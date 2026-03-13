@@ -1,48 +1,67 @@
 import React, { useState } from "react";
 
 const ContactFilter = () => {
+
   const [field, setField] = useState("");
+  const [value, setValue] = useState("");
+  const [cancelFilter, setCancelFilter] = useState(false);
+
   return (
-    <div className="">
+    <div>
+      <h1 className="font-bold">Filter Contact</h1>
+      <hr />
+      {/* SELECT */}
+      <select
+        value={field}
+        onChange={(e) => setField(e.target.value)}
+        className="border p-3 m-3 w-30    font-bold rounded-lg"
+      >
+        <option value="">Select</option>
+        <option value="name">Name</option>
+        <option value="phone">Phone</option>
+        <option value="tag">Tags </option>
+        <option value="email">Email</option>
+      </select>
+      {/* INPUT */}
+      {field && (
+        <input
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="Enter value"
+          className="border p-2 w-40 m-2 font-bold rounded-lg"
+        />
+      )}
+      {/* BUTTONS */}
+
       <div>
-        <h1 className="font-bold w-full m-0.5 p-0.5 flex justify-start">Filter Contact</h1>
-        <hr className="w-100 absolute left-1 " />
-      </div>
-      <div className="flex justify-center ">
+        <button
+          className="border p-2 m-2 w-40 font-bold text-lg rounded-lg  bg-white text-black"
+          onClick={() => {
+            setField("");
+            setValue("");
+            setCancelFilter(false);
+          }}
+        >
+          Cancel
+        </button>
 
-        <div className="flex justify-evenly">
-          <select
-            value={field}
-            onChange={(e) => setField(e.target.value)}
-            className="border border-black  rounded-lg absolute left-1 font-bold w-45  p-3 m-2 "
-          >
-            <option value="" className="">Select</option>
-            <option value="name">Name</option>
-            <option value="phone">Phone</option>
-            <option value="email">Email</option>
-          </select>
-
-
-        </div>
-        <div className="flex justify-center relative top-17  left-15">
-          <button className="bg-white  text-black border  border-black  hover:bg-gray-400 cursor-pointer p-2 m-2 rounded-lg w-30">
-            Cancle
-          </button>
-
-
-          <button className="bg-white  text-black border hover:bg-blue-500 hover:text-white hover:border-black  border-0.5  cursor-pointer p-2 m-2 rounded-lg w-30" >Apply</button>
-        </div>
-        {field && (
-          <input
-            className="border absolute font-bold text-black  w-45 top-14 rounded-lg  right-3  p-3 ml-2"
-            placeholder="Enter value"
-          />
-        )}
+        <button
+          className="border p-2 m-2 w-40 font-bold text-lg rounded-lg  bg-blue-500 text-white"
+          onClick={() => {
+            setCancelFilter(true);
+          }}
+        >
+          Apply
+        </button>
 
       </div>
 
-
-
+      {/* SHOW FILTER */}
+      {cancelFilter && (
+        <div className=" absolute  top-2 m-0.2  p-2 bg-green-600 right-20 text-black   rounded-lg w-30 font-bold"  >
+          Filter Applied
+        </div>
+      )}
     </div>
   );
 };

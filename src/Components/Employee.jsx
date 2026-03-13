@@ -60,22 +60,22 @@ const Employee = ({ inModal = false, onSuccess = null }) => {
 
   return (
 
-<div
-  className={
-    inModal
-      ? "w-full p-6 overflow-y-auto max-h-[85vh]"
-      : "min-h-screen w-full flex items-start justify-center p-6 bg-slate-50 overflow-y-auto"
-  }
->
-  <div className="w-full max-w-lg mx-auto">
     <div
-      className="bg-white w-full rounded-2xl p-10 border border-slate-200"
-      style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.10)" }}
+      className={
+        inModal
+          ? "w-full p-6 overflow-y-auto max-h-[85vh]"
+          : "min-h-screen w-full flex items-start justify-center p-6 bg-slate-50 overflow-y-auto"
+      }
     >
-      <div className="text-center mb-10">
-        <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 mx-auto mb-6">
-          <FiUser size={32} />
-        </div>
+      <div className="w-full max-w-lg mx-auto">
+        <div
+          className="bg-white w-full rounded-2xl p-10 border border-slate-200"
+          style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.10)" }}
+        >
+          <div className="text-center mb-10">
+            <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 mx-auto mb-6">
+              <FiUser size={32} />
+            </div>
             <h1 className="text-3xl font-black text-slate-800 mb-3 tracking-tight">Add Employee</h1>
             <p className="text-slate-400 font-semibold">Fill in the details below.</p>
           </div>

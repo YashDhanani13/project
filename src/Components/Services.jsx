@@ -189,7 +189,7 @@ const Services = () => {
 
       {!loading && (
         <>
-          <div className="bg-white  rounded-lg shadow-lg overflow-hidden">
+          {/* <div className="bg-white  rounded-lg shadow-lg overflow-hidden"> */}
             <table className="min-w-full">
               <thead className="bg-purple-500 text-white text-sm">
                 <tr>
@@ -270,7 +270,7 @@ const Services = () => {
                 Sorted by: <strong>{sortField}</strong> ({sortOrder})
               </span>
             </div>
-          </div>
+          {/* </div> */}
 
           {noOfPages > 1 && (
             <div className="flex justify-center items-center gap-2 mt-6 flex-wrap">
@@ -319,12 +319,12 @@ const Services = () => {
 
     <div className="bg-white border absolute top-40 left-8 border-black h-45 w-100 p-4 rounded">
 
-      {/* <button
+  <button
         onClick={() => setShowFilter(false)}
-        className="mb-2"
+        className=" rounded-lg w-10 -m-2 p-0.5 h-6 absolute top-4 right-4 font-bold  bg-white  hover:bg-red-600 hover:text-white"
       >
         X
-      </button> */}
+      </button> 
 
       <ContactFilter />
 
