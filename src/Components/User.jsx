@@ -213,7 +213,7 @@ const User = () => {
       </button>
     </div>
   </td>
-</tr>
+</tr>  
               ))}
             </tbody>
 

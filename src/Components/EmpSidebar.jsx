@@ -1,48 +1,48 @@
 import React from "react";
 // import axios  from "axios";
 const EmpSidebar = ({ selectedEmployee, setSelectedEmployee }) => {
-// import React, { useState } from "react";
+  // import React, { useState } from "react";
 
   if (!selectedEmployee) return null;
 
-  // const [error, setError] = useState("");
+  const [error, setError] = useState("");
 
-  // const handleDelete = async (id) => {
+  const handleDelete = async (id) => {
 
-  //   if (!window.confirm("Are you sure you want to delete this employee?")) return;
+    if (!window.confirm("Are you sure you want to delete this employee?")) return;
 
-  //   try {
+    try {
 
-  //     await axios.delete(
-  //       `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/employee/${id}`
-  //     );
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/employee/${id}`
+      );
 
-  //     fetchEmployees();
+      fetchEmployees();
 
-  //   } catch (err) {
-  //     setError(err.response?.data?.message || "Failed to delete employee");
-  //   }
-  // };
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to delete employee");
+    }
+  };
 
 
-  // const handleEdit = async (data) => {
-  //   try {
-  //     const updatedEmployee = {
-  //       name: data.name,
-  //       email: data.email,
-  //       age: Number(data.age),
-  //       phoneNumber: data.phoneNumber,
-  //       address: data.address,
-  //       tag: data.tag
-  //     };
-  //     await axios.put(
-  //       `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api//${data.id}`,
-  //       updatedContact);
-  //     fetchContacts();
-  //   } catch (err) {
-  //     setError(err.response?.data?.message || "Failed to update contact");
-  //   }
-  // };
+  const handleEdit = async (data) => {
+    try {
+      const updatedEmployee = {
+        name: data.name,
+        email: data.email,
+        age: Number(data.age),
+        phoneNumber: data.phoneNumber,
+        address: data.address,
+        tag: data.tag
+      };
+      await axios.put(
+        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api//${data.id}`,
+        updatedContact);
+      fetchContacts();
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to update contact");
+    }
+  };
 
   return (
     <>
@@ -127,29 +127,27 @@ const EmpSidebar = ({ selectedEmployee, setSelectedEmployee }) => {
           </div>
 
           <div>
-            <button 
-            
-            // onClick={(e) => {
-            //   e.stopPropagation();
-            //   handleDelete(employee.id);
-            // }}
+            <button
+
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete(employee.id);
+              }}
 
               className="p-2 m-2 bg-blue-700 rounded-lg text-white w-32 ">✏️ Edit </button>
-
-
             <button
-            
-            // onClick={(e) => {
-            //   e.stopPropagation();
-            //   handleDelete(employee.id)
-            // }}
+
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete(employee.id)
+              }}
               className="p-2 m-2  bg-red-100  text-red-500 rounded-lg w-32  ">🗑️ Delete
 
             </button>
 
 
 
-  
+
           </div>
 
         </div>

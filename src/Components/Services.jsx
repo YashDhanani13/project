@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Contact  from "./Contact";
-
+import ContactFilter from "./ContactFilter";
 const PAGE_SIZE = 10;   // here   page  limit  define here 
 
 const Services = () => {
@@ -19,6 +19,7 @@ const Services = () => {
   const [sortField, setSortField] = useState("name");  // sorting 
   const [sortOrder, setSortOrder] = useState("asc");  // sorting
 
+  const [showFilter, setShowFilter] = useState(false);
   // ----------------
   useEffect(() => {
     fetchContacts();
@@ -151,7 +152,10 @@ const Services = () => {
     <div className="min-h-screen bg-slate-50 text-slate-900 pt-24 px-6">
 
       <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
-        <h1 className="text-3xl font-bold">Contacts</h1>
+        {/* <h1 className="text-3xl font-bold">Contacts</h1> */}
+        <button className="bg-wite cursor-pointer border  border-black text-black  rounded-lg hover:bg-black  hover:text-white w-40 p-2 m-2 text-2xl"
+          onClick={() => setShowFilter(true)}
+        > Filter</button>
         <input
           className="bg-white border border-gray-300 p-2 rounded-lg w-72"
           type="search"
@@ -309,6 +313,25 @@ const Services = () => {
         </>
       )}
 
+
+{showFilter && (
+  <div className="fixed inset-0 border   flex items-center justify-center">
+
+    <div className="bg-white border absolute top-40 left-8 border-black h-45 w-100 p-4 rounded">
+
+      {/* <button
+        onClick={() => setShowFilter(false)}
+        className="mb-2"
+      >
+        X
+      </button> */}
+
+      <ContactFilter />
+
+    </div>
+
+  </div>
+)}
       {/* Modal */}
       {open && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
