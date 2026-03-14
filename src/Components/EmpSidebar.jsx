@@ -10,7 +10,6 @@ const EmpSidebar = ({
   // ✅ useState BEFORE early return
   const [error, setError] = useState("");
 
-  // ✅ early return AFTER hooks
   if (!selectedEmployee) return null;
 
   const handleDelete = async (id) => {

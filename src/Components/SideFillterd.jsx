@@ -1,6 +1,8 @@
-import React from 'react'
 
-const SideFillterd = () => {
+import React, { useState } from 'react'
+
+// ✅ CORRECT
+const SideFillterd = ({ setFilterField, setFilterValue, close }) => {
   return (
     <div>
 

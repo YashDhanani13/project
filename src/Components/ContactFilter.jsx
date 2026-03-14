@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-
-const ContactFilter = () => {
+const ContactFilter = ({
+  setFilterField,
+  setFilterValue,
+  close,
+}) => {
 
   const [field, setField] = useState("");
   const [value, setValue] = useState("");
@@ -18,7 +21,7 @@ const ContactFilter = () => {
       >
         <option value="">Select</option>
         <option value="name">Name</option>
-        <option value="phone">Phone</option>
+        <option value="phoneNumber">Phone Number</option>
         <option value="tag">Tags </option>
         <option value="email">Email</option>
       </select>
@@ -36,24 +39,31 @@ const ContactFilter = () => {
       <div>
         <button
           className="border p-2 m-2 w-40 font-bold text-lg rounded-lg  bg-white text-black"
-          onClick={() => {
-            setField("");
-            setValue("");
-            setCancelFilter(false);
-          }}
+      onClick={() => {
+  if (!field || !value) {
+    alert("Please select field and enter value!");
+    return;
+  }
+  setFilterField(field);
+  setFilterValue(value);
+  setCancelFilter(true);  // ✅
+  close();
+}}
+
         >
           Cancel
         </button>
 
         <button
-          className="border p-2 m-2 w-40 font-bold text-lg rounded-lg  bg-blue-500 text-white"
+          className="border p-2 m-2 w-40 font-bold text-lg rounded-lg bg-blue-500 text-white"
           onClick={() => {
-            setCancelFilter(true);
+            setFilterField(field);
+            setFilterValue(value);
+            close();
           }}
         >
           Apply
         </button>
-
       </div>
 
       {/* SHOW FILTER */}
