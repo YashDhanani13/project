@@ -44,38 +44,6 @@ const User = () => {
     fetchEmployees();
   };
 
-  const handleEdit = async (data) => {
-    try {
-      const updatedEmployee = {
-        name: data.name,
-        email: data.email,
-        age: Number(data.age),
-        phoneNumber: data.phoneNumber,
-        address: data.address,
-        tag: data.tag
-      };
-      await axios.put(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/employee/${data.id}`, // ✅ fixed URL
-        updatedEmployee  // ✅ fixed variable
-      );
-      fetchEmployees();  // ✅ fixed function
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to update employee");
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this employee?")) return;
-    try {
-      await axios.delete(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/employee/${id}`
-      );
-      fetchEmployees();
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to delete employee");
-    }
-  };
-
   const handleSort = (field) => {
     if (sortField === field) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -155,29 +123,17 @@ const User = () => {
                 <SortTh field="role" label="Role" />
                 <SortTh field="phoneNumber" label="Phone" />
                 <SortTh field="status" label="Status" />
-                <th className="p-3">Actions</th>
               </tr>
             </thead>
             <tbody>
               {paginatedEmployees.map((employee) => (
-                <tr key={employee.id} className="border-t hover:bg-gray-50"   onClick={() => setSelectedEmployee(employee)}                 >
+                <tr key={employee.id} className="border-t hover:bg-gray-50" onClick={() => setSelectedEmployee(employee)}                 >
                   <td className="p-3">{employee.name}</td>
                   <td className="p-3">{employee.email}</td>
                   <td className="p-3">{employee.role}</td>
                   <td className="p-3">{employee.phoneNumber}</td>
                   <td className="p-3">{employee.status}</td>
-                  <td className="p-3">
-                    <div className="flex justify-center gap-2">
-                      <button
-                        onClick={() => setSelectedEmployee(employee)}
-                        className="bg-blue-500 text-white px-3 py-1 rounded"
-                      >Edit</button>
-                      <button
-                        onClick={() => handleDelete(employee.id)}
-                        className="bg-red-500 text-white px-3 py-1 rounded"
-                      >Delete</button>
-                    </div>
-                  </td>
+
                 </tr>
               ))}
             </tbody>
@@ -198,10 +154,31 @@ const User = () => {
       )}
 
       {open && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center overflow-y-auto p-6">
-          <div className="bg-white p-6 rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto">
-            <button onClick={() => setOpen(false)} className="float-right text-xl font-bold">✕</button>
-            <Employee onSuccess={handleEmployeeAdded} inModal />
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-md bg-white rounded-2xl shadow-xl max-h-[90vh] flex flex-col overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-800 transition-colors text-sm font-bold"
+            >
+              ✕
+            </button>
+
+            {/* Scrollable content */}
+            <div className="overflow-y-auto flex-1">
+         {/* // ✅ CORRECT — pass close prop */}
+              <Employee
+                onSuccess={handleEmployeeAdded}
+                inModal
+                close={() => setOpen(false)}   // ✅ ADD THIS
+              />
+            </div>
           </div>
         </div>
       )}

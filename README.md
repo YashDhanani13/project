@@ -688,7 +688,7 @@ const Services = () => {
                   <th className="p-3 text-left">Tags</th>
                   <th className="p-3 text-left">Mobile</th>
                   <th className="p-3 text-left">Address</th>
-                  <th className="p-3 text-left">Actions</th>
+                  <!-- <th className="p-3 text-left">Actions</th> -->
                 </tr>
               </thead>
 

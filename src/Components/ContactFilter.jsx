@@ -1,19 +1,12 @@
 import React, { useState } from "react";
-const ContactFilter = ({
-  setFilterField,
-  setFilterValue,
-  close,
-}) => {
-
+const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
   const [field, setField] = useState("");
   const [value, setValue] = useState("");
-  const [cancelFilter, setCancelFilter] = useState(false);
 
   return (
     <div>
       <h1 className="font-bold">Filter Contact</h1>
       <hr />
-      {/* SELECT */}
       <select
         value={field}
         onChange={(e) => setField(e.target.value)}
@@ -25,7 +18,6 @@ const ContactFilter = ({
         <option value="tag">Tags </option>
         <option value="email">Email</option>
       </select>
-      {/* INPUT */}
       {field && (
         <input
           value={value}
@@ -34,29 +26,26 @@ const ContactFilter = ({
           className="border p-2 w-40 m-2 font-bold rounded-lg"
         />
       )}
-      {/* BUTTONS */}
-
-      <div>
+      <div className="flex gap-2 mt-3">
         <button
-          className="border p-2 m-2 w-40 font-bold text-lg rounded-lg  bg-white text-black"
-      onClick={() => {
-  if (!field || !value) {
-    alert("Please select field and enter value!");
-    return;
-  }
-  setFilterField(field);
-  setFilterValue(value);
-  setCancelFilter(true);  // ✅
-  close();
-}}
+          className="flex-1 border p-2 rounded-lg bg-gray-200"
+          onClick={() => {
 
-        >
+  close();
+}} >
           Cancel
         </button>
 
         <button
-          className="border p-2 m-2 w-40 font-bold text-lg rounded-lg bg-blue-500 text-white"
+          className="flex-1 border p-2 rounded-lg bg-blue-500 text-white"
           onClick={() => {
+            if (!field || !value) {
+              alert("Please select field and enter value");
+              return;
+            }
+            setFilterField("");
+            setFilterValue("");
+
             setFilterField(field);
             setFilterValue(value);
             close();
@@ -65,13 +54,6 @@ const ContactFilter = ({
           Apply
         </button>
       </div>
-
-      {/* SHOW FILTER */}
-      {cancelFilter && (
-        <div className=" absolute  top-2 m-0.2  p-2 bg-green-600 right-20 text-black   rounded-lg w-30 font-bold"  >
-          Filter Applied
-        </div>
-      )}
     </div>
   );
 };

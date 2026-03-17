@@ -64,42 +64,7 @@ const Services = () => {
     fetchContacts();
   };
 
-  const handleEdit = async (data) => {
-    try {
-      const updatedContact = {
-        name: data.name,
-        email: data.email,
-        age: Number(data.age),
-        phoneNumber: data.phoneNumber,
-        address: data.address,
-        tag: data.tag,
-      };
-      await axios.put(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/contacts/${data.id}`,
-        updatedContact,
-      );
-      fetchContacts();
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to update contact");
-    }
-  };
 
-  // delte buttion are logic are  here   : -
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this contact?"))
-      return;
-    try {
-      await axios.delete(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/contacts/${id}`,
-      );
-      fetchContacts();
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to delete contact");
-    }
-  };
-
-  // // sorting
   const handleSort = (field) => {
     if (sortField === field) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -107,7 +72,7 @@ const Services = () => {
       setSortField(field);
       setSortOrder("asc");
     }
-    setCurrentPage(0);  // ✅
+    setCurrentPage(0);
   }
 
   const sortIcon = (field) => {
@@ -134,8 +99,8 @@ const Services = () => {
   const handlePageChange = (n) => setCurrentPage(n);
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
-    setFilterField("");   // ✅ clear filter
-    setFilterValue("");   // ✅ clear filter
+    setFilterField("");
+    setFilterValue("");
     setCurrentPage(0);
   }
   const tagColors = {
@@ -215,7 +180,7 @@ const Services = () => {
                 <SortTh field="tag" label="Tags" />
                 <SortTh field="phoneNumber" label="Mobile" />
                 <SortTh field="address" label="Address" />
-                <th className="p-3 text-left">Actions</th>
+                {/* <th className="p-3 text-left">Actions</th> */}
               </tr>
             </thead>
             <tbody className="">
@@ -254,25 +219,6 @@ const Services = () => {
                     <td className="p-3 text-gray-500 max-w-xs truncate">
                       {contact.address || "—"}
                     </td>
-
-                    {/* <div className="flex justify-center"> */}
-                    <td className="p-3 ">
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleEdit(contact)}
-                          className="bg-blue-500 text-white px-3 py-1 rounded"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(contact.id)}
-                          className="bg-red-500 text-white px-3 py-1 rounded"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                    {/* </div> */}
                   </tr>
                 ))
               ) : (
@@ -294,44 +240,26 @@ const Services = () => {
               Sorted by: <strong>{sortField}</strong> ({sortOrder})
             </span>
           </div>
-          {/* </div> */}
+
 
           {noOfPages > 1 && (
             <div className="flex justify-center items-center gap-2 mt-6 flex-wrap">
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 0}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${currentPage === 0
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-blue-600 text-white hover:bg-gray-700"
-                  }`}
-              >
-                ← Prev
-              </button>
+
 
               {[...Array(noOfPages).keys()].map((n) => (
                 <button
                   key={n}
                   onClick={() => handlePageChange(n)}
                   className={`w-9 h-9 rounded-lg text-sm font-semibold transition ${currentPage === n
-                      ? "bg-blue-600 text-white shadow"
-                      : "bg-white border border-gray-300 text-gray-600 hover:bg-blue-50"
+                    ? "bg-blue-600 text-white shadow"
+                    : "bg-white border border-gray-300 text-gray-600 hover:bg-blue-50"
                     }`}
                 >
                   {n + 1}
                 </button>
               ))}
 
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === noOfPages - 1}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${currentPage === noOfPages - 1
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-blue-600 text-white hover:bg-blue-700"
-                  }`}
-              >
-                Next →
-              </button>
+
             </div>
           )}
         </>
@@ -358,25 +286,33 @@ const Services = () => {
       {/* Modal */}
 
       {open && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-          <div className="relative w-full max-w-lg mx-4 bg-white rounded-2xl max-h-[90vh] overflow-hidden">
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setOpen(false)}          // click backdrop → close
+        >
+          <div
+            className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden"
+            onClick={(e) => e.stopPropagation()}  // prevent backdrop click from firing inside card
+          >
+            {/* Close button — absolutely positioned top-right */}
             <button
               onClick={() => setOpen(false)}
-              className="float-right text-xl font-bold"
+              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors text-sm font-bold"
             >
               ✕
             </button>
-            <div className="overflow-y-auto max-h-[90vh]">
+
+            {/* Scrollable content */}
+            <div className="overflow-y-auto flex-1">
               <Contact onSuccess={handleContactAdded} />
             </div>
           </div>
         </div>
       )}
-
       <ContactSidebar
         selectedContact={selectedContact}
         setSelectedContact={setSelectedContact}
-        fetchContacts={fetchContacts} // ✅ added
+        fetchContacts={fetchContacts}
       />
     </div>
   );
