@@ -1,60 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+
 const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
   const [field, setField] = useState("");
   const [value, setValue] = useState("");
+  const filterRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (filterRef.current && !filterRef.current.contains(e.target)) {
+        close();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [close]);
 
   return (
-    <div>
-      <h1 className="font-bold">Filter Contact</h1>
-      <hr />
-      <select
-        value={field}
-        onChange={(e) => setField(e.target.value)}
-        className="border p-3 m-3 w-30    font-bold rounded-lg"
+    <>
+      <div
+        className="fixed inset-0 bg-black/20 z-40"
+        onClick={close}
+      />
+
+
+      <div
+        ref={filterRef}
+        className="relative z-50 bg-white p-4 rounded-lg shadow-lg"
       >
-        <option value="">Select</option>
-        <option value="name">Name</option>
-        <option value="phoneNumber">Phone Number</option>
-        <option value="tag">Tags </option>
-        <option value="email">Email</option>
-      </select>
-      {field && (
-        <input
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Enter value"
-          className="border p-2 w-40 m-2 font-bold rounded-lg"
-        />
-      )}
-      <div className="flex gap-2 mt-3">
-        <button
-          className="flex-1 border p-2 rounded-lg bg-gray-200"
-          onClick={() => {
-
-  close();
-}} >
-          Cancel
-        </button>
-
-        <button
-          className="flex-1 border p-2 rounded-lg bg-blue-500 text-white"
-          onClick={() => {
-            if (!field || !value) {
-              alert("Please select field and enter value");
-              return;
-            }
-            setFilterField("");
-            setFilterValue("");
-
-            setFilterField(field);
-            setFilterValue(value);
-            close();
-          }}
+        <h1 className="font-bold">Filter Contact</h1>
+        <hr />
+        <select
+          value={field}
+          onChange={(e) => setField(e.target.value)}
+          className="border p-3 m-3 w-30 font-bold rounded-lg"
         >
-          Apply
-        </button>
+          <option value="">Select</option>
+          <option value="name">Name</option>
+          <option value="phoneNumber">Phone Number</option>
+          <option value="tag">Tags</option>
+          <option value="email">Email</option>
+        </select>
+
+        {field && (
+          <input
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="Enter value"
+            className="border p-2 w-40 m-2 font-bold rounded-lg"
+          />
+        )}
+
+        <div className="flex gap-2 mt-3">
+          <button
+            className="flex-1 border p-2 rounded-lg bg-gray-200"
+            onClick={close}
+          >
+            Cancel
+          </button>
+          <button
+            className="flex-1 border p-2 rounded-lg bg-blue-500 text-white"
+            onClick={() => {
+              if (!field || !value) {
+                alert("Please select field and enter value");
+                return;
+              }
+              setFilterField(field);
+              setFilterValue(value);
+              close();
+            }}
+          >
+            Apply
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

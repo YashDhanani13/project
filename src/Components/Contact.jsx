@@ -6,13 +6,12 @@ import {
   FiArrowRight, FiCheckCircle, FiAlertCircle, FiLoader
 } from "react-icons/fi";
 
-const Contact = ({ inModal = false, onSuccess = null , close }) => {
+const Contact = ({ inModal = false, onSuccess = null, close = () => { } }) => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
-
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [apiSuccess, setApiSuccess] = useState("");
-  // const [cancal, setCancal] = useState(false);
+
 
   useEffect(() => {
     if (!apiSuccess) return;
@@ -21,12 +20,10 @@ const Contact = ({ inModal = false, onSuccess = null , close }) => {
   }, [apiSuccess]);
 
 
-
   const onSubmit = async (data) => {
     setLoading(true);
     setApiError("");
     setApiSuccess("");
-
 
     try {
       await axios.post(
@@ -45,7 +42,6 @@ const Contact = ({ inModal = false, onSuccess = null , close }) => {
     }
   };
 
-  // Light blue-gray filled input — matches screenshot
   const inputClass = (hasError) =>
     `w-full rounded-xl py-3 pl-10 pr-4 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all
      ${hasError
@@ -199,23 +195,23 @@ const Contact = ({ inModal = false, onSuccess = null , close }) => {
           {/* Buttons */}
           <div className="flex gap-3 pt-2">
             <button
+
+              className="w-50 cursor-pointer  hover:bg-black rounded-lg  hover:text-white"
               type="button"
               onClick={() => {
                 reset();
                 setApiSuccess("");
                 setApiError("");
-                close();
-          
                 if (inModal && onSuccess) onSuccess();
+                close();
               }}
-              className="flex-1 border cursor-pointer border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-semibold py-3 rounded-xl transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm cursor-pointer font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
+              className="flex-1 bg-blue-600 hover:bg-black hover:text-white  disabled:opacity-60 disabled:cursor-not-allowed  text-white text-sm cursor-pointer font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
             >
               {loading
                 ? <FiLoader size={16} className="animate-spin" />

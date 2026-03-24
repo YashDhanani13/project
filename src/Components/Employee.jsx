@@ -7,7 +7,7 @@ import {
 } from "react-icons/fi";
 
 const Employee = ({ inModal = false, onSuccess = null, close }) => {
-const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [apiSuccess, setApiSuccess] = useState("");
@@ -157,25 +157,25 @@ const { register, handleSubmit, formState: { errors }, reset } = useForm();
           <div className="flex gap-3 pt-2">
 
             <button
-            className="flex-1 border cursor-pointer border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-semibold py-3 rounded-xl transition-colors"
-              type="button"  
-              onClick={() => { 
+              className="flex-1 border cursor-pointer border-gray-300 hover:bg-black hover:text-white text-sm font-semibold py-3 rounded-xl transition-colors "
+              type="button"
+              onClick={() => {
                 reset();
-                setApiSuccess(""); 
-                setApiError("");  
+                setApiSuccess("");
+                setApiError("");
                 close();
-                  //  if (inModal && onSuccess) onSuccess();
+
               }}
-             
+
             >
               Cancel
             </button>
 
-           
+
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white  cursor-pointer text-sm font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors"
+              className="flex-1  bg-blue-600 hover:bg-black hover:text-white disabled:opacity-60 disabled:cursor-not-allowed text-white  cursor-pointer text-sm font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors"
             >
               {loading
                 ? <FiLoader size={16} className="animate-spin" />

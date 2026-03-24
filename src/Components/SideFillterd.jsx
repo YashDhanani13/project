@@ -1,16 +1,13 @@
 
 import React, { useState } from 'react'
 
-// ✅ CORRECT
 const SideFillterd = ({ setFilterField, setFilterValue, close }) => {
   return (
     <div>
 
       <h1 className='text-black font-bold text-2xl'>chooice fillter here </h1>
 
-      <div>  
-
-        {/* status click here  */}
+      <div>
         <input type="checkbox" />
         <span
           className={`inline-block mt-1 px-3 py-1 text-xs font-bold rounded-full ${selectedEmployee.status === "ACTIVE"
@@ -21,8 +18,6 @@ const SideFillterd = ({ setFilterField, setFilterValue, close }) => {
         </span>
       </div>
 
-
-      {/* role chooice  here  */}
       <div>
         <input type="checkbox" />
         <p className=" mt-1 px-3 py-1 text-xs font-semibold rounded-full text-black bg-gray-400 ">{selectedEmployee.role}</p>

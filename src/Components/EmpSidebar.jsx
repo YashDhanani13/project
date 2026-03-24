@@ -12,7 +12,7 @@ const EmpSidebar = ({
 
   if (!selectedEmployee) return null;
 
-  // ✅ Error 1 fixed
+
   const handleEdit = () => {
     setFormData({
       name: selectedEmployee.name,
@@ -26,7 +26,7 @@ const EmpSidebar = ({
 
   const handleSave = async () => {
     try {
-      // ✅ Error 2 fixed — consistent variable name
+
       const updatedEmployee = {
         name: formData.name,
         email: formData.email,
@@ -36,10 +36,11 @@ const EmpSidebar = ({
       };
       await axios.put(
         `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/employee/${selectedEmployee.id}`,
-        updatedEmployee  // ✅ correct variable
+        updatedEmployee
       );
       setIsEditing(false);
-      setSelectedEmployee(null);  // ✅ Error 3 fixed
+      setSelectedEmployee(null);
+
       fetchEmployees();
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update");
@@ -61,7 +62,7 @@ const EmpSidebar = ({
 
   return (
     <>
-      {/* ✅ Error 4 fixed — correct onClick syntax */}
+
       <div
         onClick={() => { setSelectedEmployee(null); setIsEditing(false); }}
         className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
@@ -84,11 +85,11 @@ const EmpSidebar = ({
         {isEditing ? (
           <div className="space-y-3">
             {[
-              { label: "Name",        field: "name" },
-              { label: "Email",       field: "email" },
-              { label: "Role",        field: "role" },
+              { label: "Name", field: "name" },
+              { label: "Email", field: "email" },
+              { label: "Role", field: "role" },
               { label: "Phone Number", field: "phoneNumber" },
-              { label: "Status",      field: "status" },
+              { label: "Status", field: "status" },
             ].map(({ label, field }) => (
               <div key={field} className="bg-gray-50 p-3 rounded-lg">
                 <p className="text-xs text-gray-500 uppercase">{label}</p>
@@ -130,11 +131,10 @@ const EmpSidebar = ({
             </div>
             <div className="bg-gray-50 p-3 rounded-lg">
               <p className="text-xs text-gray-500 uppercase">Status</p>
-              <span className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full ${
-                selectedEmployee.status === "ACTIVE"
+              <span className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full ${selectedEmployee.status === "ACTIVE"
                   ? "bg-green-100 text-green-700"
                   : "bg-red-100 text-red-700"
-              }`}>
+                }`}>
                 {selectedEmployee.status}
               </span>
             </div>

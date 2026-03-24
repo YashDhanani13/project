@@ -25,8 +25,6 @@ const ContactSidebar = ({
     setIsEditing(true);
   };
 
-
-  
   const handleSave = async () => {
     try {
       const updatedContact = {
@@ -48,7 +46,6 @@ const ContactSidebar = ({
       setError(err.response?.data?.message || "Failed to update");
     }
   };
-
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure?")) return;
@@ -87,9 +84,6 @@ const ContactSidebar = ({
 
         {isEditing ? (
 
-
-
-
           <div className="space-y-3">
             {[
               { label: "Name", field: "name" },
@@ -126,9 +120,6 @@ const ContactSidebar = ({
         ) : (
           // ——— VIEW MODE: p tags ———
           <div>
-
-
-
             <div className="bg-gray-50 p-3 rounded-lg">
               <p className="text-xs text-gray-500 uppercase">Name</p>
               <p className="font-semibold text-gray-800">{selectedContact.name}</p>
@@ -144,7 +135,7 @@ const ContactSidebar = ({
               <p className="font-semibold text-gray-800">{selectedContact.age}</p>
             </div>
 
-            {/* ✅ ADD THIS — was missing */}
+
             <div className="bg-gray-50 p-3 rounded-lg">
               <p className="text-xs text-gray-500 uppercase">Phone Number</p>
               <p className="font-semibold text-gray-800">{selectedContact.phoneNumber}</p>
@@ -161,7 +152,7 @@ const ContactSidebar = ({
             </div>
 
             <div className="flex gap-2">
-              {/* ✅ Now correctly calls handleEditClick */}
+
               <button
                 onClick={handleEdit}
                 className="p-2 m-2 bg-blue-700 rounded-lg text-white w-32 cursor-pointer"
