@@ -3,10 +3,8 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  FiMail, FiLock, FiEye, FiEyeOff,
-  FiArrowRight, FiCheckCircle, FiAlertCircle,
-  FiLoader, FiUserPlus,
-} from "react-icons/fi";
+  Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle2, AlertCircle, Loader2, UserPlus, User,
+} from "lucide-react";
 
 const Signup = () => {
   const {
@@ -64,14 +62,14 @@ const Signup = () => {
 
           {apiSuccess && (
             <div className="bg-emerald-50 border border-emerald-100 text-emerald-600 text-sm p-4 rounded-2xl mb-8 flex items-center gap-3">
-              <FiCheckCircle className="shrink-0" />
+              <CheckCircle2 className="shrink-0" size={18} />
               <p className="font-bold">{apiSuccess}</p>
             </div>
           )}
 
           {apiError && (
             <div className="bg-rose-50 border border-rose-100 text-rose-600 text-sm p-4 rounded-2xl mb-8 flex items-center gap-3">
-              <FiAlertCircle className="shrink-0" />
+              <AlertCircle className="shrink-0" size={18} />
               <p className="font-bold">{apiError}</p>
             </div>
           )}
@@ -84,7 +82,7 @@ const Signup = () => {
                 Full name
               </label>
               <div className="relative">
-                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                 <input
                   type="text"
                   placeholder="Enter Your Full name"
@@ -105,7 +103,7 @@ const Signup = () => {
                 Email Address
               </label>
               <div className="relative">
-                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                 <input
                   type="email"
                   placeholder="name@example.com"
@@ -126,7 +124,7 @@ const Signup = () => {
                 Organization Name
               </label>
               <div className="relative">
-                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                 <input
                   type="text"
                   placeholder="Enter your organization name"
@@ -148,7 +146,7 @@ const Signup = () => {
 
               </label>
               <div className="relative">
-                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
 
                 <input
                   type={showPassword ? "text" : "password"}
@@ -166,7 +164,7 @@ const Signup = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                 >
-                  {showPassword ? <FiEyeOff /> : <FiEye />}
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
               {errors.password && (
@@ -182,11 +180,11 @@ const Signup = () => {
               className="w-full bg-slate-900 hover:bg-slate-800 text-white font-black rounded-lg h-10 shadow-xl shadow-slate-200 transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-3 text-lg mt-4"
             >
               {loading ? (
-                <FiLoader className="animate-spin" />
+                <Loader2 className="animate-spin" size={20} />
               ) : (
                 <>
                   <span>Create Account</span>
-                  <FiArrowRight />
+                  <ArrowRight size={20} />
                 </>
               )}
             </button>

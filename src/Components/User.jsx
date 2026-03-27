@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../lib/api";
 import Employee from "./Employee";
 import EmpSidebar from "./EmpSidebar";
 
@@ -22,8 +22,8 @@ const User = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/employee`,
+      const res = await api.get(
+        "/employee",
         { params: { search: search || undefined } }
       );
       const data = res.data;
@@ -141,7 +141,7 @@ const User = () => {
                         className="border-t hover:bg-orange-50 cursor-pointer transition-colors"
                         onClick={() => setSelectedEmployee(employee)}
                       >
-                       
+
                         <td className="p-3">
                           <input type="checkbox" onClick={(e) => e.stopPropagation()} />
                         </td>
@@ -176,10 +176,24 @@ const User = () => {
               </table>
             </div>
 
+
+
+            {/* footer of this  table   */}
             <div className="px-4 py-3 border-t text-xs text-gray-400 flex items-center justify-between">
               <span>
                 Showing {totalEmployees === 0 ? 0 : start + 1}–{Math.min(end, totalEmployees)} of {totalEmployees} employees
               </span>
+
+              <div className="bg-grya-500 p-2   border-black font-bold ">
+                <select className="p-1.5 w-30   flex justify-center h-8" placeholder="">
+                  <option value="" selected >Select   the failed  </option>
+                  <option >3</option>
+                  <option value="">5</option>
+                  <option value="">10</option>
+                  <option value="">20</option>
+                </select>
+
+              </div>
               <span>
                 Sorted by: <strong className="text-gray-600">{sortField}</strong> ({sortOrder})
               </span>

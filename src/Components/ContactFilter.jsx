@@ -18,16 +18,9 @@ const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
 
   return (
     <>
-      <div
-        className="fixed inset-0 bg-black/20 z-40"
-        onClick={close}
-      />
+      <div className="fixed inset-0 bg-black/20 z-40" onClick={close} />
 
-
-      <div
-        ref={filterRef}
-        className="relative z-50 bg-white p-4 rounded-lg shadow-lg"
-      >
+      <div ref={filterRef} className="bg-white p-4 rounded-lg shadow-lg">
         <h1 className="font-bold">Filter Contact</h1>
         <hr />
         <select

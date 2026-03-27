@@ -1,17 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import {
-  FiUser, FiMail, FiPhone, FiMapPin, FiTag,
-  FiArrowRight, FiCheckCircle, FiAlertCircle, FiLoader
-} from "react-icons/fi";
+import api from "../lib/api";
 
-const Contact = ({ inModal = false, onSuccess = null, close = () => { } }) => {
-  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+import {
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Tag,
+  ArrowRight,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
+
+const Contact = ({ inModal = false, onSuccess = null, close })  => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [apiSuccess, setApiSuccess] = useState("");
-
 
   useEffect(() => {
     if (!apiSuccess) return;
@@ -19,24 +31,31 @@ const Contact = ({ inModal = false, onSuccess = null, close = () => { } }) => {
     return () => clearTimeout(t);
   }, [apiSuccess]);
 
-
   const onSubmit = async (data) => {
     setLoading(true);
     setApiError("");
     setApiSuccess("");
 
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/contacts`,
-        { ...data, age: Number(data.age) }
-      );
+
+      await api.post("/contacts", {
+        name: data.name,
+        email: data.email,
+        age: data.age,
+        tag: data.tag,
+        phoneNumber: data.phoneNumber,
+        address: data.address
+      });
+
       setApiSuccess("Contact saved successfully!");
       reset();
-      onSuccess?.();
-
+      setTimeout(() => {
+        onSuccess?.();
+        close?.();
+      }, 1500);
+      // onSuccess?.();
     } catch (err) {
       setApiError(err.response?.data?.message || "Server connection failed.");
-
     } finally {
       setLoading(false);
     }
@@ -57,71 +76,113 @@ const Contact = ({ inModal = false, onSuccess = null, close = () => { } }) => {
     }`;
 
   return (
-    <div className={inModal ? "p-6" : "min-h-screen bg-gray-100 flex items-start justify-center py-12 px-4"}>
-      <div className={inModal ? "w-full" : "w-full max-w-md bg-white rounded-2xl shadow-md p-8"}>
-
+    <div
+      className={
+        inModal
+          ? "p-6"
+          : "min-h-screen bg-gray-100 flex items-start justify-center py-12 px-4"
+      }
+    >
+      <div
+        className={
+          inModal
+            ? "w-full"
+            : "w-full max-w-md bg-white rounded-2xl shadow-md p-8"
+        }
+      >
         {/* Header */}
         <div className="mb-6">
           <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center mb-4">
-            <FiUser className="text-blue-500" size={22} />
+            <User className="text-blue-500" size={22} />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Add Contact</h1>
-          <p className="text-sm text-gray-500 mt-1">Fill in the details to save a new contact.</p>
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+            Add Contact
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Fill in the details to save a new contact.
+          </p>
         </div>
 
         {/* Toasts */}
         {apiSuccess && (
           <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 rounded-xl px-4 py-3 mb-5">
-            <FiCheckCircle size={15} className="shrink-0" /> {apiSuccess}
+            <CheckCircle2 size={15} className="shrink-0" /> {apiSuccess}
           </div>
         )}
         {apiError && (
           <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-5">
-            <FiAlertCircle size={15} className="shrink-0" /> {apiError}
+            <AlertCircle size={15} className="shrink-0" /> {apiError}
           </div>
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* ---------------------------------------------------------------------------------------- */}
           {/* Name */}
+
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Name</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+              Name
+            </label>
             <div className="relative">
-              <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
+              <User
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                size={14}
+              />
               <input
                 type="text"
                 placeholder="Enter full name"
                 className={inputClass(errors.name)}
-                {...register("name", { required: "Name is required" })}
+                {...register("name", { required: "Name is required" ,
+                  allowed:"string"
+                })}
               />
             </div>
-            {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>}
+            {errors.name && (
+              <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
+            )}
           </div>
 
           {/* Email */}
+
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+              Email
+            </label>
             <div className="relative">
-              <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
+              <Mail
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                size={14}
+              />
               <input
                 type="email"
                 placeholder="name@example.com"
                 className={inputClass(errors.email)}
                 {...register("email", {
                   required: "Email is required",
-                  pattern: { value: /^\S+@\S+\.\S+$/, message: "Invalid email format" },
+                  pattern: {
+                    value: /^\S+@\S+\.\S+$/,
+                    message: "Invalid email format",
+                  },
                 })}
               />
             </div>
-            {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="text-xs text-red-500 mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
-          {/* Age + Phone side by side */}
+          {/* Age  ,   Phone side by side */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Age</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Age
+              </label>
               <div className="relative">
-                <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
+                <User
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={14}
+                />
                 <input
                   type="number"
                   placeholder="e.g. 18"
@@ -133,26 +194,45 @@ const Contact = ({ inModal = false, onSuccess = null, close = () => { } }) => {
                   })}
                 />
               </div>
-              {errors.age && <p className="text-xs text-red-500 mt-1">{errors.age.message}</p>}
+              {errors.age && (
+                <p className="text-xs text-red-500 mt-1">
+                  {errors.age.message}
+                </p>
+              )}
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Tag</label>
-              <select className={selectClass(errors.tag)} {...register("tag", { required: "Tag is required" })}>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Tag
+              </label>
+              <select
+                className={selectClass(errors.tag)}
+                {...register("tag", { required: "Tag is required" })}
+              >
                 <option value="">Select tag…</option>
                 <option value="VIP">VIP</option>
                 <option value="VVIP">VVIP</option>
                 <option value="regular"> Regular</option>
               </select>
-              {errors.tag && <p className="text-xs text-red-500 mt-1">{errors.tag.message}</p>}
+              {errors.tag && (
+                <p className="text-xs text-red-500 mt-1">
+                  {errors.tag.message}
+                </p>
+              )}
             </div>
           </div>
 
           {/* Phone */}
+
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Phone Number</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+              Phone Number
+            </label>
             <div className="relative">
-              <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
+              <Phone
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                size={14}
+              />
               <input
                 type="text"
                 placeholder="+91 98765 43210"
@@ -161,19 +241,28 @@ const Contact = ({ inModal = false, onSuccess = null, close = () => { } }) => {
                   required: "Phone number is required",
                   pattern: {
                     value: /^\+?\d{10,}$/,
-                    message: "Invalid phone number format"
+                    message: "Invalid phone number format",
                   },
                 })}
               />
             </div>
-            {errors.phoneNumber && <p className="text-xs text-red-500 mt-1">{errors.phoneNumber.message}</p>}
+            {errors.phoneNumber && (
+              <p className="text-xs text-red-500 mt-1">
+                {errors.phoneNumber.message}
+              </p>
+            )}
           </div>
 
           {/* Address */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Address</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+              Address
+            </label>
             <div className="relative">
-              <FiMapPin className="absolute left-3 top-3 text-gray-400" size={14} />
+              <MapPin
+                className="absolute left-3 top-3 text-gray-400"
+                size={14}
+              />
               <textarea
                 rows={3}
                 placeholder="Street, City, State, PIN"
@@ -182,20 +271,22 @@ const Contact = ({ inModal = false, onSuccess = null, close = () => { } }) => {
                   required: "Address is required",
                   minLength: {
                     value: 10,
-                    message: "At least 10 characters"
+                    message: "At least 10 characters",
                   },
                 })}
               />
             </div>
-            {errors.address && <p className="text-xs text-red-500 mt-1">{errors.address.message}</p>}
+            {errors.address && (
+              <p className="text-xs text-red-500 mt-1">
+                {errors.address.message}
+              </p>
+            )}
           </div>
-          {/* ---------------------------------------------------------------------------------------------------
+          {/* -------------------------------------*/}
 
-*/}
           {/* Buttons */}
           <div className="flex gap-3 pt-2">
             <button
-
               className="w-50 cursor-pointer  hover:bg-black rounded-lg  hover:text-white"
               type="button"
               onClick={() => {
@@ -213,13 +304,16 @@ const Contact = ({ inModal = false, onSuccess = null, close = () => { } }) => {
               disabled={loading}
               className="flex-1 bg-blue-600 hover:bg-black hover:text-white  disabled:opacity-60 disabled:cursor-not-allowed  text-white text-sm cursor-pointer font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
             >
-              {loading
-                ? <FiLoader size={16} className="animate-spin" />
-                : <><span>Save Contact</span><FiArrowRight size={15} /></>
-              }
+              {loading ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                <>
+                  <span>Save Contact</span>
+                  <ArrowRight size={15} />
+                </>
+              )}
             </button>
           </div>
-
         </form>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../lib/api";
 import Contact from "./Contact";
 import ContactFilter from "./ContactFilter";
 import ContactSidebar from "./ContactSidebar";
@@ -7,9 +7,10 @@ import ContactSidebar from "./ContactSidebar";
 const PAGE_SIZE = 10;
 
 const Services = () => {
-  const [open, setOpen] = useState(false);
+  
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
@@ -20,18 +21,28 @@ const Services = () => {
   const [filterValue, setFilterValue] = useState("");
   const [showFilter, setShowFilter] = useState(false);
 
-  useEffect(() => { fetchContacts(); }, [search, filterField, filterValue]);
+  useEffect(() => {
+    fetchContacts();
+  }, [search, filterField, filterValue]);
 
   const fetchContacts = async () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/contacts`,
-        { params: { search: search || undefined, field: filterField || undefined, value: filterValue || undefined } }
+      const response = await api.get(
+        "/contacts",
+        {
+          params: {
+            search: search || undefined,
+            field: filterField || undefined,
+            value: filterValue || undefined,
+          },
+        },
       );
       const data = response.data;
-      setContacts(Array.isArray(data) ? data : data.data || data.contacts || []);
+      setContacts(
+        Array.isArray(data) ? data : data.data || data.contacts || [],
+      );
     } catch {
       setError("Failed to fetch contacts");
     } finally {
@@ -39,11 +50,17 @@ const Services = () => {
     }
   };
 
-  const handleContactAdded = () => { setOpen(false); fetchContacts(); };
+  const handleContactAdded = () => {
+    setOpen(false);
+    fetchContacts();
+  };
 
   const handleSort = (field) => {
     if (sortField === field) setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    else { setSortField(field); setSortOrder("asc"); }
+    else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
     setCurrentPage(0);
   };
 
@@ -85,7 +102,11 @@ const Services = () => {
       className="p-3 text-left cursor-pointer select-none hover:text-blue-600 transition-colors"
     >
       {label}
-      <span className={sortField === field ? "text-blue-600 font-bold" : "text-gray-400"}>
+      <span
+        className={
+          sortField === field ? "text-blue-600 font-bold" : "text-gray-400"
+        }
+      >
         {sortIcon(field)}
       </span>
     </th>
@@ -93,15 +114,12 @@ const Services = () => {
 
   return (
     <div className="min-h-screen bg-orange-50 text-slate-900 p-6">
-
       <h1 className="text-3xl font-bold">Contact Management</h1>
       <br /> <br />
       <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
-
-
         <button
           onClick={() => setShowFilter(true)}
-          className="border border-black text-black bg-white hover:bg-black hover:text-white px-5 py-2 rounded-lg font-semibold text-sm transition"
+          className="border border-black text-black bg-blue-200  hover:bg-black hover:text-white px-5 py-2 rounded-lg font-semibold text-sm transition"
         >
           Filter
         </button>
@@ -123,19 +141,17 @@ const Services = () => {
           + Add Contact
         </button>
       </div>
-
-
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-600 p-4 rounded-lg mb-4">
           {error}
         </div>
       )}
-
       {/* Loading */}
       {loading && (
-        <div className="text-center py-8 text-gray-500">Loading contacts...</div>
+        <div className="text-center py-8 text-gray-500">
+          Loading contacts...
+        </div>
       )}
-
       {/* Table */}
       {!loading && (
         <>
@@ -144,7 +160,9 @@ const Services = () => {
               <table className="min-w-full text-sm">
                 <thead className="bg-purple-500 text-white">
                   <tr>
-                    <th className="p-3"><input type="checkbox" /></th>
+                    <th className="p-3">
+                      <input type="checkbox" />
+                    </th>
                     <SortTh field="name" label="Name" />
                     <SortTh field="email" label="Email" />
                     <SortTh field="age" label="Age" />
@@ -162,21 +180,28 @@ const Services = () => {
                         onClick={() => setSelectedContact(contact)}
                       >
                         <td className="p-3">
-                          <input type="checkbox" onClick={(e) => e.stopPropagation()} />
+                          <input
+                            type="checkbox"
+                            onClick={(e) => e.stopPropagation()}
+                          />
                         </td>
                         <td className="p-3 font-medium">{contact.name}</td>
                         <td className="p-3 text-blue-600">{contact.email}</td>
                         <td className="p-3">{contact.age}</td>
                         <td className="p-3">
                           {contact.tag ? (
-                            <span style={{
-                              background: tagColors[contact.tag]?.bg || "#E5E7EB",
-                              color: tagColors[contact.tag]?.color || "#374151",
-                              padding: "3px 10px",
-                              borderRadius: 20,
-                              fontSize: 12,
-                              fontWeight: 700,
-                            }}>
+                            <span
+                              style={{
+                                background:
+                                  tagColors[contact.tag]?.bg || "#E5E7EB",
+                                color:
+                                  tagColors[contact.tag]?.color || "#374151",
+                                padding: "3px 10px",
+                                borderRadius: 20,
+                                fontSize: 12,
+                                fontWeight: 700,
+                              }}
+                            >
                               {contact.tag}
                             </span>
                           ) : (
@@ -184,13 +209,17 @@ const Services = () => {
                           )}
                         </td>
                         <td className="p-3">{contact.phoneNumber || "—"}</td>
-                        <td className="p-3 text-gray-500 max-w-xs truncate">{contact.address || "—"}</td>
+                        <td className="p-3 text-gray-500 max-w-xs truncate">
+                          {contact.address || "—"}
+                        </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
                       <td colSpan={7} className="p-8 text-center text-gray-400">
-                        {search ? "No contacts match your search" : "No contacts found — click + Add Contact"}
+                        {search
+                          ? "No contacts match your search"
+                          : "No contacts found — click + Add Contact"}
                       </td>
                     </tr>
                   )}
@@ -201,10 +230,13 @@ const Services = () => {
             {/* Footer */}
             <div className="px-4 py-3 border-t text-xs text-gray-400 flex items-center justify-between">
               <span>
-                Showing {totalContacts === 0 ? 0 : start + 1}–{Math.min(end, totalContacts)} of {totalContacts} contacts
+                Showing {totalContacts === 0 ? 0 : start + 1}–
+                {Math.min(end, totalContacts)} of {totalContacts} contacts
               </span>
               <span>
-                Sorted by: <strong className="text-gray-600">{sortField}</strong> ({sortOrder})
+                Sorted by:{" "}
+                <strong className="text-gray-600">{sortField}</strong> (
+                {sortOrder})
               </span>
             </div>
           </div>
@@ -217,9 +249,10 @@ const Services = () => {
                   key={n}
                   onClick={() => setCurrentPage(n)}
                   className={`w-9 h-9 rounded-lg text-sm font-semibold transition
-                    ${currentPage === n
-                      ? "bg-blue-600 text-white shadow"
-                      : "bg-white border border-gray-300 text-gray-600 hover:bg-blue-50"
+                    ${
+                      currentPage === n
+                        ? "bg-blue-600 text-white shadow"
+                        : "bg-white border border-gray-300 text-gray-600 hover:bg-blue-50"
                     }`}
                 >
                   {n + 1}
@@ -229,14 +262,13 @@ const Services = () => {
           )}
         </>
       )}
-
       {/* Filter Modal */}
       {showFilter && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-xl shadow-xl p-6 w-96 relative">
+        <div className="fixed  flex items-center justify-center">
+          <div className="bg-green-300  rounded-xl shadow-xl p-6 w-96 relative">
             <button
               onClick={() => setShowFilter(false)}
-              className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-500 hover:text-white text-gray-500 font-bold text-xs transition"
+              className="absolute top-3 right-3 w-4 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-500 hover:text-white text-gr ay-500 font-bold text-xs transition"
             >
               ✕
             </button>
@@ -248,11 +280,10 @@ const Services = () => {
           </div>
         </div>
       )}
-
       {/* Add Contact Modal */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50  flex items-center justify-center p-4"
           onClick={() => setOpen(false)}
         >
           <div
@@ -266,7 +297,6 @@ const Services = () => {
               ✕
             </button>
 
-
             <div className="overflow-y-auto flex-1">
               <Contact
                 onSuccess={handleContactAdded}
@@ -276,7 +306,6 @@ const Services = () => {
           </div>
         </div>
       )}
-
       {/* Contact Sidebar */}
       <ContactSidebar
         selectedContact={selectedContact}
