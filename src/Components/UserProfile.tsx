@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import {
-  Mail,
-  User,
-  Edit2,
-  Check,
-  X,
-} from "lucide-react";
+import {  Mail,  User, Edit2, Check, X } from "lucide-react";
 import api from "../lib/api";
 
 interface ProfileForm {
@@ -53,7 +47,7 @@ const UserProfile = () => {
     try {
     
       await api.put("/auth/updateprofile", {
-        name: data.fullName,
+        fullName: data.fullName,
         email: data.email,
       });
 

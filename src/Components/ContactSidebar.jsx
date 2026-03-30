@@ -69,7 +69,7 @@ const ContactSidebar = ({
         }}
         className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
       />
-      <div className="fixed right-0 top-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 p-6 overflow-y-auto transition-transform duration-300">
+      <div className="fixed right-0 top-0 h-full w-full sm:w-96 bg-white shadow-2xl z-40 p-6 overflow-y-auto transition-transform duration-300">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-extralight text-gray-800">
             {isEditing ? "Edit Contact" : "Contact Details"}

@@ -5,22 +5,25 @@ const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
   const [value, setValue] = useState("");
   const filterRef = useRef(null);
 
+ // close  the   filter for this are used this 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (filterRef.current && !filterRef.current.contains(e.target)) {
         close();
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [close]);
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/20 z-40" onClick={close} />
+      <div className="fixed inset-0 bg-black/20 " onClick={close} />
 
-      <div ref={filterRef} className="bg-white p-4 rounded-lg shadow-lg">
+      <div 
+      ref={filterRef} 
+      
+      className="bg-white p-4 rounded-lg shadow-lg  relative z-50">
         <h1 className="font-bold">Filter Contact</h1>
         <hr />
         <select
@@ -40,7 +43,7 @@ const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder="Enter value"
-            className="border p-2 w-40 m-2 font-bold rounded-lg"
+            className="border p-2 w-35 m-2 font-bold rounded-lg"
           />
         )}
 

@@ -3,20 +3,29 @@ import api from "../lib/api";
 import Employee from "./Employee";
 import EmpSidebar from "./EmpSidebar";
 
-const PAGE_SIZE = 10;
-
 const User = () => {
   const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+
+  //search bar  here   
   const [search, setSearch] = useState("");
+
+  // dropdown  row per page  adn  pagination here
   const [currentPage, setCurrentPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  //sorting   
   const [sortField, setSortField] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
 
-  useEffect(() => { fetchEmployees(); }, [search]);
+  useEffect(() => {
+     fetchEmployees(); 
+    },
+     [search]);
 
   const fetchEmployees = async () => {
     setLoading(true);
@@ -36,11 +45,15 @@ const User = () => {
     }
   };
 
-  const handleEmployeeAdded = () => { setOpen(false); fetchEmployees(); };
+  const handleEmployeeAdded = () => {
+     setOpen(false); 
+     fetchEmployees(); 
+    };
 
   const handleSort = (field) => {
     if (sortField === field) setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    else { setSortField(field); setSortOrder("asc"); }
+    else { setSortField(field);
+       setSortOrder("asc"); }
     setCurrentPage(0);
   };
 
@@ -56,14 +69,21 @@ const User = () => {
     return valB.localeCompare(valA);
   });
 
-  //  use totalEmployees — NOT totalContacts
+  
   const totalEmployees = sorted.length;
-  const noOfPages = Math.ceil(totalEmployees / PAGE_SIZE);
-  const start = currentPage * PAGE_SIZE;
-  const end = start + PAGE_SIZE;
+  const noOfPages = Math.ceil(totalEmployees / rowsPerPage);
+  const start = currentPage * rowsPerPage;
+  const end = start + rowsPerPage;
   const paginatedEmployees = sorted.slice(start, end);
 
-  const handleSearchChange = (e) => { setSearch(e.target.value); setCurrentPage(0); };
+  const handleSearchChange = (e) => {
+     setSearch(e.target.value); setCurrentPage(0); };
+
+
+  const handleRowsPerPageChange = (e) => {
+    setRowsPerPage(Number(e.target.value)); // update rows per page
+    setCurrentPage(0);                      // always reset to page 1
+  };
 
   const SortTh = ({ field, label }) => (
     <th
@@ -98,6 +118,8 @@ const User = () => {
           value={search}
           onChange={handleSearchChange}
         />
+
+
         <button
           onClick={() => setOpen(true)}
           className="bg-zinc-600 hover:bg-orange-500 text-white font-semibold px-5 py-2 rounded-lg transition text-sm"
@@ -141,7 +163,6 @@ const User = () => {
                         className="border-t hover:bg-orange-50 cursor-pointer transition-colors"
                         onClick={() => setSelectedEmployee(employee)}
                       >
-
                         <td className="p-3">
                           <input type="checkbox" onClick={(e) => e.stopPropagation()} />
                         </td>
@@ -175,84 +196,81 @@ const User = () => {
                 </tbody>
               </table>
             </div>
+            {/* Footer */}
+          
+            <div className="px-4 py-3 border-t text-xs text-gray-500 flex items-center justify-between flex-wrap gap-3">
 
-
-
-            {/* footer of this  table   */}
-            <div className="px-4 py-3 border-t text-xs text-gray-400 flex items-center justify-between">
+              {/* Left: showing count */}
               <span>
-                Showing {totalEmployees === 0 ? 0 : start + 1}–{Math.min(end, totalEmployees)} of {totalEmployees} employees
+                Showing{" "}
+                <strong className="text-gray-700">
+                  {totalEmployees === 0 ? 0 : start + 1}–{Math.min(end, totalEmployees)}
+                </strong>{" "}
+                of <strong className="text-gray-700">{totalEmployees}</strong> employees
               </span>
 
-              <div className="bg-grya-500 p-2   border-black font-bold ">
-                <select className="p-1.5 w-30   flex justify-center h-8" placeholder="">
-                  <option value="" selected >Select   the failed  </option>
-                  <option >3</option>
-                  <option value="">5</option>
-                  <option value="">10</option>
-                  <option value="">20</option>
+          {/* here  drop down  manu throguh  */}
+              <div className="flex items-center gap-2">
+                <span className="text-gray-400">Rows per page:</span>
+                <select
+                  className="border border-gray-300 rounded-lg px-2 py-1 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300"
+                  value={rowsPerPage}              // ✅ controlled value
+                  onChange={handleRowsPerPageChange} // ✅ wired handler
+                >
+                  <option value={3}>3</option>
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
                 </select>
-
               </div>
-              <span>
-                Sorted by: <strong className="text-gray-600">{sortField}</strong> ({sortOrder})
-              </span>
+
+             {/*  here  prev and  next button  */}
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setCurrentPage(p => p - 1)}
+                  disabled={currentPage === 0}
+                  className="px-3 py-1 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                >
+                  ← Prev
+                </button>
+
+
+                <span className="text-gray-500">
+                  Page <strong className="text-gray-700">{currentPage + 1}</strong> of{" "}
+                  <strong className="text-gray-700">{Math.max(noOfPages, 1)}</strong>
+                </span>
+
+                <button
+                  onClick={() => setCurrentPage(p => p + 1)}
+                  disabled={currentPage >= noOfPages - 1}
+                  className="px-3 py-1 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                >
+                  Next →
+                </button>
+              </div>
+
             </div>
           </div>
 
-          {/* Pagination */}
-          {noOfPages > 1 && (
-            <div className="flex justify-center items-center gap-2 mt-5 flex-wrap">
-              {[...Array(noOfPages).keys()].map((n) => (
-                <button
-                  key={n}
-                  onClick={() => setCurrentPage(n)}
-                  className={`w-9 h-9 rounded-lg text-sm font-semibold transition
-                    ${currentPage === n
-                      ? "bg-blue-600 text-white shadow"
-                      : "bg-white border border-gray-300 text-gray-600 hover:bg-blue-50"
-                    }`}
-                >
-                  {n + 1}
-                </button>
-              ))}
-            </div>
+          {/* Sidebar for selected employee */}
+          {selectedEmployee && (
+            <EmpSidebar
+              employee={selectedEmployee}
+              onClose={() => setSelectedEmployee(null)}
+              onUpdated={fetchEmployees}
+            />
+          )}
+
+          {/* Add employee modal */}
+          {open && (
+            <Employee
+              onClose={() => setOpen(false)}
+              onAdded={handleEmployeeAdded}
+            />
           )}
         </>
       )}
-
-      {/* Add Employee Modal */}
-      {open && (
-        <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setOpen(false)}
-        >
-          <div
-            className="relative w-full max-w-md bg-white rounded-2xl shadow-xl max-h-[90vh] flex flex-col overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setOpen(false)}
-              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold text-sm transition"
-            >
-              ✕
-            </button>
-            <div className="overflow-y-auto flex-1">
-              <Employee
-                onSuccess={handleEmployeeAdded}
-                inModal
-                close={() => setOpen(false)}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      <EmpSidebar
-        selectedEmployee={selectedEmployee}
-        setSelectedEmployee={setSelectedEmployee}
-        fetchEmployees={fetchEmployees}
-      />
     </div>
   );
 };
