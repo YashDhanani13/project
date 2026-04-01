@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import api from "../lib/api";
 import Employee from "./Employee";
 import EmpSidebar from "./EmpSidebar";
+import { Dice1 } from "lucide-react";
 
 const User = () => {
   const [employees, setEmployees] = useState([]);
@@ -23,9 +24,9 @@ const User = () => {
   const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
-     fetchEmployees(); 
-    },
-     [search]);
+    fetchEmployees();
+  },
+    [search]);
 
   const fetchEmployees = async () => {
     setLoading(true);
@@ -46,14 +47,16 @@ const User = () => {
   };
 
   const handleEmployeeAdded = () => {
-     setOpen(false); 
-     fetchEmployees(); 
-    };
+    setOpen(false);
+    fetchEmployees();
+  };
 
   const handleSort = (field) => {
     if (sortField === field) setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    else { setSortField(field);
-       setSortOrder("asc"); }
+    else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
     setCurrentPage(0);
   };
 
@@ -69,15 +72,19 @@ const User = () => {
     return valB.localeCompare(valA);
   });
 
-  
+
   const totalEmployees = sorted.length;
   const noOfPages = Math.ceil(totalEmployees / rowsPerPage);
   const start = currentPage * rowsPerPage;
   const end = start + rowsPerPage;
   const paginatedEmployees = sorted.slice(start, end);
-
+  
   const handleSearchChange = (e) => {
-     setSearch(e.target.value); setCurrentPage(0); };
+    setSearch(e.target.value);
+    setFilterField("");
+    setFilterValue("");
+    setCurrentPage(0);
+  };
 
 
   const handleRowsPerPageChange = (e) => {
@@ -197,7 +204,7 @@ const User = () => {
               </table>
             </div>
             {/* Footer */}
-          
+
             <div className="px-4 py-3 border-t text-xs text-gray-500 flex items-center justify-between flex-wrap gap-3">
 
               {/* Left: showing count */}
@@ -209,7 +216,7 @@ const User = () => {
                 of <strong className="text-gray-700">{totalEmployees}</strong> employees
               </span>
 
-          {/* here  drop down  manu throguh  */}
+              {/* here  drop down  manu throguh  */}
               <div className="flex items-center gap-2">
                 <span className="text-gray-400">Rows per page:</span>
                 <select
@@ -224,7 +231,7 @@ const User = () => {
                 </select>
               </div>
 
-             {/*  here  prev and  next button  */}
+              {/*  here  prev and  next button  */}
 
               <div className="flex items-center gap-2">
                 <button
@@ -234,7 +241,6 @@ const User = () => {
                 >
                   ← Prev
                 </button>
-
 
                 <span className="text-gray-500">
                   Page <strong className="text-gray-700">{currentPage + 1}</strong> of{" "}
@@ -263,12 +269,37 @@ const User = () => {
           )}
 
           {/* Add employee modal */}
+          
           {open && (
-            <Employee
-              onClose={() => setOpen(false)}
-              onAdded={handleEmployeeAdded}
-            />
+            <div
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              onClick={() => setOpen(false)}
+            >
+              <div
+                className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl h-170 flex flex-col"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => setOpen(false)}
+                  className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold text-sm transition"
+                >
+                  ✕
+                </button>
+                <div className="overflow-y-auto flex-1">
+                  <Employee onSuccess={handleEmployeeAdded} close={() => setOpen(false)} />
+                </div>
+              </div>
+            </div>
+      
           )}
+
+
+          <EmpSidebar
+            selectedEmployee={selectedEmployee}
+            setSelectedEmployee={setSelectedEmployee}
+            fetchEmployees={fetchEmployees}
+          />
+          
         </>
       )}
     </div>

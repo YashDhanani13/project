@@ -19,7 +19,6 @@ const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
   return (
     <>
       <div className="fixed inset-0 bg-black/20 " onClick={close} />
-
       <div 
       ref={filterRef} 
       

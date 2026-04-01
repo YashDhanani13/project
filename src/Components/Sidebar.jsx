@@ -92,7 +92,7 @@ const Sidebar = () => {
 
       {showProfile && (
         <div className="fixed  flex items-center justify-center z-40 ">
-          <div className="bg-gray-500 relative left-20   rounded-xl shadow-xl  p-6 w-200 h-130 m-2">
+          <div className="bg-gray-500 relative left-20   rounded-xl shadow-xl  p-6 w-200 h-120 m-2">
             <button
               onClick={() => setShowProfile(false)}
               className="absolute top-3 right-3 w-4 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-500 hover:text-white text-gr ay-500 font-bold text-xs transition"

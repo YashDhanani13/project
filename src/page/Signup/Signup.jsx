@@ -1,24 +1,45 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { z } from "zod";
+import { Link  } from "react-router-dom";
 import {
-  Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle2, AlertCircle, Loader2, UserPlus, User,
+  Mail, Lock, ArrowRight, CheckCircle2, AlertCircle, Loader2, User,
 } from "lucide-react";
+import axios from "axios";
+
+const signValdate = z.object({
+  name: z
+    .min(1, "Name is  requiredd"),
+
+  email: z
+    .min(1, "Email is required")
+       .value( /^\S+@\S+\.\S+$/)
+    .email("Invalid email format"),
+
+  organizationName: z
+    .min(1, "organizationName")
+    .min("organaziation name is  required"),
+
+  password: z
+    .string()
+    .min(1, "Password is required")
+    .maxLength(8, "Password must be at least 8 characters"),
+});
+
 
 const Signup = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
-  } = useForm();
+  } = useForm({
+    resolver : zodResolver(signValdate)
+  });
 
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [apiSuccess, setApiSuccess] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -34,8 +55,7 @@ const Signup = () => {
       });
 
       setApiSuccess("Account created successfully!");
-      reset();
-      setTimeout(() => navigate("/login"), 2000);
+
     } catch (error) {
       if (error.response) {
         setApiError(error.response.data.message || "Signup failed.");
@@ -87,7 +107,8 @@ const Signup = () => {
                   type="text"
                   placeholder="Enter Your Full name"
                   className={`w-full bg-slate-50 border-2 ${errors.fullName ? "border-rose-100" : "border-slate-50"} text-slate-900 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-blue-200 focus:bg-white transition-all font-bold placeholder:text-slate-300`}
-                  {...register("fullName", { required: "Full name is required" })}
+                  {...register("fullName")
+                  }
                 />
               </div>
               {errors.fullName && (
@@ -99,24 +120,19 @@ const Signup = () => {
 
             {/* email */}
             <div className="space-y-2">
-              <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
-                Email Address
-              </label>
+              <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Email Address</label>
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                 <input
                   type="email"
                   placeholder="name@example.com"
-                  className={`w-full bg-slate-50 border-2 ${errors.email ? "border-rose-100" : "border-slate-50"} text-slate-900 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-blue-200 focus:bg-white transition-all font-bold placeholder:text-slate-300`}
-                  {...register("email", { required: "Email is required" })}
+                  className={`w-full bg-slate-50 border-2 ${errors.email ? "border-rose-300" : "border-slate-50"} rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-blue-200 transition-all font-bold`}
+                  {...register("email")}
                 />
               </div>
-              {errors.email && (
-                <p className="text-rose-500 text-xs font-bold ml-1">
-                  {errors.email.message}
-                </p>
-              )}
+              {errors.email && <p className="text-rose-500 text-xs font-bold ml-1">{errors.email.message}</p>}
             </div>
+
 
             {/* organization name */}
             <div className="space-y-2">
@@ -129,7 +145,7 @@ const Signup = () => {
                   type="text"
                   placeholder="Enter your organization name"
                   className={`w-full bg-slate-50 border-2 ${errors.organizationName ? "border-rose-100" : "border-slate-50"} text-slate-900 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-blue-200 focus:bg-white transition-all font-bold placeholder:text-slate-300`}
-                  {...register("organizationName", { required: "Organization name is required" })}
+                  {...register("organizationName")}
                 />
               </div>
               {errors.organizationName && (
@@ -139,41 +155,23 @@ const Signup = () => {
               )}
             </div>
 
-            {/* password */}
-            <div className="space-y-2">
-              <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
-                Password
 
-              </label>
+            {/* password  */}
+            <div className="space-y-2">
+              <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Password</label>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-
                 <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="At least 8 characters"
-                  className={`w-full bg-slate-50 border-2 ${errors.password ? "border-rose-100" : "border-slate-50"} text-slate-900 rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 focus:bg-white transition-all font-bold placeholder:text-slate-300`}
-                  {...register("password", {
-                    required: "Password is required",
-                    minLength: { value: 8, message: "Min 8 characters" },
-                  })}
+                  type="password"
+                  className={`w-full bg-slate-50 border-2 ${errors.password ? "border-rose-300" : "border-slate-50"} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
+                  {...register("password")}
                 />
-
-
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
               </div>
-              {errors.password && (
-                <p className="text-rose-500 text-xs font-bold ml-1">
-                  {errors.password.message}
-                </p>
-              )}
+              {errors.password && <p className="text-rose-500 text-xs font-bold ml-1">{errors.password.message}</p>}
             </div>
 
+
+            {/* button  */}
             <button
               disabled={loading}
               type="submit"

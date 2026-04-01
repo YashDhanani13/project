@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import api from "../lib/api";
+import { useState } from "react";
 import { Pencil, Trash2, X } from "lucide-react";
 
 const ContactSidebar = ({

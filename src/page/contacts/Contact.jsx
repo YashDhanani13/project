@@ -1,35 +1,51 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import api from "../lib/api";
-
 import {
   User,
   Mail,
   Phone,
   MapPin,
-  Tag,
   ArrowRight,
   CheckCircle2,
   AlertCircle,
   Loader2,
 } from "lucide-react";
+import z, { email } from "zod";
 
-const Contact = ({ inModal = false, onSuccess = null, close })  => {
+
+
+const contactvalidation = z.object({
+  name: z
+    .min("name is required"),
+
+  email: z
+    .min("email is   required ")
+    .email("@ this si  required "),
+
+  age: z
+    .min("18 is  required")
+    .maxLength("minimum  100  age are  requied"),
+
+  tag: z
+    .min("tag is   required"),
+
+  phoneNumber: z
+    .minLength("10 digit is  required   ")
+})
+
+const Contact = ({ inModal = false, onSuccess = null, close }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
-  } = useForm();
+  } = useForm({
+    resolver: zodReslove(contactvalidation)
+  });
+
+
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [apiSuccess, setApiSuccess] = useState("");
-
-  useEffect(() => {
-    if (!apiSuccess) return;
-    const t = setTimeout(() => setApiSuccess(""), 3000);
-    return () => clearTimeout(t);
-  }, [apiSuccess]);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -37,8 +53,7 @@ const Contact = ({ inModal = false, onSuccess = null, close })  => {
     setApiSuccess("");
 
     try {
-
-      await api.post("/contacts", {
+      await axios.post("http:localhost3000/api/contact", {
         name: data.name,
         email: data.email,
         age: data.age,
@@ -47,13 +62,6 @@ const Contact = ({ inModal = false, onSuccess = null, close })  => {
         address: data.address
       });
 
-      setApiSuccess("Contact saved successfully!");
-      reset();
-      setTimeout(() => {
-        onSuccess?.();
-        close?.();
-      }, 1500);
-      // onSuccess?.();
     } catch (err) {
       setApiError(err.response?.data?.message || "Server connection failed.");
     } finally {
@@ -61,19 +69,6 @@ const Contact = ({ inModal = false, onSuccess = null, close })  => {
     }
   };
 
-  const inputClass = (hasError) =>
-    `w-full rounded-xl py-3 pl-10 pr-4 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all
-     ${hasError
-      ? "bg-red-50 border border-red-300 focus:ring-2 focus:ring-red-100"
-      : "bg-[#EEF2FF] border border-transparent focus:border-blue-400 focus:ring-2 focus:ring-blue-100 focus:bg-white"
-    }`;
-
-  const selectClass = (hasError) =>
-    `w-full rounded-xl py-3 px-3 text-sm text-gray-800 outline-none transition-all appearance-none cursor-pointer
-     ${hasError
-      ? "bg-red-50 border border-red-300 focus:ring-2 focus:ring-red-100"
-      : "bg-[#EEF2FF] border border-transparent focus:border-blue-400 focus:ring-2 focus:ring-blue-100 focus:bg-white"
-    }`;
 
   return (
     <div
@@ -103,7 +98,6 @@ const Contact = ({ inModal = false, onSuccess = null, close })  => {
           </p>
         </div>
 
-        {/* Toasts */}
         {apiSuccess && (
           <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 rounded-xl px-4 py-3 mb-5">
             <CheckCircle2 size={15} className="shrink-0" /> {apiSuccess}
@@ -116,33 +110,28 @@ const Contact = ({ inModal = false, onSuccess = null, close })  => {
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Name */}
-
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-              Name
+          <div className="space-y-2">
+            <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+              name
             </label>
             <div className="relative">
-              <User
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                size={14}
-              />
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
               <input
                 type="text"
-                placeholder="Enter full name"
-                className={inputClass(errors.name)}
-                {...register("name", { required: "Name is required" ,
-                  allowed:"string"
-                })}
+                placeholder="Enter Your Full name"
+                className={`w-full bg-slate-50 border-2 ${errors.fullName ? "border-rose-100" : "border-slate-50"} text-slate-900 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-blue-200 focus:bg-white transition-all font-bold placeholder:text-slate-300`}
+                {...register("fullName")
+                }
               />
             </div>
-            {errors.name && (
-              <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
+            {errors.fullName && (
+              <p className="text-rose-500 text-xs font-bold ml-1">
+                {errors.ame.message}
+              </p>
             )}
           </div>
 
           {/* Email */}
-
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">
               Email
@@ -156,15 +145,10 @@ const Contact = ({ inModal = false, onSuccess = null, close })  => {
                 type="email"
                 placeholder="name@example.com"
                 className={inputClass(errors.email)}
-                {...register("email", {
-                  required: "Email is required",
-                  pattern: {
-                    value: /^\S+@\S+\.\S+$/,
-                    message: "Invalid email format",
-                  },
-                })}
+                {...register("email")}
               />
             </div>
+
             {errors.email && (
               <p className="text-xs text-red-500 mt-1">
                 {errors.email.message}
@@ -172,28 +156,22 @@ const Contact = ({ inModal = false, onSuccess = null, close })  => {
             )}
           </div>
 
-          {/* Age  ,   Phone side by side */}
+
           <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                Age
-              </label>
-              <div className="relative">
-                <User
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                  size={14}
-                />
-                <input
-                  type="number"
-                  placeholder="e.g. 18"
-                  className={inputClass(errors.age)}
-                  {...register("age", {
-                    required: "Required",
-                    min: { value: 18, message: "Min 18" },
-                    max: { value: 100, message: "Max 100" },
-                  })}
-                />
-              </div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+              Age
+            </label>
+            <div className="relative">
+              <User
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                size={14}
+              />
+              <input
+                type="number"
+                placeholder="e.g. 18"
+                className={inputClass(errors.age)}
+                {...register("age")}
+              />
               {errors.age && (
                 <p className="text-xs text-red-500 mt-1">
                   {errors.age.message}
@@ -228,6 +206,7 @@ const Contact = ({ inModal = false, onSuccess = null, close })  => {
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">
               Phone Number
             </label>
+
             <div className="relative">
               <Phone
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -237,15 +216,10 @@ const Contact = ({ inModal = false, onSuccess = null, close })  => {
                 type="text"
                 placeholder="+91 98765 43210"
                 className={inputClass(errors.phoneNumber)}
-                {...register("phoneNumber", {
-                  required: "Phone number is required",
-                  pattern: {
-                    value: /^\+?\d{10,}$/,
-                    message: "Invalid phone number format",
-                  },
-                })}
+                {...register("phoneNumber")}
               />
             </div>
+
             {errors.phoneNumber && (
               <p className="text-xs text-red-500 mt-1">
                 {errors.phoneNumber.message}
@@ -266,14 +240,8 @@ const Contact = ({ inModal = false, onSuccess = null, close })  => {
               <textarea
                 rows={3}
                 placeholder="Street, City, State, PIN"
-                className={`${inputClass(errors.address)} pl-10 resize-none`}
-                {...register("address", {
-                  required: "Address is required",
-                  minLength: {
-                    value: 10,
-                    message: "At least 10 characters",
-                  },
-                })}
+
+                {...register("address")}
               />
             </div>
             {errors.address && (
@@ -282,7 +250,6 @@ const Contact = ({ inModal = false, onSuccess = null, close })  => {
               </p>
             )}
           </div>
-          {/* -------------------------------------*/}
 
           {/* Buttons */}
           <div className="flex gap-3 pt-2">

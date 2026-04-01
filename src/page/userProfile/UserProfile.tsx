@@ -25,11 +25,12 @@ const UserProfile = () => {
     },
   });
 
-  // ─── GET profile ───────────────────────
+  // ─── GET profile ──────────
+  
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await api.get("/auth/userprofile");
+        const res = await api.get("/auth/getUserProfile");
         const { fullName, email } = res.data.data;
         reset({ fullName, email });
       } catch (err) {
@@ -46,7 +47,7 @@ const UserProfile = () => {
   const onSubmit = async (data: ProfileForm) => {
     try {
     
-      await api.put("/auth/updateprofile", {
+      await api.put("/auth/updateUserProfile", {
         fullName: data.fullName,
         email: data.email,
       });
@@ -62,19 +63,19 @@ const UserProfile = () => {
   if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="h-108 rounded-lg bg-orange-50 p-6">
       <div className="max-w-2xl mx-auto">
 
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage your personal information</p>
+          <p className="text-1-xl text-gray-500 font-semibold  mt-1">Manage your personal information</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-lg font-bold text-gray-900">Profile Information</h2>
-              <p className="text-sm text-gray-400">Update your personal details</p>
+              <p className="text-1-xl  font-semibold  text-gray-400">Update your personal details</p>
             </div>
 
             {!isEditing ? (
@@ -106,7 +107,7 @@ const UserProfile = () => {
 
             {/* Full Name */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">
+              <label className="text-xs font-bold text-black uppercase tracking-widest">
                 Full Name
               </label>
               <div className="relative">
@@ -117,7 +118,7 @@ const UserProfile = () => {
                   placeholder="Enter your full name"
                   className={`w-full border-2 rounded-xl py-3 pl-11 pr-4 text-sm font-semibold outline-none transition-all
                     ${!isEditing
-                      ? "bg-gray-50 border-gray-100 text-gray-500 cursor-not-allowed"
+                      ? "bg-gray-50 border-gray-100 text-blue-300 cursor-not-allowed"
                       : errors.fullName
                         ? "bg-white border-red-300 text-gray-900"
                         : "bg-white border-gray-200 focus:border-orange-400 text-gray-900"
@@ -143,7 +144,7 @@ const UserProfile = () => {
                   placeholder="name@example.com"
                   className={`w-full border-2 rounded-xl py-3 pl-11 pr-4 text-sm font-semibold outline-none transition-all
                     ${!isEditing
-                      ? "bg-gray-50 border-gray-100 text-gray-500 cursor-not-allowed"
+                      ? "bg-gray-50 border-gray-100 text-blue-300 cursor-not-allowed"
                       : errors.email
                         ? "bg-white border-red-300 text-gray-900"
                         : "bg-white border-gray-200 focus:border-orange-400 text-gray-900"

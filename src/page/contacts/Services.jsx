@@ -6,16 +6,24 @@ import ContactSidebar from "./ContactSidebar";
 
 const Services = () => {
   const [contacts, setContacts] = useState([]);
+
   const [selectedContact, setSelectedContact] = useState(null);
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+
+
+  //filter here  defined 
+  const [showFilter, setShowFilter] = useState(false);
   const [filterField, setFilterField] = useState("");
   const [filterValue, setFilterValue] = useState("");
-  const [showFilter, setShowFilter] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  //sorting order i can 
   const [sortField, setSortField] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
 
