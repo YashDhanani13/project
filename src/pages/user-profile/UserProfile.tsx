@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import {  Mail,  User, Edit2, Check, X } from "lucide-react";
+import { Mail, User, Edit2, Check, X } from "lucide-react";
 import axios from "axios";
 
 interface ProfileForm {
@@ -26,11 +26,13 @@ const UserProfile = () => {
   });
 
   // ─── GET profile ──────────
-  
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/auth/getUserProfile");
+        const res = await axios.get(
+          "http://localhost:3000/auth/getUserProfile",
+        );
         const { fullName, email } = res.data.data;
         reset({ fullName, email });
       } catch (err) {
@@ -46,8 +48,7 @@ const UserProfile = () => {
   // ─── UPDATE profile ────────────────────
   const onSubmit = async (data: ProfileForm) => {
     try {
-    
-      await axios.put("http://localhost:3000/api/auth/updateUserProfile", {
+      await axios.put("http://localhost:3000/auth/updateUserProfile", {
         fullName: data.fullName,
         email: data.email,
       });
@@ -65,17 +66,22 @@ const UserProfile = () => {
   return (
     <div className="h-108 rounded-lg bg-orange-50 p-6">
       <div className="max-w-2xl mx-auto">
-
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
-          <p className="text-1-xl text-gray-500 font-semibold  mt-1">Manage your personal information</p>
+          <p className="text-1-xl text-gray-500 font-semibold  mt-1">
+            Manage your personal information
+          </p>
         </div>
 
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Profile Information</h2>
-              <p className="text-1-xl  font-semibold  text-gray-400">Update your personal details</p>
+              <h2 className="text-lg font-bold text-gray-900">
+                Profile Information
+              </h2>
+              <p className="text-1-xl  font-semibold  text-gray-400">
+                Update your personal details
+              </p>
             </div>
 
             {!isEditing ? (
@@ -104,30 +110,37 @@ const UserProfile = () => {
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-
             {/* Full Name */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-black uppercase tracking-widest">
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <User
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={18}
+                />
                 <input
                   type="text"
                   disabled={!isEditing}
                   placeholder="Enter your full name"
                   className={`w-full border-2 rounded-xl py-3 pl-11 pr-4 text-sm font-semibold outline-none transition-all
-                    ${!isEditing
-                      ? "bg-gray-50 border-gray-100 text-blue-300 cursor-not-allowed"
-                      : errors.fullName
-                        ? "bg-white border-red-300 text-gray-900"
-                        : "bg-white border-gray-200 focus:border-orange-400 text-gray-900"
+                    ${
+                      !isEditing
+                        ? "bg-gray-50 border-gray-100 text-blue-300 cursor-not-allowed"
+                        : errors.fullName
+                          ? "bg-white border-red-300 text-gray-900"
+                          : "bg-white border-gray-200 focus:border-orange-400 text-gray-900"
                     }`}
-                  {...register("fullName", { required: "Full name is required" })}
+                  {...register("fullName", {
+                    required: "Full name is required",
+                  })}
                 />
               </div>
               {errors.fullName && (
-                <p className="text-red-500 text-xs font-semibold ml-1">{errors.fullName.message}</p>
+                <p className="text-red-500 text-xs font-semibold ml-1">
+                  {errors.fullName.message}
+                </p>
               )}
             </div>
 
@@ -137,29 +150,37 @@ const UserProfile = () => {
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <Mail
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={18}
+                />
                 <input
                   type="email"
                   disabled={!isEditing}
                   placeholder="name@example.com"
                   className={`w-full border-2 rounded-xl py-3 pl-11 pr-4 text-sm font-semibold outline-none transition-all
-                    ${!isEditing
-                      ? "bg-gray-50 border-gray-100 text-blue-300 cursor-not-allowed"
-                      : errors.email
-                        ? "bg-white border-red-300 text-gray-900"
-                        : "bg-white border-gray-200 focus:border-orange-400 text-gray-900"
+                    ${
+                      !isEditing
+                        ? "bg-gray-50 border-gray-100 text-blue-300 cursor-not-allowed"
+                        : errors.email
+                          ? "bg-white border-red-300 text-gray-900"
+                          : "bg-white border-gray-200 focus:border-orange-400 text-gray-900"
                     }`}
                   {...register("email", {
                     required: "Email is required",
-                    pattern: { value: /^\S+@\S+\.\S+$/, message: "Invalid email" },
+                    pattern: {
+                      value: /^\S+@\S+\.\S+$/,
+                      message: "Invalid email",
+                    },
                   })}
                 />
               </div>
               {errors.email && (
-                <p className="text-red-500 text-xs font-semibold ml-1">{errors.email.message}</p>
+                <p className="text-red-500 text-xs font-semibold ml-1">
+                  {errors.email.message}
+                </p>
               )}
             </div>
-
           </form>
         </div>
       </div>

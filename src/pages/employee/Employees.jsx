@@ -33,7 +33,7 @@ const Employees = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.get("http://localhost:3000/api/employee",
+      const res = await axios.get("http://localhost:3000/employee",
         { params: { search: search || undefined } }
       );
       const data = res.data;
@@ -261,6 +261,7 @@ const Employees = () => {
 
           {/* Sidebar for selected employee */}
           {selectedEmployee && (
+          
             <EmpSidebar
               employee={selectedEmployee}
               onClose={() => setSelectedEmployee(null)}

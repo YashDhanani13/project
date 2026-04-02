@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-
 import {
   User,
   Mail,
@@ -12,26 +11,19 @@ import {
   Loader2,
   ChevronDown,
 } from "lucide-react";
+
 import EmpSidebar from "./EmpSidebar";
 import { z } from "zod"
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const Empvalidation = z.object({
   name: z.string().min(1, "Name is required"),
-
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Invalid email"),
-
+  email: z.string().min(1, "Email is required").email("Invalid email"),
   role: z.string().min(1, "Role is required"),
-
-  phoneNumber: z
-    .string()
-    .min(10, "Phone must be at least 10 digits"),
-
+  phoneNumber: z.string().min(10, "Phone must be at least 10 digits"),
   status: z.string().min(1, "Status is required"),
 });
+
 
 /* ── main component ──────────────────────────────────────────────────────── */
 const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
@@ -39,7 +31,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
+  
   } = useForm({
     resolver: zodResolver
       (Empvalidation)
@@ -54,23 +46,19 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
   const fetchEmployees = () => { };
   const handleEmployeeAdded = () => fetchEmployees();
 
-
-
   const onSubmit = async (data) => {
     setLoading(true);
     setApiError("");
     setApiSuccess("");
     try {
-      await axios.post("http://localhost:3000/api/employee", {
+      await axios.post("http://localhost:3000/employee", {
         name: data.name,
         email: data.email,
         role: data.role,
         phoneNumber: data.phoneNumber,
         status: data.status,
       });
-
       setApiSuccess("Employee created successfully!");
-
     } catch (error) {
       setApiError(error.response?.data?.message || "Server connection failed.");
     } finally {
@@ -79,12 +67,11 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
   };
 
   const inner = (
-    <div
-      className={
-        inModal
-          ? "w-full"
-          : "w-full max-w-[460px] rounded-2xl border border-gray-200 bg-white p-10 shadow-sm"
-      }
+    <div className={
+      inModal
+        ? "w-full"
+        : "w-full max-w-[460px] rounded-2xl border border-gray-200 bg-white p-10 shadow-sm"
+    }
     >
       {/* ── Header ── */}
       <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-900">
@@ -219,7 +206,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
           <button
             type="button"
             onClick={() => {
-              reset();
+             
               close?.();
             }}
             className="flex-1 rounded-lg border border-gray-200 bg-transparent py-2.5 text-sm font-semibold

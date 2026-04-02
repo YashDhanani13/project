@@ -6,14 +6,10 @@ import { Link } from "react-router-dom";
 import {
   Mail, Lock, ArrowRight, CheckCircle2, AlertCircle, Loader2, LogIn,
 } from "lucide-react";
-
 import axios from "axios";
 
 const loginvalidate = z.object({
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Invalid email format"),
+  email: z.string().min(1, "Email is required").email("Invalid email format"),
 
   password: z
     .string()
@@ -40,7 +36,7 @@ const Login = () => {
     setApiSuccess("");
 
     try {
-      await axios.post("http://localhost:3000/api/auth/login", data);
+      await axios.post("http://localhost:3000/auth/login", data);
       setApiSuccess("Welcome back!");
     } catch (error) {
       setApiError(error.response?.data?.message || "Invalid credentials.");
@@ -53,7 +49,7 @@ const Login = () => {
     <div className="min-h-screen w-full flex items-center justify-center p-6 bg-gradient-to-r from-blue-300 to-white pt-28">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-[2.5rem] p-10 shadow-3xl border-slate-100">
-          
+
           {/* Header Section */}
           <div className="text-center mb-10">
             <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 mx-auto mb-6">
@@ -80,7 +76,7 @@ const Login = () => {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
-            
+
             {/* Email Field */}
             <div className="space-y-2">
               <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Email Address</label>

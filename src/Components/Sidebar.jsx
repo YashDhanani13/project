@@ -17,14 +17,56 @@ const mainLinks = [
 
 const Sidebar = () => {
   const [showProfile, setShowProfile] = useState(false);
-
+  const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
 
-  // const isActive = (path) => location.pathname === path;
+  const isActive = (path) => location.pathname === path;
 
   return (
-   
+    // ✅ Wrap sidebar + page content in a flex row
     <div className="flex min-h-screen">
+
+      {/* ── Sidebar ── always visible */}
+      <aside
+        className={`fixed top-0 left-0 h-screen z-50 flex flex-col transition-all duration-300
+          ${collapsed ? "w-16" : "w-52"}
+          bg-[#3c3737] text-white`}
+      >
+        {/* Logo */}
+        <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">
+          {!collapsed && (
+            <div className="leading-tight">
+              <p className="text-blue-300 font-bold text-sm">class</p>
+              <p className="text-orange-400 font-bold text-sm -mt-0.5">Mate</p>
+            </div>
+          )}
+          {/* Collapse toggle */}
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="text-gray-400 hover:text-white transition ml-auto"
+          >
+            <span className="text-xs">{collapsed ? "→" : "←"}</span>
+          </button>
+        </div>
+
+        {/* Nav Links */}
+        <nav className="flex-1 overflow-y-auto px-2 py-3 space-y-0.5">
+          {mainLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              title={collapsed ? link.name : ""}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all
+                ${isActive(link.path)
+                  ? "bg-white/10 text-white"
+                  : "text-gray-400 hover:bg-white/10 hover:text-white"
+                }`}
+            >
+              <span className="flex-shrink-0">{link.icon}</span>
+              {!collapsed && <span className="flex-1">{link.name}</span>}
+            </Link>
+          ))}
+        </nav>
 
         {/* Bottom — Profile Settings */}
         <div className="flex flex-col gap-1 px-4 mb-4">
@@ -33,10 +75,10 @@ const Sidebar = () => {
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:bg-white/10 hover:text-white transition-all w-full text-left"
           >
             <Settings size={18} />
-           <span>Profile Settings</span>
+            {!collapsed && <span>Profile Settings</span>}
           </button>
         </div>
-    
+      </aside>
 
       {/* ── Main Content — Outlet renders here ── */}
       <main className={`flex-1 transition-all duration-300 ${collapsed ? "ml-16" : "ml-52"}`}>

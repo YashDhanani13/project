@@ -9,14 +9,9 @@ import {
 import axios from "axios";
 
 const signValdate = z.object({
-
   fullName :  z.string().min(1, "Name is required"),
-
   email: z.string().min(1, "Email is required").email("Invalid email format"),
-
-
   organizationName: z.string().min(1, "Organization name is required"),
-
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
@@ -43,7 +38,7 @@ const Signup = () => {
     setApiSuccess("");
 
     try {
-      await axios.post("http://localhost:3000/api/auth/signup", {
+      await axios.post("http://localhost:3000/auth/signup", {
         fullName: data.fullName,
         email: data.email,
         organizationName: data.organizationName,
@@ -54,7 +49,7 @@ const Signup = () => {
 
     } catch (error) {
       if (error.response) {
-        setApiError(error.response.data.message || "Signup failed.");
+        setApiError(error.response.data.message || " ");
       } else {
         setApiError("Server connection failed.");
       }

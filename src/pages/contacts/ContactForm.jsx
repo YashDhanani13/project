@@ -56,7 +56,7 @@ const ContactForm = ({ inModal = false, onSuccess = null, close }) => {
     setApiSuccess("");
 
     try {
-      await axios.post("http://localhost:3000/api/contact", {
+      await axios.post("http://localhost:3000/contacts", {
         name: data.name,
         email: data.email,
         age: data.age,
@@ -260,7 +260,6 @@ const ContactForm = ({ inModal = false, onSuccess = null, close }) => {
               className="w-50 cursor-pointer  hover:bg-black rounded-lg  hover:text-white"
               type="button"
               onClick={() => {
-                reset();
                 setApiSuccess("");
                 setApiError("");
                 if (inModal && onSuccess) onSuccess();

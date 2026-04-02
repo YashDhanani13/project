@@ -36,7 +36,7 @@ const Contacts = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get("http://localhost:3000/api/contact", {
+      const response = await axios.get("http://localhost:3000/contacts", {
         params: {
           search: search || undefined,
           field: filterField || undefined,
