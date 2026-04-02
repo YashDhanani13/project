@@ -1,31 +1,27 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Link  } from "react-router-dom";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Link } from "react-router-dom";
 import {
   Mail, Lock, ArrowRight, CheckCircle2, AlertCircle, Loader2, User,
 } from "lucide-react";
 import axios from "axios";
 
 const signValdate = z.object({
-  name: z
-    .min(1, "Name is  requiredd"),
 
-  email: z
-    .min(1, "Email is required")
-       .value( /^\S+@\S+\.\S+$/)
-    .email("Invalid email format"),
+  fullName :  z.string().min(1, "Name is required"),
 
-  organizationName: z
-    .min(1, "organizationName")
-    .min("organaziation name is  required"),
+  email: z.string().min(1, "Email is required").email("Invalid email format"),
+
+
+  organizationName: z.string().min(1, "Organization name is required"),
 
   password: z
     .string()
-    .min(1, "Password is required")
-    .maxLength(8, "Password must be at least 8 characters"),
+    .min(8, "Password must be at least 8 characters")
+    .max(100, "Password is too long"), // Added 
 });
-
 
 const Signup = () => {
   const {
@@ -33,7 +29,7 @@ const Signup = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver : zodResolver(signValdate)
+    resolver: zodResolver(signValdate)
   });
 
   const [loading, setLoading] = useState(false);

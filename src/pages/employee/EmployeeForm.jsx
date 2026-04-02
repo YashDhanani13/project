@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 import {
   User,
@@ -13,32 +14,27 @@ import {
 } from "lucide-react";
 import EmpSidebar from "./EmpSidebar";
 import { z } from "zod"
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const Empvalidation = z.object({
-
-  name: z
-    .min("name is required"),
+  name: z.string().min(1, "Name is required"),
 
   email: z
-    .min("email is   required ")
-    .email("this si  required "),
+    .string()
+    .min(1, "Email is required")
+    .email("Invalid email"),
 
-  role: z
-    .min("role is  required")
-    .maxLength("minimum  100  age are  requied"),
+  role: z.string().min(1, "Role is required"),
+
   phoneNumber: z
-    .minLength("10 digit is  required   "),
-  statuus: z
-    .min("status is   required"),
-})
+    .string()
+    .min(10, "Phone must be at least 10 digits"),
 
-
-
-
-
+  status: z.string().min(1, "Status is required"),
+});
 
 /* ── main component ──────────────────────────────────────────────────────── */
-const Employee = ({ inModal = false, onSuccess = null, close }) => {
+const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
   const {
     register,
     handleSubmit,
@@ -65,13 +61,14 @@ const Employee = ({ inModal = false, onSuccess = null, close }) => {
     setApiError("");
     setApiSuccess("");
     try {
-      await axios.post("http :localhost:3000/api/employee", {
+      await axios.post("http://localhost:3000/api/employee", {
         name: data.name,
         email: data.email,
         role: data.role,
         phoneNumber: data.phoneNumber,
         status: data.status,
       });
+
       setApiSuccess("Employee created successfully!");
 
     } catch (error) {
@@ -119,7 +116,7 @@ const Employee = ({ inModal = false, onSuccess = null, close }) => {
 
         {/* Name */}
         <div>
-          <Label>Full Name</Label>
+          <label className="mb-1.5 block text-sm font-semibold text-gray-700">Full Name</label>
           <div className="relative">
             <User
               size={14}
@@ -128,16 +125,16 @@ const Employee = ({ inModal = false, onSuccess = null, close }) => {
             <input
               type="text"
               placeholder="e.g. Rohan Mehta"
-              className={inputCls(errors.name)}
+              className={`w-full border-2 rounded-xl py-2.5 pl-10 pr-4 text-sm font-medium outline-none transition-all ${errors.name ? "border-red-300 focus:border-red-400" : "border-gray-100 focus:border-gray-900"}`}
               {...register("name")}
             />
           </div>
-          <FieldError message={errors.name?.message} />
+          {errors.name?.message && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
         </div>
 
         {/* Email */}
         <div>
-          <Label>Email Address</Label>
+          <label className="mb-1.5 block text-sm font-semibold text-gray-700">Email Address</label>
           <div className="relative">
             <Mail
               size={14}
@@ -146,21 +143,21 @@ const Employee = ({ inModal = false, onSuccess = null, close }) => {
             <input
               type="email"
               placeholder="name@company.com"
-              className={inputCls(errors.email)}
+              className={`w-full border-2 rounded-xl py-2.5 pl-10 pr-4 text-sm font-medium outline-none transition-all ${errors.email ? "border-red-300 focus:border-red-400" : "border-gray-100 focus:border-gray-900"}`}
               {...register("email")}
             />
           </div>
-          <FieldError message={errors.email?.message} />
+          {errors.email?.message && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
         </div>
 
         {/* Role + Status — side by side */}
         <div className="grid grid-cols-2 gap-3">
           {/* Role */}
           <div>
-            <Label>Role</Label>
+            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Role</label>
             <div className="relative">
               <select
-                className={selectCls(errors.role)}
+                className={`w-full border-2 rounded-xl py-2.5 pl-4 pr-10 text-sm font-medium outline-none transition-all appearance-none bg-white ${errors.role ? "border-red-300 focus:border-red-400" : "border-gray-100 focus:border-gray-900"}`}
                 {...register("role", { required: "Role is required" })}
               >
                 <option value="">Select role</option>
@@ -172,15 +169,15 @@ const Employee = ({ inModal = false, onSuccess = null, close }) => {
                 className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400"
               />
             </div>
-            <FieldError message={errors.role?.message} />
+            {errors.role?.message && <p className="mt-1 text-xs text-red-500">{errors.role.message}</p>}
           </div>
 
           {/* Status */}
           <div>
-            <Label>Status</Label>
+            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Status</label>
             <div className="relative">
               <select
-                className={selectCls(errors.status)}
+                className={`w-full border-2 rounded-xl py-2.5 pl-4 pr-10 text-sm font-medium outline-none transition-all appearance-none bg-white ${errors.status ? "border-red-300 focus:border-red-400" : "border-gray-100 focus:border-gray-900"}`}
                 {...register("status")}
               >
                 <option value="">Select status</option>
@@ -192,13 +189,13 @@ const Employee = ({ inModal = false, onSuccess = null, close }) => {
                 className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400"
               />
             </div>
-            <FieldError message={errors.status?.message} />
+            {errors.status?.message && <p className="mt-1 text-xs text-red-500">{errors.status.message}</p>}
           </div>
         </div>
 
         {/* Phone */}
         <div>
-          <Label>Phone Number</Label>
+          <label className="mb-1.5 block text-sm font-semibold text-gray-700">Phone Number</label>
           <div className="relative">
             <Phone
               size={14}
@@ -207,11 +204,11 @@ const Employee = ({ inModal = false, onSuccess = null, close }) => {
             <input
               type="text"
               placeholder="+91 98765 43210"
-              className={inputCls(errors.phoneNumber)}
+              className={`w-full border-2 rounded-xl py-2.5 pl-10 pr-4 text-sm font-medium outline-none transition-all ${errors.phoneNumber ? "border-red-300 focus:border-red-400" : "border-gray-100 focus:border-gray-900"}`}
               {...register("phoneNumber")}
             />
           </div>
-          <FieldError message={errors.phoneNumber?.message} />
+          {errors.phoneNumber?.message && <p className="mt-1 text-xs text-red-500">{errors.phoneNumber.message}</p>}
         </div>
 
         {/* Divider */}
@@ -263,7 +260,7 @@ const Employee = ({ inModal = false, onSuccess = null, close }) => {
           onClick={() => setOpen(false)}
         >
           <div onClick={(e) => e.stopPropagation()}>
-            <Employee
+            <EmployeeForm
               onSuccess={handleEmployeeAdded}
               close={() => setOpen(false)}
               inModal
@@ -281,4 +278,4 @@ const Employee = ({ inModal = false, onSuccess = null, close }) => {
   );
 };
 
-export default Employee;
+export default EmployeeForm;

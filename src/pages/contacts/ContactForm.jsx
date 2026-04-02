@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 import {
   User,
   Mail,
@@ -10,36 +11,38 @@ import {
   AlertCircle,
   Loader2,
 } from "lucide-react";
-import z, { email } from "zod";
+import z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
 
 
 
 const contactvalidation = z.object({
-  name: z
-    .min("name is required"),
+  name: z.string().min(1, "Name is required"),
 
   email: z
-    .min("email is   required ")
-    .email("@ this si  required "),
+    .string()
+    .min(1, "Email is required")
+    .email("Invalid email"),
 
   age: z
-    .min("18 is  required")
-    .maxLength("minimum  100  age are  requied"),
+    .string()
+    .min(1, "Age is required"),
 
-  tag: z
-    .min("tag is   required"),
+  tag: z.string().min(1, "Tag is required"),
 
   phoneNumber: z
-    .minLength("10 digit is  required   ")
-})
+    .string()
+    .min(10, "Phone must be at least 10 digits"),
+});
 
-const Contact = ({ inModal = false, onSuccess = null, close }) => {
+const ContactForm = ({ inModal = false, onSuccess = null, close }) => {
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodReslove(contactvalidation)
+    resolver: zodResolver(contactvalidation)
   });
 
 
@@ -53,7 +56,7 @@ const Contact = ({ inModal = false, onSuccess = null, close }) => {
     setApiSuccess("");
 
     try {
-      await axios.post("http:localhost3000/api/contact", {
+      await axios.post("http://localhost:3000/api/contact", {
         name: data.name,
         email: data.email,
         age: data.age,
@@ -120,13 +123,13 @@ const Contact = ({ inModal = false, onSuccess = null, close }) => {
                 type="text"
                 placeholder="Enter Your Full name"
                 className={`w-full bg-slate-50 border-2 ${errors.fullName ? "border-rose-100" : "border-slate-50"} text-slate-900 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-blue-200 focus:bg-white transition-all font-bold placeholder:text-slate-300`}
-                {...register("fullName")
+                {...register("name")
                 }
               />
             </div>
             {errors.fullName && (
               <p className="text-rose-500 text-xs font-bold ml-1">
-                {errors.ame.message}
+                {errors.message}
               </p>
             )}
           </div>
@@ -144,7 +147,7 @@ const Contact = ({ inModal = false, onSuccess = null, close }) => {
               <input
                 type="email"
                 placeholder="name@example.com"
-                className={inputClass(errors.email)}
+                className={`w-full border-2 rounded-xl py-3 pl-11 pr-4 text-sm font-semibold outline-none transition-all ${errors.email ? "border-red-300 focus:border-red-400" : "border-gray-200 focus:border-blue-400"}`}
                 {...register("email")}
               />
             </div>
@@ -169,7 +172,7 @@ const Contact = ({ inModal = false, onSuccess = null, close }) => {
               <input
                 type="number"
                 placeholder="e.g. 18"
-                className={inputClass(errors.age)}
+                className={`w-full border-2 rounded-xl py-3 pl-11 pr-4 text-sm font-semibold outline-none transition-all ${errors.age ? "border-red-300 focus:border-red-400" : "border-gray-200 focus:border-blue-400"}`}
                 {...register("age")}
               />
               {errors.age && (
@@ -184,7 +187,7 @@ const Contact = ({ inModal = false, onSuccess = null, close }) => {
                 Tag
               </label>
               <select
-                className={selectClass(errors.tag)}
+                className={`w-full border-2 rounded-xl py-3 px-4 text-sm font-semibold outline-none transition-all appearance-none bg-white ${errors.tag ? "border-red-300 focus:border-red-400" : "border-gray-200 focus:border-blue-400"}`}
                 {...register("tag", { required: "Tag is required" })}
               >
                 <option value="">Select tag…</option>
@@ -215,7 +218,7 @@ const Contact = ({ inModal = false, onSuccess = null, close }) => {
               <input
                 type="text"
                 placeholder="+91 98765 43210"
-                className={inputClass(errors.phoneNumber)}
+                className={`w-full border-2 rounded-xl py-3 pl-11 pr-4 text-sm font-semibold outline-none transition-all ${errors.phoneNumber ? "border-red-300 focus:border-red-400" : "border-gray-200 focus:border-blue-400"}`}
                 {...register("phoneNumber")}
               />
             </div>
@@ -287,4 +290,4 @@ const Contact = ({ inModal = false, onSuccess = null, close }) => {
   );
 };
 
-export default Contact;
+export default ContactForm;

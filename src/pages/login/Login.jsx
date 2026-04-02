@@ -14,6 +14,7 @@ const loginvalidate = z.object({
     .string()
     .min(1, "Email is required")
     .email("Invalid email format"),
+
   password: z
     .string()
     .min(1, "Password is required")
@@ -39,8 +40,7 @@ const Login = () => {
     setApiSuccess("");
 
     try {
-      
-     await axios.post("http://localhost:3000//api/auth/login", post);
+      await axios.post("http://localhost:3000/api/auth/login", data);
       setApiSuccess("Welcome back!");
     } catch (error) {
       setApiError(error.response?.data?.message || "Invalid credentials.");

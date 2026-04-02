@@ -1,46 +1,42 @@
-import { useState } from "react";
-import { Pencil, Trash2, X } from "lucide-react";
+import React, { useState } from "react";
+import { Save, Pencil, Trash2, X } from "lucide-react";
+import axios from "axios";
 
-const ContactSidebar = ({
-  selectedContact,
-  setSelectedContact,
-  fetchContacts,
+const EmpSidebar = ({
+  selectedEmployee,
+  setSelectedEmployee,
+  fetchEmployees,
 }) => {
   const [error, setError] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
 
-  if (!selectedContact) return null;
+  if (!selectedEmployee) return null;
 
   const handleEdit = () => {
     setFormData({
-      name: selectedContact.name,
-      email: selectedContact.email,
-      age: selectedContact.age,
-      phoneNumber: selectedContact.phoneNumber,
-      tag: selectedContact.tag,
-      address: selectedContact.address,
+      name: selectedEmployee.name,
+      email: selectedEmployee.email,
+      phoneNumber: selectedEmployee.phoneNumber,
+      role: selectedEmployee.role,
+      status: selectedEmployee.status,
     });
     setIsEditing(true);
   };
 
   const handleSave = async () => {
     try {
-      const updatedContact = {
+      const updatedEmployee = {
         name: formData.name,
         email: formData.email,
-        age: Number(formData.age),
         phoneNumber: formData.phoneNumber,
-        tag: formData.tag,
-        address: formData.address,
+        role: formData.role,
+        status: formData.status,
       };
-      await api.put(
-        `/contacts/${selectedContact.id}`,
-        updatedContact,
-      );
+      await axios.put(`http://localhost:3000/api/employee/${selectedEmployee.id}`, updatedEmployee);
       setIsEditing(false);
-      setSelectedContact(null);
-      fetchContacts();
+      setSelectedEmployee(null);
+      fetchEmployees();
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update");
     }
@@ -49,34 +45,33 @@ const ContactSidebar = ({
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure?")) return;
     try {
-      await api.delete(
-        `/contacts/${id}`,
-      );
-      setSelectedContact(null);
-      fetchContacts();
+      await axios.delete(`http://localhost:3000/api/employee/${id}`);
+      setSelectedEmployee(null);
+      fetchEmployees();
     } catch (err) {
       setError(err.response?.data?.message || "Failed to delete");
     }
   };
 
+
   return (
-    <div className="space-y-4">
+    <>
       <div
         onClick={() => {
-          setSelectedContact(null);
+          setSelectedEmployee(null);
           setIsEditing(false);
         }}
         className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
       />
-      <div className="fixed right-0 top-0 h-full w-full sm:w-96 bg-white shadow-2xl z-40 p-6 overflow-y-auto transition-transform duration-300">
+      <div className="fixed right-0 top-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 p-6 overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-extralight text-gray-800">
-            {isEditing ? "Edit Contact" : "Contact Details"}
-            <p className="text-2xl font-bold">{selectedContact.name}</p>
+            {isEditing ? "Edit Employee" : "Employee Details"}
+            <p className="text-2xl font-bold">{selectedEmployee.name}</p>
           </h2>
           <button
             onClick={() => {
-              setSelectedContact(null);
+              setSelectedEmployee(null);
               setIsEditing(false);
             }}
             className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold"
@@ -92,10 +87,9 @@ const ContactSidebar = ({
             {[
               { label: "Name", field: "name" },
               { label: "Email", field: "email" },
-              { label: "Age", field: "age" },
-              { label: "PhoneNumber", field: "phoneNumber" },
-              { label: "Tag", field: "tag" },
-              { label: "Address", field: "address" },
+              { label: "Role", field: "role" },
+              { label: "Phone Number", field: "phoneNumber" },
+              { label: "Status", field: "status" },
             ].map(({ label, field }) => (
               <div key={field} className="bg-gray-50 p-3 rounded-lg">
                 <p className="text-xs text-gray-500 uppercase">{label}</p>
@@ -112,10 +106,9 @@ const ContactSidebar = ({
             <div className="flex gap-2 mt-4">
               <button
                 onClick={handleSave}
-                className="p-2 m-2 bg-green-600 rounded-lg text-white w-32 cursor-pointer"
+                className="flex items-center justify-center gap-2 p-2 m-2 bg-green-600 rounded-lg text-white w-32 cursor-pointer"
               >
-                {" "}
-                Save
+                <Save size={16} /> Save
               </button>
               <button
                 onClick={() => setIsEditing(false)}
@@ -126,48 +119,42 @@ const ContactSidebar = ({
             </div>
           </div>
         ) : (
-          // ——— VIEW MODE: p tags ———
-          <div>
+          <div className="space-y-4">
             <div className="bg-gray-50 p-3 rounded-lg">
               <p className="text-xs text-gray-500 uppercase">Name</p>
               <p className="font-semibold text-gray-800">
-                {selectedContact.name}
+                {selectedEmployee.name}
               </p>
             </div>
-
             <div className="bg-gray-50 p-3 rounded-lg">
               <p className="text-xs text-gray-500 uppercase">Email</p>
               <p className="font-semibold text-gray-800">
-                {selectedContact.email}
+                {selectedEmployee.email}
               </p>
             </div>
-
             <div className="bg-gray-50 p-3 rounded-lg">
-              <p className="text-xs text-gray-500 uppercase">Age</p>
+              <p className="text-xs text-gray-500 uppercase">Role</p>
               <p className="font-semibold text-gray-800">
-                {selectedContact.age}
+                {selectedEmployee.role}
               </p>
             </div>
-
             <div className="bg-gray-50 p-3 rounded-lg">
-              <p className="text-xs text-gray-500 uppercase">Phone Number</p>
+              <p className="text-xs text-gray-500 uppercase">Phone</p>
               <p className="font-semibold text-gray-800">
-                {selectedContact.phoneNumber}
+                {selectedEmployee.phoneNumber}
               </p>
             </div>
-
             <div className="bg-gray-50 p-3 rounded-lg">
-              <p className="text-xs text-gray-500 uppercase">Tag</p>
-              <p className="font-semibold text-gray-800">
-                {selectedContact.tag}
-              </p>
-            </div>
-
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <p className="text-xs text-gray-500 uppercase">Address</p>
-              <p className="font-semibold text-gray-800">
-                {selectedContact.address}
-              </p>
+              <p className="text-xs text-gray-500 uppercase">Status</p>
+              <span
+                className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full ${
+                  selectedEmployee.status === "ACTIVE"
+                    ? "bg-green-100 text-green-700"
+                    : "bg-red-100 text-red-700"
+                }`}
+              >
+                {selectedEmployee.status}
+              </span>
             </div>
 
             <div className="flex gap-2">
@@ -180,7 +167,7 @@ const ContactSidebar = ({
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleDelete(selectedContact.id);
+                  handleDelete(selectedEmployee.id);
                 }}
                 className="flex items-center justify-center gap-2 p-2 m-2 bg-red-100 text-red-500 rounded-lg w-32 cursor-pointer"
               >
@@ -190,7 +177,8 @@ const ContactSidebar = ({
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
-export default ContactSidebar;
+
+export default EmpSidebar;

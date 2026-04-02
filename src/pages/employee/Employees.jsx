@@ -1,64 +1,62 @@
 import React, { useState, useEffect } from "react";
-import api from "../lib/api";
-import Contact from "./Contact";
-import ContactFilter from "./ContactFilter";
-import ContactSidebar from "./ContactSidebar";
+import axios from "axios";
 
-const Services = () => {
-  const [contacts, setContacts] = useState([]);
+import Employee from "./EmployeeForm";
+import EmpSidebar from "./EmpSidebar"
+import { Dice1 } from "lucide-react";
 
-  const [selectedContact, setSelectedContact] = useState(null);
+const Employees = () => {
+  const [employees, setEmployees] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+
+  //search bar  here   
   const [search, setSearch] = useState("");
 
-
-  //filter here  defined 
-  const [showFilter, setShowFilter] = useState(false);
-  const [filterField, setFilterField] = useState("");
-  const [filterValue, setFilterValue] = useState("");
-
+  // dropdown  row per page  adn  pagination here
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  //sorting order i can 
+  //sorting   
   const [sortField, setSortField] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
-    fetchContacts();
-  }, [search, filterField, filterValue]);
+    fetchEmployees();
+  },
+    [search]);
 
-  const fetchContacts = async () => {
+  const fetchEmployees = async () => {
     setLoading(true);
     setError("");
     try {
-      const response = await api.get("/contacts", {
-        params: {
-          search: search || undefined,
-          field: filterField || undefined,
-          value: filterValue || undefined,
-        },
-      });
-      const data = response.data;
-      setContacts(Array.isArray(data) ? data : data.data || data.contacts || []);
-    } catch {
-      setError("Failed to fetch contacts");
+      const res = await axios.get("http://localhost:3000/api/employee",
+        { params: { search: search || undefined } }
+      );
+      const data = res.data;
+      setEmployees(Array.isArray(data) ? data : data.data || data.employees || []);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to fetch employees");
+      setEmployees([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleContactAdded = () => {
+  const handleEmployeeAdded = () => {
     setOpen(false);
-    fetchContacts();
+    fetchEmployees();
   };
 
   const handleSort = (field) => {
     if (sortField === field) setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    else { setSortField(field); setSortOrder("asc"); }
+    else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
     setCurrentPage(0);
   };
 
@@ -67,19 +65,19 @@ const Services = () => {
     return sortOrder === "asc" ? " ↑" : " ↓";
   };
 
-  const sorted = [...contacts].sort((a, b) => {
+  const sorted = [...employees].sort((a, b) => {
     const valA = (a[sortField] ?? "").toString().toLowerCase();
     const valB = (b[sortField] ?? "").toString().toLowerCase();
-    if (sortOrder === "asc") return valA > valB ? 1 : -1;
-    if (sortOrder === "desc") return valA < valB ? 1 : -1;
-    return 0;
+    if (sortOrder === "asc") return valA.localeCompare(valB);
+    return valB.localeCompare(valA);
   });
 
-  const totalContacts = sorted.length;
-  const noOfPages = Math.ceil(totalContacts / rowsPerPage);
+
+  const totalEmployees = sorted.length;
+  const noOfPages = Math.ceil(totalEmployees / rowsPerPage);
   const start = currentPage * rowsPerPage;
   const end = start + rowsPerPage;
-  const paginatedContacts = sorted.slice(start, end);
+  const paginatedEmployees = sorted.slice(start, end);
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
@@ -88,56 +86,52 @@ const Services = () => {
     setCurrentPage(0);
   };
 
-  const handleRowsPerPageChange = (e) => {
-    setRowsPerPage(Number(e.target.value));
-    setCurrentPage(0);
-  };
 
-  const tagColors = {
-    VIP: { bg: "#FFF3CD", color: "#856404" },
-    VVIP: { bg: "#F3E8FF", color: "#6B21A8" },
-    regular: { bg: "#D1FAE5", color: "#065F46" },
+  const handleRowsPerPageChange = (e) => {
+    setRowsPerPage(Number(e.target.value)); // update rows per page
+    setCurrentPage(0);                      // always reset to page 1
   };
 
   const SortTh = ({ field, label }) => (
     <th
       onClick={() => handleSort(field)}
-      className="p-3 text-left cursor-pointer select-none hover:text-blue-600 transition-colors"
+      className="p-3 text-left cursor-pointer select-none hover:text-yellow-300 transition-colors"
     >
       {label}
-      <span className={sortField === field ? "text-blue-600 font-bold" : "text-gray-400"}>
+      <span className={sortField === field ? "text-yellow-300 font-bold" : "text-purple-200"}>
         {sortIcon(field)}
       </span>
     </th>
   );
 
+  const statusColors = {
+    active: { bg: "#D1FAE5", color: "#065F46" },
+    inactive: { bg: "#FEE2E2", color: "#991B1B" },
+    pending: { bg: "#FFF3CD", color: "#856404" },
+  };
+
   return (
     <div className="min-h-screen bg-orange-50 text-slate-900 p-6">
-      <h1 className="text-3xl font-bold">Contact Management</h1>
-      <br /><br />
+
+      {/* Page Title */}
+      <h1 className="text-2xl font-bold text-slate-800 mb-6">Employee Management</h1>
 
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
-        <button
-          onClick={() => setShowFilter(true)}
-          className="border border-black text-black bg-blue-200 hover:bg-black hover:text-white px-5 py-2 rounded-lg font-semibold text-sm transition"
-        >
-          Filter
-        </button>
-
         <input
           className="flex-1 min-w-[200px] max-w-sm bg-white border border-gray-300 px-4 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-300"
           type="search"
-          placeholder="Search Contact"
+          placeholder="Search employees..."
           value={search}
           onChange={handleSearchChange}
         />
+
 
         <button
           onClick={() => setOpen(true)}
           className="bg-zinc-600 hover:bg-orange-500 text-white font-semibold px-5 py-2 rounded-lg transition text-sm"
         >
-          + Add Contact
+          + Add Employee
         </button>
       </div>
 
@@ -149,93 +143,86 @@ const Services = () => {
       )}
 
       {/* Loading */}
-      {loading && (
-        <div className="text-center py-8 text-gray-500">Loading contacts...</div>
-      )}
-
-      {/* Table — BUG 1 FIXED: <> not <?> */}
-      {!loading && (
+      {loading ? (
+        <div className="text-center py-10 text-gray-400">Loading employees...</div>
+      ) : (
         <>
-          <div className="bg-white rounded-xl shadow overflow-hidden"> {/* BUG 2 FIXED: shadow */}
+          <div className="bg-white rounded-xl shadow overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead className="bg-purple-500 text-white">
                   <tr>
-                    <th className="p-3"><input type="checkbox" /></th>
+                    <th className="p-3">
+                      <input type="checkbox" />
+                    </th>
                     <SortTh field="name" label="Name" />
                     <SortTh field="email" label="Email" />
-                    <SortTh field="age" label="Age" />
-                    <SortTh field="tag" label="Tags" />
-                    <SortTh field="phoneNumber" label="Mobile" />
-                    <SortTh field="address" label="Address" />
+                    <SortTh field="role" label="Role" />
+                    <SortTh field="phoneNumber" label="Phone" />
+                    <SortTh field="status" label="Status" />
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedContacts.length > 0 ? (
-                    paginatedContacts.map((contact) => (
+                  {paginatedEmployees.length > 0 ? (
+                    paginatedEmployees.map((employee) => (
                       <tr
-                        key={contact.id}
+                        key={employee.id}
                         className="border-t hover:bg-orange-50 cursor-pointer transition-colors"
-                        onClick={() => setSelectedContact(contact)}
+                        onClick={() => setSelectedEmployee(employee)}
                       >
                         <td className="p-3">
                           <input type="checkbox" onClick={(e) => e.stopPropagation()} />
                         </td>
-                        <td className="p-3 font-medium">{contact.name}</td>
-                        <td className="p-3 text-blue-600">{contact.email}</td>
-                        <td className="p-3">{contact.age}</td>
+                        <td className="p-3 font-medium">{employee.name}</td>
+                        <td className="p-3 text-blue-600">{employee.email}</td>
+                        <td className="p-3">{employee.role}</td>
+                        <td className="p-3">{employee.phoneNumber || "—"}</td>
                         <td className="p-3">
-                          {contact.tag ? (
+                          {employee.status ? (
                             <span style={{
-                              background: tagColors[contact.tag]?.bg || "#E5E7EB",
-                              color: tagColors[contact.tag]?.color || "#374151",
+                              background: statusColors[employee.status?.toLowerCase()]?.bg || "#E5E7EB",
+                              color: statusColors[employee.status?.toLowerCase()]?.color || "#374151",
                               padding: "3px 10px",
                               borderRadius: 20,
                               fontSize: 12,
                               fontWeight: 700,
                             }}>
-                              {contact.tag}
+                              {employee.status}
                             </span>
-                          ) : (
-                            <span className="text-gray-300 text-xs">—</span>
-                          )}
+                          ) : "—"}
                         </td>
-                        <td className="p-3">{contact.phoneNumber || "—"}</td>
-                        <td className="p-3 text-gray-500 max-w-xs truncate">{contact.address || "—"}</td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={7} className="p-8 text-center text-gray-400">
-                        {search
-                          ? "No contacts match your search"
-                          : "No contacts found — click + Add Contact"}
+                      <td colSpan={6} className="p-8 text-center text-gray-400">
+                        {search ? "No employees match your search" : "No employees found — click + Add Employee"}
                       </td>
                     </tr>
                   )}
                 </tbody>
               </table>
             </div>
+            {/* Footer */}
 
-            {/* Table Footer */}
             <div className="px-4 py-3 border-t text-xs text-gray-500 flex items-center justify-between flex-wrap gap-3">
 
-              {/* Showing X–Y of Z */}
+              {/* Left: showing count */}
               <span>
                 Showing{" "}
                 <strong className="text-gray-700">
-                  {totalContacts === 0 ? 0 : start + 1}–{Math.min(end, totalContacts)}
+                  {totalEmployees === 0 ? 0 : start + 1}–{Math.min(end, totalEmployees)}
                 </strong>{" "}
-                of <strong className="text-gray-700">{totalContacts}</strong> contacts
+                of <strong className="text-gray-700">{totalEmployees}</strong> employees
               </span>
 
-              {/* Rows per page dropdown */}
+              {/* here  drop down  manu throguh  */}
               <div className="flex items-center gap-2">
                 <span className="text-gray-400">Rows per page:</span>
                 <select
                   className="border border-gray-300 rounded-lg px-2 py-1 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300"
-                  value={rowsPerPage}
-                  onChange={handleRowsPerPageChange}
+                  value={rowsPerPage}              // ✅ controlled value
+                  onChange={handleRowsPerPageChange} // ✅ wired handler
                 >
                   <option value={3}>3</option>
                   <option value={5}>5</option>
@@ -244,21 +231,24 @@ const Services = () => {
                 </select>
               </div>
 
-              {/* Prev / Page X of Y / Next */}
+              {/*  here  prev and  next button  */}
+
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => setCurrentPage((p) => p - 1)}
+                  onClick={() => setCurrentPage(p => p - 1)}
                   disabled={currentPage === 0}
                   className="px-3 py-1 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
                 >
                   ← Prev
                 </button>
+
                 <span className="text-gray-500">
                   Page <strong className="text-gray-700">{currentPage + 1}</strong> of{" "}
                   <strong className="text-gray-700">{Math.max(noOfPages, 1)}</strong>
                 </span>
+
                 <button
-                  onClick={() => setCurrentPage((p) => p + 1)}
+                  onClick={() => setCurrentPage(p => p + 1)}
                   disabled={currentPage >= noOfPages - 1}
                   className="px-3 py-1 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
                 >
@@ -269,34 +259,24 @@ const Services = () => {
             </div>
           </div>
 
-          {/* Filter Modal */}
-          {showFilter && (
-            <div className="absolute top-40 items-center z-50">
-              <div className="bg-green-300 rounded-xl shadow-xl p-6 w-96">
-                <button
-                  onClick={() => setShowFilter(false)}
-                  className="absolute top-3 right-3 w-4 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-500 hover:text-white text-gray-500 font-bold text-xs transition"
-                  
-                >
-                  ✕
-                </button>
-                <ContactFilter
-                  setFilterField={setFilterField}
-                  setFilterValue={setFilterValue}
-                  close={() => setShowFilter(false)}
-                />
-              </div>
-            </div>
+          {/* Sidebar for selected employee */}
+          {selectedEmployee && (
+            <EmpSidebar
+              employee={selectedEmployee}
+              onClose={() => setSelectedEmployee(null)}
+              onUpdated={fetchEmployees}
+            />
           )}
 
-          {/* Add Contact Modal */}
+          {/* Add employee modal */}
+
           {open && (
             <div
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
               onClick={() => setOpen(false)}
             >
               <div
-                className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden"
+                className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl h-170 flex flex-col"
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
@@ -306,24 +286,24 @@ const Services = () => {
                   ✕
                 </button>
                 <div className="overflow-y-auto flex-1">
-                  <Contact onSuccess={handleContactAdded} close={() => setOpen(false)} />
+                  <Employee onSuccess={handleEmployeeAdded} close={() => setOpen(false)} />
                 </div>
               </div>
             </div>
+
           )}
 
-          {/* Contact Sidebar — BUG 4 FIXED: removed stray } after this */}
-          <ContactSidebar
-            selectedContact={selectedContact}
-            setSelectedContact={setSelectedContact}
-            fetchContacts={fetchContacts}
+
+          <EmpSidebar
+            selectedEmployee={selectedEmployee}
+            setSelectedEmployee={setSelectedEmployee}
+            fetchEmployees={fetchEmployees}
           />
 
-        </> // BUG 5 FIXED: removed extra } and )} that were here
+        </>
       )}
-
     </div>
   );
 };
 
-export default Services;
+export default Employees;
