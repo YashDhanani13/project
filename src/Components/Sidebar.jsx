@@ -23,7 +23,7 @@ const Sidebar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    // ✅ Wrap sidebar + page content in a flex row
+   
     <div className="flex min-h-screen">
 
       {/* ── Sidebar ── always visible */}

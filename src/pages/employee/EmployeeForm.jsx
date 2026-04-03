@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import api from "../../api/api";
 import {
   User,
   Mail,
@@ -51,7 +51,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
     setApiError("");
     setApiSuccess("");
     try {
-      await axios.post("http://localhost:3000/employee", {
+      await api.post("/employee", {
         name: data.name,
         email: data.email,
         role: data.role,
@@ -59,6 +59,8 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
         status: data.status,
       });
       setApiSuccess("Employee created successfully!");
+      if (onSuccess) onSuccess();
+      if (inModal && close) close();
     } catch (error) {
       setApiError(error.response?.data?.message || "Server connection failed.");
     } finally {

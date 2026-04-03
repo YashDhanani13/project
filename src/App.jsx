@@ -14,10 +14,18 @@ import Employees from "./pages/employee/Employees";
 // Layout
 import Sidebar from "./components/Sidebar";
 
+// Route Protection
+import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Sidebar />,
+    element: (
+      <ProtectedRoute>
+        <Sidebar />
+      </ProtectedRoute>
+    ),
     children: [
       { path: "",         element: <Home />         },
       { path: "contacts", element: <Contacts />     },
@@ -28,8 +36,8 @@ const router = createBrowserRouter([
     ],
   },
 
-  { path: "/login",  element: <Login />  },
-  { path: "/signup", element: <Signup /> },
+  { path: "/login",  element: <PublicRoute><Login /></PublicRoute>  },
+  { path: "/signup", element: <PublicRoute><Signup /></PublicRoute> },
 ]);
 
 function App() {

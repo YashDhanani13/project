@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Mail, Lock, ArrowRight, CheckCircle2, AlertCircle, Loader2, LogIn,
 } from "lucide-react";
-import axios from "axios";
+import api from "../../api/api";
+import { AuthContext } from "../../Authcontext/context";
 
 const loginvalidate = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
@@ -18,12 +19,15 @@ const loginvalidate = z.object({
 });
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(loginvalidate), // Fixed: removed semicolon
+    resolver: zodResolver(loginvalidate),
   });
 
   const [loading, setLoading] = useState(false);
@@ -36,8 +40,16 @@ const Login = () => {
     setApiSuccess("");
 
     try {
-      await axios.post("http://localhost:3000/auth/login", data);
-      setApiSuccess("Welcome back!");
+      const response = await api.post("/auth/login", data);
+      const token = response.data.token;
+      
+      if (token) {
+        login(token);
+        setApiSuccess("Welcome back!");
+        setTimeout(() => navigate("/"), 1500);
+      } else {
+        setApiError("No token received from server");
+      }
     } catch (error) {
       setApiError(error.response?.data?.message || "Invalid credentials.");
     } finally {

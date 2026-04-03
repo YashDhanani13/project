@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Contact from "./ContactForm";
 import ContactFilter from "./ContactFilter";
 import ContactSidebar from "./ContactSidebar";
-import axios from "axios";
+import api from "../../api/api";
 
 const Contacts = () => {
   const [contacts, setContacts] = useState([]);
@@ -36,7 +36,7 @@ const Contacts = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get("http://localhost:3000/contacts", {
+      const response = await api.get("/contacts", {
         params: {
           search: search || undefined,
           field: filterField || undefined,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import api from "../../api/api";
 import {
   User,
   Mail,
@@ -56,7 +56,7 @@ const ContactForm = ({ inModal = false, onSuccess = null, close }) => {
     setApiSuccess("");
 
     try {
-      await axios.post("http://localhost:3000/contacts", {
+      await api.post("/contacts", {
         name: data.name,
         email: data.email,
         age: data.age,
@@ -64,7 +64,10 @@ const ContactForm = ({ inModal = false, onSuccess = null, close }) => {
         phoneNumber: data.phoneNumber,
         address: data.address
       });
-
+      
+      setApiSuccess("Contact added successfully!");
+      if (onSuccess) onSuccess();
+      if (inModal && close) close();
     } catch (err) {
       setApiError(err.response?.data?.message || "Server connection failed.");
     } finally {

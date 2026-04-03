@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Mail, Lock, ArrowRight, CheckCircle2, AlertCircle, Loader2, User,
 } from "lucide-react";
-import axios from "axios";
+import api from "../../api/api";
+import { AuthContext } from "../../Authcontext/context";
 
 const signValdate = z.object({
   fullName :  z.string().min(1, "Name is required"),
@@ -38,18 +39,24 @@ const Signup = () => {
     setApiSuccess("");
 
     try {
-      await axios.post("http://localhost:3000/auth/signup", {
+      const response = await api.post("/auth/signup", {
         fullName: data.fullName,
         email: data.email,
         organizationName: data.organizationName,
         password: data.password,
       });
 
-      setApiSuccess("Account created successfully!");
-
+      const token = response.data.token;
+      if (token) {
+        login(token);
+        setApiSuccess("Account created successfully!");
+        setTimeout(() => navigate("/"), 1500);
+      } else {
+        setApiError("No token received from server");
+      }
     } catch (error) {
       if (error.response) {
-        setApiError(error.response.data.message || " ");
+        setApiError(error.response.data.message || "Signup failed");
       } else {
         setApiError("Server connection failed.");
       }

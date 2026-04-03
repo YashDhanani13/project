@@ -33,7 +33,7 @@ const EmpSidebar = ({
         role: formData.role,
         status: formData.status,
       };
-      await axios.put(`http://localhost:3000/employee/${selectedEmployee.id}`, updatedEmployee);
+      await api.put(`/employee/${selectedEmployee.id}`, updatedEmployee);
       setIsEditing(false);
       setSelectedEmployee(null);
       fetchEmployees();
@@ -43,9 +43,8 @@ const EmpSidebar = ({
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure?")) return;
-    try {
-      await axios.delete(`http://localhost:3000/employee/${id}`);
+        try {
+      await axios.delete(`/employee/${id}`);
       setSelectedEmployee(null);
       fetchEmployees();
     } catch (err) {

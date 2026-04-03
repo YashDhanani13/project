@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../api/api";
 
 import Employee from "./EmployeeForm";
 import EmpSidebar from "./EmpSidebar"
@@ -33,7 +33,7 @@ const Employees = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.get("http://localhost:3000/employee",
+      const res = await api.get("/employee",
         { params: { search: search || undefined } }
       );
       const data = res.data;

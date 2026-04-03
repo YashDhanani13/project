@@ -35,7 +35,7 @@ const ContactSidebar = ({
         tag: formData.tag,
         address: formData.address,
       };
-      await axios.put(`http://localhost:3000/contacts/${selectedContact.id}`, updatedContact);
+      await api.put(`/contacts/${selectedContact.id}`, updatedContact);
       setIsEditing(false);
       setSelectedContact(null);
       fetchContacts();
@@ -45,9 +45,8 @@ const ContactSidebar = ({
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure?")) return;
-    try {
-      await axios.delete(`http://localhost:3000/contacts/${id}`);
+      try {
+      await api.delete(`/contacts/${id}`);
       setSelectedContact(null);
       fetchContacts();
     } catch (err) {

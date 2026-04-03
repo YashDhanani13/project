@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Mail, User, Edit2, Check, X } from "lucide-react";
-import axios from "axios";
+import api from "../../api/api";
 
 interface ProfileForm {
   fullName: string;
@@ -30,9 +30,7 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:3000/auth/getUserProfile",
-        );
+        const res = await api.get("/auth/getUserProfile");
         const { fullName, email } = res.data.data;
         reset({ fullName, email });
       } catch (err) {
@@ -48,9 +46,9 @@ const UserProfile = () => {
   // ─── UPDATE profile ────────────────────
   const onSubmit = async (data: ProfileForm) => {
     try {
-      await axios.put("http://localhost:3000/auth/updateUserProfile", {
+      await api.put("/updateUserProfile", {
         fullName: data.fullName,
-        email: data.email,
+        email :data.email
       });
 
       console.log("Profile updated ");
