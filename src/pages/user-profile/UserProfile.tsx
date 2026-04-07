@@ -26,7 +26,6 @@ const UserProfile = () => {
   });
 
   // ─── GET profile ──────────
-
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -46,12 +45,12 @@ const UserProfile = () => {
   // ─── UPDATE profile ────────────────────
   const onSubmit = async (data: ProfileForm) => {
     try {
-      await api.put("/updateUserProfile", {
+      await api.put("auth/updateUserProfile", {
         fullName: data.fullName,
         email :data.email
       });
 
-      console.log("Profile updated ");
+      console.log("Profile updated");
       setIsEditing(false);
     } catch (err) {
       console.error("Update failed ", err);
@@ -62,7 +61,7 @@ const UserProfile = () => {
   if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
 
   return (
-    <div className="h-108 rounded-lg bg-orange-50 p-6">
+    <div className=" rounded-lg bg-orange-50 h-130 p-4 " >
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
@@ -71,7 +70,7 @@ const UserProfile = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm  h-90  p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-lg font-bold text-gray-900">
@@ -106,7 +105,7 @@ const UserProfile = () => {
               </div>
             )}
           </div>
-
+            
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* Full Name */}
             <div className="space-y-1.5">

@@ -31,7 +31,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
     register,
     handleSubmit,
     formState: { errors },
-  
+
   } = useForm({
     resolver: zodResolver
       (Empvalidation)
@@ -132,7 +132,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
             <input
               type="email"
               placeholder="name@company.com"
-              className={`w-full border-2 rounded-xl py-2.5 pl-10 pr-4 text-sm font-medium outline-none transition-all ${errors.email ? "border-red-300 focus:border-red-400" : "border-gray-100 focus:border-gray-900"}`}
+              className={`w-full border-2 rounded-xl py-2.5 pl-10 pr-4 text-sm font-medium outline-none transitio-all ${errors.email ? "border-nred-300 focus:border-red-400" : "border-gray-100 focus:border-gray-900"}`}
               {...register("email")}
             />
           </div>
@@ -208,7 +208,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
           <button
             type="button"
             onClick={() => {
-             
+
               close?.();
             }}
             className="flex-1 rounded-lg border border-gray-200 bg-transparent py-2.5 text-sm font-semibold
@@ -228,7 +228,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
               <Loader2 size={15} className="animate-spin" />
             ) : (
               <>
-                Create <ArrowRight size={14} />
+                Create Employee <ArrowRight size={14} />
               </>
             )}
           </button>

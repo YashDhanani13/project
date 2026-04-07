@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Pencil, Trash2, X } from "lucide-react";
-import axios from "axios";
+// import axios from "axios";//
+// Add this at the top of ContactSidebar.jsx
+import api from "../../api/api";
 
 const ContactSidebar = ({
   selectedContact,
@@ -35,6 +37,7 @@ const ContactSidebar = ({
         tag: formData.tag,
         address: formData.address,
       };
+
       await api.put(`/contacts/${selectedContact.id}`, updatedContact);
       setIsEditing(false);
       setSelectedContact(null);
@@ -45,15 +48,14 @@ const ContactSidebar = ({
   };
 
   const handleDelete = async (id) => {
-      try {
-      await api.delete(`/contacts/${id}`);
+    try {
+      await api.delete(`/contacts/${selectedContact.id}`);
       setSelectedContact(null);
       fetchContacts();
     } catch (err) {
       setError(err.response?.data?.message || "Failed to delete");
     }
   };
-
 
   return (
     <div className="space-y-4">
@@ -167,12 +169,12 @@ const ContactSidebar = ({
             </div>
 
             <div className="flex gap-2">
-              <button
+              <buttony
                 onClick={handleEdit}
                 className="flex items-center justify-center gap-2 p-2 m-2 bg-blue-700 rounded-lg text-white w-32 cursor-pointer"
               >
                 <Pencil size={16} /> Edit
-              </button>
+              </buttony>
               <button
                 onClick={(e) => {
                   e.stopPropagation();

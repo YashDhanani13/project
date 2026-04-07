@@ -69,7 +69,7 @@ const Sidebar = () => {
         </nav>
 
         {/* Bottom — Profile Settings */}
-        <div className="flex flex-col gap-1 px-4 mb-4">
+        <div className="flex flex-col gap-1 p-6 mb-4">
           <button
             onClick={() => setShowProfile(true)}
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:bg-white/10 hover:text-white transition-all w-full text-left"
@@ -87,8 +87,8 @@ const Sidebar = () => {
 
       {/* ── Profile Modal ── */}
       {showProfile && (
-        <div className="fixed inset-0 flex items-center justify-center z-40 bg-black/40">
-          <div className="bg-gray-500 relative rounded-xl shadow-xl p-6 w-96 m-2">
+        <div className="fixed inset-0  flex items-center justify-center z-40 bg-black/40">
+          <div className="bg-gray-500 relative rounded-xl shadow-xl p-6 w-220  h-140 m-2">
             <button
               onClick={() => setShowProfile(false)}
               className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-500 hover:text-white text-gray-500 font-bold text-xs transition"

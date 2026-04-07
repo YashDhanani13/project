@@ -4,6 +4,8 @@ import Contact from "./ContactForm";
 import ContactFilter from "./ContactFilter";
 import ContactSidebar from "./ContactSidebar";
 import api from "../../api/api";
+import { email } from "zod";
+// import 
 
 const Contacts = () => {
   const [contacts, setContacts] = useState([]);
@@ -82,18 +84,37 @@ const Contacts = () => {
   const end = start + rowsPerPage;
   const paginatedContacts = sorted.slice(start, end);
 
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-    setFilterField("");
-    setFilterValue("");
-    setCurrentPage(0);
-  };
+  // const handleSearchChange = (e) => {
+  //   setSearch(e.target.value);
+  //   setFilterField("");
+  //   setFilterValue("");
+  //   setCurrentPage(0);
+  // };
 
   const handleRowsPerPageChange = (e) => {
     setRowsPerPage(Number(e.target.value));
     setCurrentPage(0);
   };
 
+
+  // const  handlesearchChange = async() => {
+  //    try {
+  //   await api.get("/search" , {
+  //     params : { 
+  //       query : search ,
+  //       name :search ,
+  //       email : search ,
+  //       age : search ,
+  //       tag : search ,
+  //       phoneNumber : search ,
+  //       address : search
+  //     }
+  //   })
+  //    } catch (error) {
+  //     console.log(Error .error);
+
+  //    }
+  // }
   const tagColors = {
     VIP: { bg: "#FFF3CD", color: "#856404" },
     VVIP: { bg: "#F3E8FF", color: "#6B21A8" },
@@ -121,24 +142,24 @@ const Contacts = () => {
       <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
         <button
           onClick={() => setShowFilter(true)}
-          className="border border-black text-black bg-blue-200 hover:bg-black hover:text-white px-5 py-2 rounded-lg font-semibold text-sm transition"
+          className="border border-b-indigo-900 border-2 text-gray-800  w-35 h-12 bg-white  hover:bg-black hover:text-white  hover:border-orange-400 border-2 px-5 py-2 rounded-lg font-bold text-sm transition cursor-pointer"
         >
           Filter
         </button>
 
-        <input
+        {/* <input
           className="flex-1 min-w-[200px] max-w-sm bg-white border border-gray-300 px-4 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-300"
           type="search"
           placeholder="Search Contact"
           value={search}
-          onChange={handleSearchChange}
-        />
+          onChange={handlesearchChange}
+        /> */}
 
         <button
           onClick={() => setOpen(true)}
-          className="bg-zinc-600 hover:bg-orange-500 text-white font-semibold px-5 py-2 rounded-lg transition text-sm"
+          className="border border-orange-400 border-2   bg-gray-800 hover:bg-orange-400 hover:border-slate-800 h-12 cursor-pointer text-white   outline  font-semibold px-5 py-2 rounded-lg transition text-sm"
         >
-          + Add Contact
+          +  Add Contact
         </button>
       </div>
 
@@ -313,7 +334,7 @@ const Contacts = () => {
             </div>
           )}
 
-          {/* Contact Sidebar — BUG 4 FIXED: removed stray } after this */}
+
           <ContactSidebar
             selectedContact={selectedContact}
             setSelectedContact={setSelectedContact}

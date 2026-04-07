@@ -1,5 +1,5 @@
-import React from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import React, { useContext } from "react";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 
 // Pages
 import Signup from "./pages/signup/Signup";
@@ -14,18 +14,34 @@ import Employees from "./pages/employee/Employees";
 // Layout
 import Sidebar from "./components/Sidebar";
 
-// Route Protection
-import ProtectedRoute from "./components/ProtectedRoute";
-import PublicRoute from "./components/PublicRoute";
+// Auth Context
+import { AuthContext } from "./Authcontext/AuthContext";
+
+// Route Protection Component
+const ProtectedLayout = ({ children }) => {
+  const { token } = useContext(AuthContext);
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Sidebar />;
+};
+
+const PublicRoute = ({ children }) => {
+  const { token } = useContext(AuthContext);
+
+  if (token) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <ProtectedRoute>
-        <Sidebar />
-      </ProtectedRoute>
-    ),
+    element: <ProtectedLayout />,
     children: [
       { path: "",         element: <Home />         },
       { path: "contacts", element: <Contacts />     },

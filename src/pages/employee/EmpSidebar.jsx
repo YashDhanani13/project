@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Save, Pencil, Trash2, X } from "lucide-react";
 import axios from "axios";
+// Add this at the top of ContactSidebar.jsx
+import api from "../../api/api";
+
 
 const EmpSidebar = ({
   selectedEmployee,
@@ -44,7 +47,7 @@ const EmpSidebar = ({
 
   const handleDelete = async (id) => {
         try {
-      await axios.delete(`/employee/${id}`);
+      await api.delete(`/employee/${id}`);
       setSelectedEmployee(null);
       fetchEmployees();
     } catch (err) {

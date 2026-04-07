@@ -1,17 +1,18 @@
 import React, { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from "react-router-dom";
 import {
   Mail, Lock, ArrowRight, CheckCircle2, AlertCircle, Loader2, LogIn,
 } from "lucide-react";
 import api from "../../api/api";
-import { AuthContext } from "../../Authcontext/context";
+import { AuthContext } from "../../Authcontext/AuthContext";
 
-const loginvalidate = z.object({
+
+
+const loginValidationSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
-
   password: z
     .string()
     .min(1, "Password is required")
@@ -21,13 +22,12 @@ const loginvalidate = z.object({
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(loginvalidate),
+    resolver: zodResolver(loginValidationSchema),
   });
 
   const [loading, setLoading] = useState(false);
@@ -41,14 +41,18 @@ const Login = () => {
 
     try {
       const response = await api.post("/auth/login", data);
-      const token = response.data.token;
+      console.log("Login response:", response.data); // Debug: see what the backend returns
+      
+      // Handle different response structures
+      let token = response.data.token || response.data.accessToken || response.data.data;
       
       if (token) {
         login(token);
         setApiSuccess("Welcome back!");
         setTimeout(() => navigate("/"), 1500);
       } else {
-        setApiError("No token received from server");
+        console.error("Token not found in response:", response.data);
+        setApiError("No token received from server. Check console for details.");
       }
     } catch (error) {
       setApiError(error.response?.data?.message || "Invalid credentials.");
@@ -58,7 +62,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-6 bg-gradient-to-r from-blue-300 to-white pt-28">
+    <div className="min-h-screen w-full flex items-center justify-center p-6 bg-linear-to-r from-blue-300 to-white pt-28">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-[2.5rem] p-10 shadow-3xl border-slate-100">
 
@@ -111,6 +115,7 @@ const Login = () => {
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                 <input
                   type="password"
+                  placeholder="Enter your password"
                   className={`w-full bg-slate-50 border-2 ${errors.password ? "border-rose-300" : "border-slate-50"} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
                   {...register("password")}
                 />

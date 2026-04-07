@@ -5,7 +5,7 @@ const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
   const [value, setValue] = useState("");
   const filterRef = useRef(null);
 
- // close  the   filter for this are used this 
+  // close  the   filter for this are used this 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (filterRef.current && !filterRef.current.contains(e.target)) {
@@ -19,10 +19,10 @@ const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
   return (
     <>
       <div className="fixed inset-0 bg-black/20 " onClick={close} />
-      <div 
-      ref={filterRef} 
-      
-      className="bg-white p-4 rounded-lg shadow-lg  relative z-50">
+      <div
+        ref={filterRef}
+
+        className="bg-white p-4 rounded-lg shadow-lg  relative z-50">
         <h1 className="font-bold">Filter Contact</h1>
         <hr />
         <select

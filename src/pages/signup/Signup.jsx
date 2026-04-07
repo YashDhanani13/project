@@ -7,7 +7,7 @@ import {
   Mail, Lock, ArrowRight, CheckCircle2, AlertCircle, Loader2, User,
 } from "lucide-react";
 import api from "../../api/api";
-import { AuthContext } from "../../Authcontext/context";
+import { AuthContext } from "../../Authcontext/AuthContext";
 
 const signValdate = z.object({
   fullName :  z.string().min(1, "Name is required"),
@@ -161,6 +161,7 @@ const Signup = () => {
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                 <input
                   type="password"
+                  placeholder="Enter your password"
                   className={`w-full bg-slate-50 border-2 ${errors.password ? "border-rose-300" : "border-slate-50"} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
                   {...register("password")}
                 />
