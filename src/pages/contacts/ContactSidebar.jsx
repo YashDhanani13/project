@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { Pencil, Trash2, X } from "lucide-react";
+import zod from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+
 // import axios from "axios";//
 // Add this at the top of ContactSidebar.jsx
 import api from "../../api/api";
+
 
 const ContactSidebar = ({
   selectedContact,
@@ -169,12 +174,12 @@ const ContactSidebar = ({
             </div>
 
             <div className="flex gap-2">
-              <buttony
+              <button
                 onClick={handleEdit}
                 className="flex items-center justify-center gap-2 p-2 m-2 bg-blue-700 rounded-lg text-white w-32 cursor-pointer"
               >
                 <Pencil size={16} /> Edit
-              </buttony>
+              </button>
               <button
                 onClick={(e) => {
                   e.stopPropagation();

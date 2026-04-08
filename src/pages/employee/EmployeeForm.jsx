@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 
 import EmpSidebar from "./EmpSidebar";
-import { z } from "zod"
-import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const Empvalidation = z.object({
   name: z.string().min(1, "Name is required"),
@@ -24,17 +24,14 @@ const Empvalidation = z.object({
   status: z.string().min(1, "Status is required"),
 });
 
-
 /* ── main component ──────────────────────────────────────────────────────── */
 const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-
   } = useForm({
-    resolver: zodResolver
-      (Empvalidation)
+    resolver: zodResolver(Empvalidation),
   });
 
   const [loading, setLoading] = useState(false);
@@ -43,7 +40,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
 
   const [open, setOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const fetchEmployees = () => { };
+  const fetchEmployees = () => {};
   const handleEmployeeAdded = () => fetchEmployees();
 
   const onSubmit = async (data) => {
@@ -69,11 +66,12 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
   };
 
   const inner = (
-    <div className={
-      inModal
-        ? "w-full"
-        : "w-full max-w-[460px] rounded-2xl border border-gray-200 bg-white p-10 shadow-sm"
-    }
+    <div
+      className={
+        inModal
+          ? "w-full"cd
+          : "w-full max-w-[460px] rounded-2xl border border-gray-200 bg-white p-10 shadow-sm"
+      }
     >
       {/* ── Header ── */}
       <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-900">
@@ -102,10 +100,11 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
 
       {/* ── Form ── */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
         {/* Name */}
         <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-700">Full Name</label>
+          <label className="mb-1.5 block text-sm font-semibold text-gray-700">
+            Full Name
+          </label>
           <div className="relative">
             <User
               size={14}
@@ -118,12 +117,16 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
               {...register("name")}
             />
           </div>
-          {errors.name?.message && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
+          {errors.name?.message && (
+            <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>
+          )}
         </div>
 
         {/* Email */}
         <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-700">Email Address</label>
+          <label className="mb-1.5 block text-sm font-semibold text-gray-700">
+            Email Address
+          </label>
           <div className="relative">
             <Mail
               size={14}
@@ -136,14 +139,18 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
               {...register("email")}
             />
           </div>
-          {errors.email?.message && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
+          {errors.email?.message && (
+            <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>
+          )}
         </div>
 
         {/* Role + Status — side by side */}
         <div className="grid grid-cols-2 gap-3">
           {/* Role */}
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Role</label>
+            <label className="mb-1.5 block text-sm font-semibold text-gray-700">
+              Role
+            </label>
             <div className="relative">
               <select
                 className={`w-full border-2 rounded-xl py-2.5 pl-4 pr-10 text-sm font-medium outline-none transition-all appearance-none bg-white ${errors.role ? "border-red-300 focus:border-red-400" : "border-gray-100 focus:border-gray-900"}`}
@@ -158,12 +165,16 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
                 className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400"
               />
             </div>
-            {errors.role?.message && <p className="mt-1 text-xs text-red-500">{errors.role.message}</p>}
+            {errors.role?.message && (
+              <p className="mt-1 text-xs text-red-500">{errors.role.message}</p>
+            )}
           </div>
 
           {/* Status */}
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Status</label>
+            <label className="mb-1.5 block text-sm font-semibold text-gray-700">
+              Status
+            </label>
             <div className="relative">
               <select
                 className={`w-full border-2 rounded-xl py-2.5 pl-4 pr-10 text-sm font-medium outline-none transition-all appearance-none bg-white ${errors.status ? "border-red-300 focus:border-red-400" : "border-gray-100 focus:border-gray-900"}`}
@@ -178,13 +189,19 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
                 className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400"
               />
             </div>
-            {errors.status?.message && <p className="mt-1 text-xs text-red-500">{errors.status.message}</p>}
+            {errors.status?.message && (
+              <p className="mt-1 text-xs text-red-500">
+                {errors.status.message}
+              </p>
+            )}
           </div>
         </div>
 
         {/* Phone */}
         <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-700">Phone Number</label>
+          <label className="mb-1.5 block text-sm font-semibold text-gray-700">
+            Phone Number
+          </label>
           <div className="relative">
             <Phone
               size={14}
@@ -197,7 +214,11 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
               {...register("phoneNumber")}
             />
           </div>
-          {errors.phoneNumber?.message && <p className="mt-1 text-xs text-red-500">{errors.phoneNumber.message}</p>}
+          {errors.phoneNumber?.message && (
+            <p className="mt-1 text-xs text-red-500">
+              {errors.phoneNumber.message}
+            </p>
+          )}
         </div>
 
         {/* Divider */}
@@ -208,7 +229,6 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
           <button
             type="button"
             onClick={() => {
-
               close?.();
             }}
             className="flex-1 rounded-lg border border-gray-200 bg-transparent py-2.5 text-sm font-semibold

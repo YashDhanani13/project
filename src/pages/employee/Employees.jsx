@@ -119,7 +119,7 @@ const Employees = () => {
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
         <input
-          className="flex-1 min-w-[200px] max-w-sm bg-white border border-gray-300 px-4 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-300"
+          className="flex-1  font-bold  h-13 text-1xl text-black  max-w-2xl bg-white border border-gray-300 px-4 py-2 rounded-lg  outline-none focus:ring-2 focus:ring-black"
           type="search"
           placeholder="Search employees..."
           value={search}
@@ -129,7 +129,7 @@ const Employees = () => {
 
         <button
           onClick={() => setOpen(true)}
-          className="bg-zinc-600 hover:bg-orange-500 text-white font-semibold px-5 py-2 rounded-lg transition text-sm"
+          className="flex items-center gap-2 px-4 py-2 bg-white- hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  text-orange-500 rounded-lg w-38 h-12 border border-orange-400  text-sm font-semibold transition-all"
         >
           + Add Employee
         </button>
@@ -261,7 +261,7 @@ const Employees = () => {
 
           {/* Sidebar for selected employee */}
           {selectedEmployee && (
-          
+
             <EmpSidebar
               employee={selectedEmployee}
               onClose={() => setSelectedEmployee(null)}

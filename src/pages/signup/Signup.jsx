@@ -10,7 +10,7 @@ import api from "../../api/api";
 import { AuthContext } from "../../Authcontext/AuthContext";
 
 const signValdate = z.object({
-  fullName :  z.string().min(1, "Name is required"),
+  fullName: z.string().min(1, "Name is required"),
   email: z.string().min(1, "Email is required").email("Invalid email format"),
   organizationName: z.string().min(1, "Organization name is required"),
   password: z

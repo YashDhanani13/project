@@ -46,7 +46,7 @@ const EmpSidebar = ({
   };
 
   const handleDelete = async (id) => {
-        try {
+    try {
       await api.delete(`/employee/${id}`);
       setSelectedEmployee(null);
       fetchEmployees();
@@ -149,11 +149,10 @@ const EmpSidebar = ({
             <div className="bg-gray-50 p-3 rounded-lg">
               <p className="text-xs text-gray-500 uppercase">Status</p>
               <span
-                className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full ${
-                  selectedEmployee.status === "ACTIVE"
+                className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full ${selectedEmployee.status === "ACTIVE"
                     ? "bg-green-100 text-green-700"
                     : "bg-red-100 text-red-700"
-                }`}
+                  }`}
               >
                 {selectedEmployee.status}
               </span>

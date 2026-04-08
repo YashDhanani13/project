@@ -97,24 +97,24 @@ const Contacts = () => {
   };
 
 
-  // const  handlesearchChange = async() => {
-  //    try {
-  //   await api.get("/search" , {
-  //     params : { 
-  //       query : search ,
-  //       name :search ,
-  //       email : search ,
-  //       age : search ,
-  //       tag : search ,
-  //       phoneNumber : search ,
-  //       address : search
-  //     }
-  //   })
-  //    } catch (error) {
-  //     console.log(Error .error);
+  const handlesearchChange = async () => {
+    try {
+      await api.get("/", {
+        params: {
+          query: search,
+          name: search,
+          email: search,
+          age: search,
+          tag: search,
+          phoneNumber: search,
+          address: search
+        }
+      })
+    } catch (error) {
+      console.log(Error.error);
 
-  //    }
-  // }
+    }
+  }
   const tagColors = {
     VIP: { bg: "#FFF3CD", color: "#856404" },
     VVIP: { bg: "#F3E8FF", color: "#6B21A8" },
@@ -147,17 +147,17 @@ const Contacts = () => {
           Filter
         </button>
 
-        {/* <input
-          className="flex-1 min-w-[200px] max-w-sm bg-white border border-gray-300 px-4 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-300"
+        <input
+          className="flex-1  font-bold  h-13 text-1xl text-black  max-w-2xl bg-white border border-gray-300 px-4 py-2 rounded-lg  outline-none focus:ring-2 focus:ring-black"
           type="search"
-          placeholder="Search Contact"
+          placeholder="Search employees..."
           value={search}
           onChange={handlesearchChange}
-        /> */}
+        />
 
         <button
           onClick={() => setOpen(true)}
-          className="border border-orange-400 border-2   bg-gray-800 hover:bg-orange-400 hover:border-slate-800 h-12 cursor-pointer text-white   outline  font-semibold px-5 py-2 rounded-lg transition text-sm"
+          className="flex items-center gap-2 px-4 py-2 bg-white- hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2 font-bold text-blue-500 rounded-lg w-38 h-12 border border-black text-sm  transition-all"
         >
           +  Add Contact
         </button>
@@ -294,7 +294,7 @@ const Contacts = () => {
           {/* Filter Modal */}
           {showFilter && (
             <div className="absolute top-40 items-center z-50">
-              <div className="bg-green-300 rounded-xl shadow-xl p-6 w-96">
+              <div className="bg-gray-500 rounded-xl shadow-xl p-4 w-116">
                 <button
                   onClick={() => setShowFilter(false)}
                   className="absolute top-3 right-3 w-4 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-500 hover:text-white text-gray-500 font-bold text-xs transition"
@@ -314,11 +314,11 @@ const Contacts = () => {
           {/* Add Contact Modal */}
           {open && (
             <div
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center "
               onClick={() => setOpen(false)}
             >
               <div
-                className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden"
+                className="relative w-110 bg-orange-600 shadow-2xl max-h-[93vh] rounded-3xl flex flex-col "
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
@@ -334,14 +334,14 @@ const Contacts = () => {
             </div>
           )}
 
-
+          {/* Contact - sidebar  */}
           <ContactSidebar
             selectedContact={selectedContact}
             setSelectedContact={setSelectedContact}
             fetchContacts={fetchContacts}
           />
 
-        </> // BUG 5 FIXED: removed extra } and )} that were here
+        </>
       )}
 
     </div>

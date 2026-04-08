@@ -9,8 +9,6 @@ import {
 import api from "../../api/api";
 import { AuthContext } from "../../Authcontext/AuthContext";
 
-
-
 const loginValidationSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
   password: z
@@ -42,10 +40,10 @@ const Login = () => {
     try {
       const response = await api.post("/auth/login", data);
       console.log("Login response:", response.data); // Debug: see what the backend returns
-      
+
       // Handle different response structures
       let token = response.data.token || response.data.accessToken || response.data.data;
-      
+
       if (token) {
         login(token);
         setApiSuccess("Welcome back!");

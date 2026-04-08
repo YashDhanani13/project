@@ -7,6 +7,7 @@ import {
   Users,
   Briefcase,
   Settings,
+  LogOut,
 } from "lucide-react";
 
 const mainLinks = [
@@ -14,6 +15,11 @@ const mainLinks = [
   { name: "Contacts", path: "/contacts", icon: <Users size={18} /> },
   { name: "Employee", path: "/employees", icon: <Briefcase size={18} /> },
 ];
+
+const logout = () => {
+  localStorage.removeItem('token'); // Clear it so Interceptor sends nothing
+  window.location.href = '/login';
+};
 
 const Sidebar = () => {
   const [showProfile, setShowProfile] = useState(false);
@@ -23,7 +29,7 @@ const Sidebar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-   
+
     <div className="flex min-h-screen">
 
       {/* ── Sidebar ── always visible */}
@@ -78,6 +84,16 @@ const Sidebar = () => {
             {!collapsed && <span>Profile Settings</span>}
           </button>
         </div>
+
+        <div className="flex flex-col gap-1 p-6 mb-4">
+          <button
+            onClick={() => logout(true)}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:bg-white/10 hover:text-white transition-all w-full text-left"
+          >
+            <LogOut size={18} />
+            {!collapsed && <span>Log out</span>}
+          </button>
+        </div>
       </aside>
 
       {/* ── Main Content — Outlet renders here ── */}
@@ -91,7 +107,7 @@ const Sidebar = () => {
           <div className="bg-gray-500 relative rounded-xl shadow-xl p-6 w-220  h-140 m-2">
             <button
               onClick={() => setShowProfile(false)}
-              className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-500 hover:text-white text-gray-500 font-bold text-xs transition"
+              className="absolute top-0   right-0 w-9 h-8 flex rounded-xs items-center justify-center p-4 bg-gray-100 hover:bg-red-500 hover:text-white text-gray-500 font-bold text-xs transition"
             >
               ✕
             </button>
