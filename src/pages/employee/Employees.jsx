@@ -3,7 +3,7 @@ import api from "../../api/api";
 
 import Employee from "./EmployeeForm";
 import EmpSidebar from "./EmpSidebar"
-import { Dice1 } from "lucide-react";
+import { UserPlus} from "lucide-react";
 
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
@@ -95,10 +95,10 @@ const Employees = () => {
   const SortTh = ({ field, label }) => (
     <th
       onClick={() => handleSort(field)}
-      className="p-3 text-left cursor-pointer select-none hover:text-yellow-300 transition-colors"
+      className="p-3 text-left cursor-pointer select-none hover:text-black  transition-colors"
     >
       {label}
-      <span className={sortField === field ? "text-yellow-300 font-bold" : "text-purple-200"}>
+      <span className={sortField === field ? "text-blue-600 font-bold" : "text-black"}>
         {sortIcon(field)}
       </span>
     </th>
@@ -129,9 +129,10 @@ const Employees = () => {
 
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-white- hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  text-orange-500 rounded-lg w-38 h-12 border border-orange-400  text-sm font-semibold transition-all"
+          className="flex items-center gap-2 px-4 py-2 bg-white cursor-pointer  hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  text-orange-500 rounded-lg w-38 h-12 border border-orange-400  text-sm font-semibold transition-all"
         >
-          + Add Employee
+          <UserPlus size={16} />
+           Add Employee
         </button>
       </div>
 
@@ -148,9 +149,9 @@ const Employees = () => {
       ) : (
         <>
           <div className="bg-white rounded-xl shadow overflow-hidden">
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto  ">
               <table className="min-w-full text-sm">
-                <thead className="bg-purple-500 text-white">
+                <thead className="bg-orange-200  text-black  p-">
                   <tr>
                     <th className="p-3">
                       <input type="checkbox" />
@@ -167,7 +168,7 @@ const Employees = () => {
                     paginatedEmployees.map((employee) => (
                       <tr
                         key={employee.id}
-                        className="border-t hover:bg-orange-50 cursor-pointer transition-colors"
+                        className="border-t hover:bg-blue-100 cursor-pointer transition-colors"
                         onClick={() => setSelectedEmployee(employee)}
                       >
                         <td className="p-3">
@@ -235,22 +236,22 @@ const Employees = () => {
 
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => setCurrentPage(p => p - 1)}
-                  disabled={currentPage === 0}
-                  className="px-3 py-1 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                  onClick={() => setCurrentPage((p) => p - 1)}
+                    disabled={currentPage === 0}
+                    className="p-3  w-25  rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition disabled:bg-white disabled:border-red-300 disabled:text-red-500"
                 >
                   ← Prev
                 </button>
 
-                <span className="text-gray-500">
+                <span className="text-gray-500 font-bold">
                   Page <strong className="text-gray-700">{currentPage + 1}</strong> of{" "}
                   <strong className="text-gray-700">{Math.max(noOfPages, 1)}</strong>
                 </span>
 
                 <button
-                  onClick={() => setCurrentPage(p => p + 1)}
-                  disabled={currentPage >= noOfPages - 1}
-                  className="px-3 py-1 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                onClick={() => setCurrentPage((p) => p + 1)}
+                    disabled={currentPage >= noOfPages - 1}
+                    className="p-3 w-25  border-2  rounded-lg   text-blue-400 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition disabled:bg-white broder  disabled:broder-red-400 disabled:text-red-500"
                 >
                   Next →
                 </button>

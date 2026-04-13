@@ -1,34 +1,26 @@
-import React, { useState, useEffect } from "react";
-
+import { useState, useEffect } from "react";
 import Contact from "./ContactForm";
 import ContactFilter from "./ContactFilter";
 import ContactSidebar from "./ContactSidebar";
 import api from "../../api/api";
-import { email } from "zod";
-// import 
+import ReactCountryFlag from "react-country-flag";
+import { UserPlus } from "lucide-react";
 
 const Contacts = () => {
   const [contacts, setContacts] = useState([]);
-
   const [selectedContact, setSelectedContact] = useState(null);
-
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
-
-
-  //filter here  defined 
   const [showFilter, setShowFilter] = useState(false);
   const [filterField, setFilterField] = useState("");
   const [filterValue, setFilterValue] = useState("");
-
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  //sorting order i can 
   const [sortField, setSortField] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
+
 
   useEffect(() => {
     fetchContacts();
@@ -59,6 +51,11 @@ const Contacts = () => {
     fetchContacts();
   };
 
+  const handlesearchChange = (e) => {
+    setSearch(e.target.value);
+    setCurrentPage(0);
+  };
+
   const handleSort = (field) => {
     if (sortField === field) setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     else { setSortField(field); setSortOrder("asc"); }
@@ -84,37 +81,11 @@ const Contacts = () => {
   const end = start + rowsPerPage;
   const paginatedContacts = sorted.slice(start, end);
 
-  // const handleSearchChange = (e) => {
-  //   setSearch(e.target.value);
-  //   setFilterField("");
-  //   setFilterValue("");
-  //   setCurrentPage(0);
-  // };
-
   const handleRowsPerPageChange = (e) => {
     setRowsPerPage(Number(e.target.value));
     setCurrentPage(0);
   };
 
-
-  const handlesearchChange = async () => {
-    try {
-      await api.get("/", {
-        params: {
-          query: search,
-          name: search,
-          email: search,
-          age: search,
-          tag: search,
-          phoneNumber: search,
-          address: search
-        }
-      })
-    } catch (error) {
-      console.log(Error.error);
-
-    }
-  }
   const tagColors = {
     VIP: { bg: "#FFF3CD", color: "#856404" },
     VVIP: { bg: "#F3E8FF", color: "#6B21A8" },
@@ -136,49 +107,47 @@ const Contacts = () => {
   return (
     <div className="min-h-screen bg-orange-50 text-slate-900 p-6">
       <h1 className="text-3xl font-bold">Contact Management</h1>
-      <br /><br />
+      <br />
 
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
         <button
           onClick={() => setShowFilter(true)}
-          className="border border-b-indigo-900 border-2 text-gray-800  w-35 h-12 bg-white  hover:bg-black hover:text-white  hover:border-orange-400 border-2 px-5 py-2 rounded-lg font-bold text-sm transition cursor-pointer"
+          className="border-2 font-extrabold border-black text-gray-800 w-35 h-12 bg-white hover:bg-black hover:text-white hover:border-orange-400 px-5 py-2 rounded-lg text-sm transition cursor-pointer"
         >
           Filter
         </button>
 
         <input
-          className="flex-1  font-bold  h-13 text-1xl text-black  max-w-2xl bg-white border border-gray-300 px-4 py-2 rounded-lg  outline-none focus:ring-2 focus:ring-black"
+          className="flex-1 font-bold h-13 text-black max-w-2xl bg-white border border-gray-300 px-4 py-2 rounded-lg outline-none focus:ring-2 focus:ring-black"
           type="search"
-          placeholder="Search employees..."
+          placeholder="Search contacts..." cd
           value={search}
           onChange={handlesearchChange}
         />
 
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-white- hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2 font-bold text-blue-500 rounded-lg w-38 h-12 border border-black text-sm  transition-all"
+          className="flex items-center gap-2 px-4 py-2 hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2 font-bold text-blue-500 rounded-lg w-38 h-12 border cursor-pointer border-black text-sm transition-all"
         >
-          +  Add Contact
+          <UserPlus size={16} />
+          Add Contact
         </button>
       </div>
 
-      {/* Error */}
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-600 p-4 rounded-lg mb-4">
           {error}
         </div>
       )}
 
-      {/* Loading */}
       {loading && (
         <div className="text-center py-8 text-gray-500">Loading contacts...</div>
       )}
 
-      {/* Table — BUG 1 FIXED: <> not <?> */}
       {!loading && (
         <>
-          <div className="bg-white rounded-xl shadow overflow-hidden"> {/* BUG 2 FIXED: shadow */}
+          <div className="bg-white rounded-xl shadow overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead className="bg-purple-500 text-white">
@@ -222,16 +191,25 @@ const Contacts = () => {
                             <span className="text-gray-300 text-xs">—</span>
                           )}
                         </td>
-                        <td className="p-3">{contact.phoneNumber || "—"}</td>
+                        <td className="p-3">
+
+                          <ReactCountryFlag
+                            countryCode="US"
+                            svg
+                            cdnUrl="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.3/flags/1x1/"
+                            cdnSuffix="svg"
+                            title="US"
+                          />
+                          {contact.phoneNumber || "—"}
+                          <br />
+                        </td>
                         <td className="p-3 text-gray-500 max-w-xs truncate">{contact.address || "—"}</td>
                       </tr>
                     ))
                   ) : (
                     <tr>
                       <td colSpan={7} className="p-8 text-center text-gray-400">
-                        {search
-                          ? "No contacts match your search"
-                          : "No contacts found — click + Add Contact"}
+                        {search ? "No contacts match your search" : "No contacts found — click + Add Contact"}
                       </td>
                     </tr>
                   )}
@@ -239,10 +217,7 @@ const Contacts = () => {
               </table>
             </div>
 
-            {/* Table Footer */}
             <div className="px-4 py-3 border-t text-xs text-gray-500 flex items-center justify-between flex-wrap gap-3">
-
-              {/* Showing X–Y of Z */}
               <span>
                 Showing{" "}
                 <strong className="text-gray-700">
@@ -251,11 +226,10 @@ const Contacts = () => {
                 of <strong className="text-gray-700">{totalContacts}</strong> contacts
               </span>
 
-              {/* Rows per page dropdown */}
               <div className="flex items-center gap-2">
                 <span className="text-gray-400">Rows per page:</span>
                 <select
-                  className="border border-gray-300 rounded-lg px-2 py-1 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300"
+                  className="border border-gray-300 rounded-lg px-2 py-1 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-300"
                   value={rowsPerPage}
                   onChange={handleRowsPerPageChange}
                 >
@@ -266,39 +240,35 @@ const Contacts = () => {
                 </select>
               </div>
 
-              {/* Prev / Page X of Y / Next */}
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setCurrentPage((p) => p - 1)}
                   disabled={currentPage === 0}
-                  className="px-3 py-1 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                  className="p-3  w-25  rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition disabled:bg-white disabled:border-red-300 disabled:text-red-500"
                 >
                   ← Prev
                 </button>
-                <span className="text-gray-500">
+                <span className="text-black  font-bold text-md">
                   Page <strong className="text-gray-700">{currentPage + 1}</strong> of{" "}
                   <strong className="text-gray-700">{Math.max(noOfPages, 1)}</strong>
                 </span>
                 <button
                   onClick={() => setCurrentPage((p) => p + 1)}
                   disabled={currentPage >= noOfPages - 1}
-                  className="px-3 py-1 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                  className="p-3 w-25  border-2  rounded-lg   text-blue-400 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition disabled:bg-white broder  disabled:broder-red-400 disabled:text-red-500"
                 >
                   Next →
                 </button>
               </div>
-
             </div>
           </div>
 
-          {/* Filter Modal */}
           {showFilter && (
             <div className="absolute top-40 items-center z-50">
               <div className="bg-gray-500 rounded-xl shadow-xl p-4 w-116">
                 <button
                   onClick={() => setShowFilter(false)}
                   className="absolute top-3 right-3 w-4 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-500 hover:text-white text-gray-500 font-bold text-xs transition"
-
                 >
                   ✕
                 </button>
@@ -311,14 +281,13 @@ const Contacts = () => {
             </div>
           )}
 
-          {/* Add Contact Modal */}
           {open && (
             <div
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center "
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center"
               onClick={() => setOpen(false)}
             >
               <div
-                className="relative w-110 bg-orange-600 shadow-2xl max-h-[93vh] rounded-3xl flex flex-col "
+                className="relative w-110 bg-orange-600 shadow-2xl max-h-[93vh] rounded-3xl flex flex-col"
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
@@ -334,16 +303,13 @@ const Contacts = () => {
             </div>
           )}
 
-          {/* Contact - sidebar  */}
           <ContactSidebar
             selectedContact={selectedContact}
             setSelectedContact={setSelectedContact}
             fetchContacts={fetchContacts}
           />
-
         </>
       )}
-
     </div>
   );
 };

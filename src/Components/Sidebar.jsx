@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import UserProfile from "../pages/user-profile/UserProfile";
+// import { useNavigate } from "react-router-dom";
+//  import Login from "../pages/login/Login.jsx";
+
 import {
   Home,
   Users,
@@ -9,6 +12,9 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
+
+
+// const navigate / useNavigate();
 
 const mainLinks = [
   { name: "Home", path: "/", icon: <Home size={18} /> },
@@ -19,6 +25,8 @@ const mainLinks = [
 const logout = () => {
   localStorage.removeItem('token'); // Clear it so Interceptor sends nothing
   window.location.href = '/login';
+  // useNavigate("/login");
+
 };
 
 const Sidebar = () => {
@@ -36,13 +44,13 @@ const Sidebar = () => {
       <aside
         className={`fixed top-0 left-0 h-screen z-50 flex flex-col transition-all duration-300
           ${collapsed ? "w-16" : "w-52"}
-          bg-[#3c3737] text-white`}
+          bg-mist-800 text-black`}
       >
         {/* Logo */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">
           {!collapsed && (
             <div className="leading-tight">
-              <p className="text-blue-300 font-bold text-sm">class</p>
+              <p className="text-indigo-400 font-bold text-sm">class</p>
               <p className="text-orange-400 font-bold text-sm -mt-0.5">Mate</p>
             </div>
           )}
@@ -65,7 +73,7 @@ const Sidebar = () => {
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all
                 ${isActive(link.path)
                   ? "bg-white/10 text-white"
-                  : "text-gray-400 hover:bg-white/10 hover:text-white"
+                  : "text-gray-600 hover:bg-white/10 hover:text-white"
                 }`}
             >
               <span className="flex-shrink-0">{link.icon}</span>
@@ -73,27 +81,26 @@ const Sidebar = () => {
             </Link>
           ))}
         </nav>
+        <div className="p-4 m-4">        {/* Bottom — Profile Settings */}
 
-        {/* Bottom — Profile Settings */}
-        <div className="flex flex-col gap-1 p-6 mb-4">
           <button
             onClick={() => setShowProfile(true)}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:bg-white/10 hover:text-white transition-all w-full text-left"
+            className="flex items-center gap-3 px-1.5 py-3 rounded-lg text-sm font-medium text-orange-100 hover:bg-white/10 hover:text-white transition-all w-42 text-left"
           >
             <Settings size={18} />
             {!collapsed && <span>Profile Settings</span>}
           </button>
-        </div>
 
-        <div className="flex flex-col gap-1 p-6 mb-4">
           <button
             onClick={() => logout(true)}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:bg-white/10 hover:text-white transition-all w-full text-left"
+            className="flex items-center gap-3 px-2 py-2 rounded-lg text-sm font-medium text-red-300 hover:bg-white/10 hover:text-white transition-all w-full text-left"
           >
             <LogOut size={18} />
             {!collapsed && <span>Log out</span>}
           </button>
+
         </div>
+
       </aside>
 
       {/* ── Main Content — Outlet renders here ── */}

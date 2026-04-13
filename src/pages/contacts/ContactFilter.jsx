@@ -3,9 +3,9 @@ import React, { useState, useRef, useEffect } from "react";
 const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
   const [field, setField] = useState("");
   const [value, setValue] = useState("");
+
   const filterRef = useRef(null);
 
-  // close  the   filter for this are used this 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (filterRef.current && !filterRef.current.contains(e.target)) {
@@ -21,21 +21,20 @@ const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
       <div className="fixed inset-0 bg-black/20 " onClick={close} />
       <div
         ref={filterRef}
-
-        className="bg-white p-4 rounded-lg shadow-lg  relative z-50">
+        className="bg-white p-4 rounded-lg shadow-lg  relative z-50"
+      >
         <h1 className="font-bold">Filter Contact</h1>
-        <hr />
 
-        <select 
-         className="border p-3 m-3 w-40 font-bold rounded-lg cursor-pointer"
+        <hr />
+        <select
+          className="border p-3 m-3 w-40 font-bold rounded-lg cursor-pointer"
           onChange={(e) => setField(e.target.value)}
         >
-
           <option value="">Select</option>
           <option value="name">Name</option>
           <option value="phoneNumber">Phone Number</option>
           <option value="tag">Tags</option>
-          <option value="email">Email</option> 
+          <option value="email">Email</option>
         </select>
 
         {field && (
@@ -49,7 +48,7 @@ const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
 
         <div className="flex gap-2 mt-3">
           <button
-            className="flex-1   border rounded-lg bg-white hover:bg-red-500 hover:text-white  hover:border-blue-400 cursor-pointer"
+            className="flex-1   border rounded-lg bg-white hover:bg-red-500 hover:text-white  hover:border-blue-400  cursor-pointer"
             onClick={close}
           >
             Cancel

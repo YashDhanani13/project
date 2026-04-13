@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { Pencil, Trash2, X } from "lucide-react";
-import zod from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-
-// import axios from "axios";//
-// Add this at the top of ContactSidebar.jsx
+// import zod from "zod";
+// import { zodResolver } from "@hookform/resolvers/zod";
 import api from "../../api/api";
 
 
@@ -17,6 +13,54 @@ const ContactSidebar = ({
   const [error, setError] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
+
+
+  // const contactSideValidation = z.object({
+  //   name: z
+  //     .string({ required_error: "Name is required" })
+  //     .trim()
+  //     .min(1, "Name is required")
+  //     .max(100, "Name must be under 100 characters")
+  //     .regex(
+  //       /^[a-zA-Z\s'-]+$/,
+  //       "Name can only contain letters, spaces, hyphens, and apostrophes",
+  //     ),
+
+  //   email: z
+  //     .string({ required_error: "Email is required" })
+  //     .trim()
+  //     .toLowerCase()
+  //     .min(1, "Email is required")
+  //     .email("Invalid email address")
+  //     .max(255, "Email must be under 255 characters"),
+
+  //   age: z
+  //     .number({
+  //       required_error: "Age is required",
+  //     })
+  //     .min(18, "Must be at least 18 years old")
+  //     .max(120, "Age seems invalid"),
+
+  //   tag: z
+  //     .string({ required_error: "Tag is required" })
+  //     .trim()
+  //     .min(1, "Tag is required")
+  //     .max(50, "Tag must be under 50 characters"),
+
+  //   phoneNumber: z
+  //     .string({ required_error: "Phone number is required" })
+  //     .trim()
+  //     .min(10, "Phone must be at least 10 digits")
+  //     .max(15, "Phone number is too long")
+  //     .regex(/^\+?[0-9\s\-().]+$/, "Invalid phone number format"),
+
+  //   address: z
+  //     .string()
+  //     .trim()
+  //     .max(255, "Address must be under 255 characters")
+  //     .optional(),
+  // });
+
 
   if (!selectedContact) return null;
 
@@ -100,10 +144,12 @@ const ContactSidebar = ({
               { label: "Tag", field: "tag" },
               { label: "Address", field: "address" },
             ].map(({ label, field }) => (
-              <div key={field} className="bg-gray-50 p-3 rounded-lg">
+              <div key={field} className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
+
+
                 <p className="text-xs text-gray-500 uppercase">{label}</p>
                 <input
-                  className="w-full font-semibold text-gray-800 bg-transparent border-b border-blue-400 outline-none pt-1"
+                  className="w-full font-semibold text-gray-800 bg-transparent  outline-none pt-1"
                   value={formData[field] || ""}
                   onChange={(e) =>
                     setFormData({ ...formData, [field]: e.target.value })
@@ -122,7 +168,8 @@ const ContactSidebar = ({
               </button>
               <button
                 onClick={() => setIsEditing(false)}
-                className="p-2 m-2 bg-gray-200 text-gray-700 rounded-lg w-32 cursor-pointer"
+                className="flex items-center gap-3 px-4 py-2 bg-white  hover:bg-red-500  hover:text-white  hover:border-2  text-black rounded-lg w-38 h-12 border border-gray-400  text-sm font-semibold transition-all"
+
               >
                 Cancel
               </button>
@@ -130,43 +177,43 @@ const ContactSidebar = ({
           </div>
         ) : (
           // ——— VIEW MODE: p tags ———
-          <div>
-            <div className="bg-gray-50 p-3 rounded-lg">
+          <div className=" grid grid-rows-5 gap-y-3.5  ">
+            <div className="bg-gray-100  p-3 border border-mist-500 rounded-lg ">
               <p className="text-xs text-gray-500 uppercase">Name</p>
               <p className="font-semibold text-gray-800">
                 {selectedContact.name}
               </p>
             </div>
 
-            <div className="bg-gray-50 p-3 rounded-lg">
+            <div className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
               <p className="text-xs text-gray-500 uppercase">Email</p>
               <p className="font-semibold text-gray-800">
                 {selectedContact.email}
               </p>
             </div>
 
-            <div className="bg-gray-50 p-3 rounded-lg">
+            <div className="bg-gray-100 p-3 border border-mist-500 rounded-lg">
               <p className="text-xs text-gray-500 uppercase">Age</p>
               <p className="font-semibold text-gray-800">
                 {selectedContact.age}
               </p>
             </div>
 
-            <div className="bg-gray-50 p-3 rounded-lg">
+            <div className="bg-gray-100 p-3 border border-mist-500  rounded-lg">
               <p className="text-xs text-gray-500 uppercase">Phone Number</p>
               <p className="font-semibold text-gray-800">
                 {selectedContact.phoneNumber}
               </p>
             </div>
 
-            <div className="bg-gray-50 p-3 rounded-lg">
+            <div className="bg-gray-100 p-3 border border-mist-500 rounded-lg">
               <p className="text-xs text-gray-500 uppercase">Tag</p>
               <p className="font-semibold text-gray-800">
                 {selectedContact.tag}
               </p>
             </div>
 
-            <div className="bg-gray-50 p-3 rounded-lg">
+            <div className="bg-gray-100 p-3 border border-mist-500  rounded-lg">
               <p className="text-xs text-gray-500 uppercase">Address</p>
               <p className="font-semibold text-gray-800">
                 {selectedContact.address}
@@ -176,7 +223,7 @@ const ContactSidebar = ({
             <div className="flex gap-2">
               <button
                 onClick={handleEdit}
-                className="flex items-center justify-center gap-2 p-2 m-2 bg-blue-700 rounded-lg text-white w-32 cursor-pointer"
+                className="flex items-center gap-2 p-3 bg-white- hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  text-blue-500 rounded-lg w-38 h-12 border border-blue-300  text-sm font-semibold transition-all cursor-pointer"
               >
                 <Pencil size={16} /> Edit
               </button>
@@ -185,7 +232,8 @@ const ContactSidebar = ({
                   e.stopPropagation();
                   handleDelete(selectedContact.id);
                 }}
-                className="flex items-center justify-center gap-2 p-2 m-2 bg-red-100 text-red-500 rounded-lg w-32 cursor-pointer"
+                className="flex items-center gap-3 px-4 py-2 bg-white- hover:bg-red-500  hover:text-white  hover:border-2  text-red-400  rounded-lg w-38 h-12 border border-red-200  text-sm font-semibold transition-all cursor-pointer"
+
               >
                 <Trash2 size={16} /> Delete
               </button>

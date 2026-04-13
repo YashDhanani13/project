@@ -15,7 +15,6 @@ const EmpSidebar = ({
   const [formData, setFormData] = useState({});
 
   if (!selectedEmployee) return null;
-
   const handleEdit = () => {
     setFormData({
       name: selectedEmployee.name,
@@ -93,10 +92,12 @@ const EmpSidebar = ({
               { label: "Phone Number", field: "phoneNumber" },
               { label: "Status", field: "status" },
             ].map(({ label, field }) => (
-              <div key={field} className="bg-gray-50 p-3 rounded-lg">
+              <div key={field} className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
+
+
                 <p className="text-xs text-gray-500 uppercase">{label}</p>
                 <input
-                  className="w-full font-semibold text-gray-800 bg-transparent border-b border-blue-400 outline-none pt-1"
+                  className="w-full font-semibold text-gray-800 bg-transparent  outline-none pt-1"
                   value={formData[field] || ""}
                   onChange={(e) =>
                     setFormData({ ...formData, [field]: e.target.value })
@@ -108,50 +109,55 @@ const EmpSidebar = ({
             <div className="flex gap-2 mt-4">
               <button
                 onClick={handleSave}
-                className="flex items-center justify-center gap-2 p-2 m-2 bg-green-600 rounded-lg text-white w-32 cursor-pointer"
+                className="flex items-center justify-center gap-2 p-2 bg-white  rounded-lg text-blue-400 w-40 border  border-blue-400 cursor-pointer hover:bg-black hover:text-white hover:border-orange-400"
               >
                 <Save size={16} /> Save
               </button>
               <button
                 onClick={() => setIsEditing(false)}
-                className="p-2 m-2 bg-gray-200 text-gray-700 rounded-lg w-32 cursor-pointer"
+                className="flex items-center justify-center gap-2 h-12 bg-white  rounded-lg text-red-300 w-40 border  border-red-600 cursor-pointer hover:bg-red-400  hover:text-white hover:border-b-fuchsia-800"
               >
                 Cancel
               </button>
             </div>
           </div>
         ) : (
-          <div className="space-y-4">
-            <div className="bg-gray-50 p-3 rounded-lg">
+          <div className=" grid grid-rows-5 gap-y-3.5  ">
+            <div className="bg-gray-100  p-3 border border-mist-500 rounded-lg ">
               <p className="text-xs text-gray-500 uppercase">Name</p>
               <p className="font-semibold text-gray-800">
                 {selectedEmployee.name}
               </p>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg">
+
+
+            <div className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
               <p className="text-xs text-gray-500 uppercase">Email</p>
               <p className="font-semibold text-gray-800">
                 {selectedEmployee.email}
               </p>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg">
+
+
+            <div className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
               <p className="text-xs text-gray-500 uppercase">Role</p>
               <p className="font-semibold text-gray-800">
                 {selectedEmployee.role}
               </p>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg">
+            <div className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
               <p className="text-xs text-gray-500 uppercase">Phone</p>
               <p className="font-semibold text-gray-800">
                 {selectedEmployee.phoneNumber}
               </p>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg">
+
+            <div className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
               <p className="text-xs text-gray-500 uppercase">Status</p>
               <span
                 className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full ${selectedEmployee.status === "ACTIVE"
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-700"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
                   }`}
               >
                 {selectedEmployee.status}
@@ -161,7 +167,7 @@ const EmpSidebar = ({
             <div className="flex gap-2">
               <button
                 onClick={handleEdit}
-                className="flex items-center justify-center gap-2 p-2 m-2 bg-blue-700 rounded-lg text-white w-32 cursor-pointer"
+                className="flex items-center gap-2 p-3 bg-white- hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  text-blue-500 rounded-lg w-38 h-12 border border-blue-300  text-sm font-semibold transition-all cursor-pointer"
               >
                 <Pencil size={16} /> Edit
               </button>
@@ -170,7 +176,7 @@ const EmpSidebar = ({
                   e.stopPropagation();
                   handleDelete(selectedEmployee.id);
                 }}
-                className="flex items-center justify-center gap-2 p-2 m-2 bg-red-100 text-red-500 rounded-lg w-32 cursor-pointer"
+                className="flex items-center gap-3 px-4 py-2 bg-white- hover:bg-red-500  hover:text-white  hover:border-2  text-black rounded-lg w-38 h-12 border border-gray-400  text-sm font-semibold transition-all cursor-pointer"
               >
                 <Trash2 size={16} /> Delete
               </button>

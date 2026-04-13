@@ -3,8 +3,10 @@ import { useForm } from "react-hook-form";
 import api from "../../api/api";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ReactCountryFlag from "react-country-flag";
 
-// validation
+
+//zod validation  :- 
 
 const contactValidation = z.object({
   name: z
@@ -12,7 +14,10 @@ const contactValidation = z.object({
     .trim()
     .min(1, "Name is required")
     .max(100, "Name must be under 100 characters")
-    .regex(/^[a-zA-Z\s'-]+$/, "Name can only contain letters, spaces, hyphens, and apostrophes"),
+    .regex(
+      /^[a-zA-Z\s'-]+$/,
+      "Name can only contain letters, spaces, hyphens, and apostrophes",
+    ),
 
   email: z
     .string({ required_error: "Email is required" })
@@ -43,21 +48,25 @@ const contactValidation = z.object({
     .regex(/^\+?[0-9\s\-().]+$/, "Invalid phone number format"),
 
   address: z
-    .string()
+    .string({ required_error: "Phone number is required" })
     .trim()
-    .max(255, "Address must be under 255 characters")
-    .optional(),
+    .min(10, "Address must be at least 10 characters")
+    .max(255, "Address must be under 255 characters"),
 });
 
 const ContactForm = ({ close }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(contactValidation),
-  });
+ // Add "watch" to your useForm hook
+const {
+  register,
+  handleSubmit,
+  watch, // Add this
+  formState: { errors },
+} = useForm({
+  resolver: zodResolver(contactValidation),
+  defaultValues: { countryCode: "IN" } // Set a default like India
+});
 
+const selectedCountry = watch("countryCode"); // This tracks the selection
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [apiSuccess, setApiSuccess] = useState("");
@@ -80,15 +89,11 @@ const ContactForm = ({ close }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-200 to-gray-200 flex items-center justify-center p-0.5 ">
-
       {/* Card */}
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-8 transition-all">
-
         {/* Header */}
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-gray-800">
-            Add Contact
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-800">Add Contact</h1>
           <p className="text-sm text-gray-500 mt-1">
             Manage your contacts easily
           </p>
@@ -110,6 +115,33 @@ const ContactForm = ({ close }) => {
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
+          {/* Country Selector */}
+          <div>
+            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              Country
+              {selectedCountry && (
+                <ReactCountryFlag
+                  countryCode={selectedCountry}
+                  svg
+                  style={{ width: '1.2em', height: '1.2em' }}
+                />
+              )}
+            </label>
+            <select
+              {...register("countryCode")}
+              className="w-full mt-1 rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
+            >
+              <option value="IN">India (+91)</option>
+              <option value="US">USA (+1)</option>
+              <option value="GB">UK (+44)</option>
+              <option value="AE">UAE (+971)</option>
+              <option value="CA">Canada (+1)</option>
+            </select>
+            {errors.countryCode && (
+              <p className="text-xs text-red-500 mt-1">{errors.countryCode.message}</p>
+            )}
+          </div>
+
           {/* Name */}
           <div>
             <label className="text-sm font-medium text-gray-700">
@@ -122,20 +154,17 @@ const ContactForm = ({ close }) => {
               className={`w-full mt-1 rounded-xl border px-4 py-3 text-sm outline-none transition 
               ${errors.name
                   ? "border-red-300 focus:ring-2 focus:ring-red-200"
-                  : "border-gray-200 focus:border-gray-900 focus:ring-2 focus:ring-gray-200"}`}
+                  : "border-gray-200 focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
+                }`}
             />
             {errors.name && (
-              <p className="text-xs text-red-500 mt-1">
-                {errors.name.message}
-              </p>
+              <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
             )}
           </div>
 
           {/* Email */}
           <div>
-            <label className="text-sm font-medium text-gray-700">
-              Email
-            </label>
+            <label className="text-sm font-medium text-gray-700">Email</label>
             <input
               type="email"
               placeholder="name@mail.com"
@@ -143,7 +172,8 @@ const ContactForm = ({ close }) => {
               className={`w-full mt-1 rounded-xl border px-4 py-3 text-sm outline-none transition 
               ${errors.email
                   ? "border-red-300 focus:ring-2 focus:ring-red-200"
-                  : "border-gray-200 focus:border-gray-900 focus:ring-2 focus:ring-gray-200"}`}
+                  : "border-gray-200 focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
+                }`}
             />
             {errors.email && (
               <p className="text-xs text-red-500 mt-1">
@@ -155,9 +185,7 @@ const ContactForm = ({ close }) => {
           {/* Age + Tag */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-sm font-medium text-gray-700">
-                Age
-              </label>
+              <label className="text-sm font-medium text-gray-700">Age</label>
               <input
                 type="number"
                 placeholder="18"
@@ -172,9 +200,7 @@ const ContactForm = ({ close }) => {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700">
-                Tag
-              </label>
+              <label className="text-sm font-medium text-gray-700">Tag</label>
               <select
                 {...register("tag")}
                 className="w-full mt-1 rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
@@ -194,9 +220,7 @@ const ContactForm = ({ close }) => {
 
           {/* Phone */}
           <div>
-            <label className="text-sm font-medium text-gray-700">
-              Phone
-            </label>
+            <label className="text-sm font-medium text-gray-700">Phone</label>
             <input
               type="text"
               placeholder="+91 9876543210"
@@ -212,9 +236,7 @@ const ContactForm = ({ close }) => {
 
           {/* Address */}
           <div>
-            <label className="text-sm font-medium text-gray-700">
-              Address
-            </label>
+            <label className="text-sm font-medium text-gray-700">Address</label>
             <textarea
               rows={3}
               placeholder="City, State..."
@@ -228,7 +250,7 @@ const ContactForm = ({ close }) => {
             <button
               type="button"
               onClick={() => close?.()}
-              className="flex-1 rounded-xl border border-gray-300 py-3 text-sm font-medium hover:bg-gray-100 transition"
+              className="flex items-center gap-3 px-4 py-2 bg-white hover:bg-red-500  hover:text-white  hover:border-2  text-black rounded-lg w-43 h-12 border border-gray-400 cursor-pointer text-sm font-semibold transition-all"
             >
               Cancel
             </button>
@@ -236,12 +258,11 @@ const ContactForm = ({ close }) => {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 rounded-xl bg-black text-white py-3 text-sm font-semibold hover:bg-gray-800 transition active:scale-[0.97]"
+              className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-black hover:text-white hover:border-gray-500  hover:border-2  text-blue-500 rounded-lg w-38 h-12 border cursor-pointer border-blue-400  text-sm font-semibold transition-all"
             >
               {loading ? "Loading..." : "Create Contact"}
             </button>
           </div>
-
         </form>
       </div>
     </div>

@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { Mail, User, Edit2, Check, X } from "lucide-react";
 import api from "../../api/api";
 
+// import ProfileSkeleton from "../../components/ProfileSkeleton";
+
 interface ProfileForm {
   fullName: string;
   email: string;
@@ -56,8 +58,7 @@ const UserProfile = () => {
       console.error("Update failed ", err);
     }
   };
-
-  if (loading) return <p className="text-center mt-10">Loading...</p>;
+// if (loading) return <ProfileSkeleton />;
   if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
 
   return (
@@ -84,7 +85,7 @@ const UserProfile = () => {
             {!isEditing ? (
               <button
                 onClick={() => setIsEditing(true)}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-200    rounded-xl text-sm  text-gray-700 hover:border-orange-400 hover:text-orange-500 hover:bg-orange-50 transition-all w-35 h-13 font-bold relative left-4 "
+                className="flex items-center gap-2 px-4 py-2 border border-gray-200    rounded-xl text-sm  text-gray-700 hover:border-orange-400 hover:text-orange-500 hover:bg-orange-50 transition-all w-35 h-13 font-bold relative left-4 cursor-pointer "
               >
                 <Edit2 className="relative left-1 gap-2 "  size={14} /> Edit
               </button>
@@ -92,13 +93,13 @@ const UserProfile = () => {
               <div className="flex gap-2">
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="flex items-center gap-3 px-4 py-2 bg-white- hover:bg-red-500  hover:text-white  hover:border-2  text-black rounded-lg w-38 h-12 border border-gray-400  text-sm font-semibold transition-all"
+                  className="flex items-center gap-3 px-4 py-2 bg-white- hover:bg-red-500  hover:text-white  hover:border-2  text-black rounded-lg w-38 h-12 border border-gray-400  text-sm font-semibold transition-all cursor-pointer"
                 >
                   <X size={14} /> Cancel
                 </button>
                 <button
                   onClick={handleSubmit(onSubmit)}
-                  className="flex items-center gap-2 px-4 py-2 bg-white- hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  text-orange-500 rounded-lg w-38 h-12 border border-orange-400  text-sm font-semibold transition-all"
+                  className="flex items-center gap-2 px-4 py-2 bg-white- hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  text-orange-500 rounded-lg w-38 h-12 border border-orange-400  text-sm font-semibold  cursor-pointer transition-all"
                 >
                   <Check size={14} /> Save Changes
                 </button>
