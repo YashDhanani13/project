@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import api from "../../api/api";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ReactCountryFlag from "react-country-flag";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
 
 
-//zod validation  :- 
 
 const contactValidation = z.object({
   name: z
@@ -55,18 +55,16 @@ const contactValidation = z.object({
 });
 
 const ContactForm = ({ close }) => {
- // Add "watch" to your useForm hook
-const {
-  register,
-  handleSubmit,
-  watch, // Add this
-  formState: { errors },
-} = useForm({
-  resolver: zodResolver(contactValidation),
-  defaultValues: { countryCode: "IN" } // Set a default like India
-});
-
-const selectedCountry = watch("countryCode"); // This tracks the selection
+  const {
+    register,
+    handleSubmit,
+    watch, // Add this
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(contactValidation),
+    // defaultValues: { countryCode: "IN" }, // Set a default like India
+  });
+  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [apiSuccess, setApiSuccess] = useState("");
@@ -114,33 +112,33 @@ const selectedCountry = watch("countryCode"); // This tracks the selection
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
-          {/* Country Selector */}
-          <div>
-            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-              Country
-              {selectedCountry && (
-                <ReactCountryFlag
-                  countryCode={selectedCountry}
-                  svg
-                  style={{ width: '1.2em', height: '1.2em' }}
-                />
-              )}
-            </label>
-            <select
-              {...register("countryCode")}
-              className="w-full mt-1 rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
-            >
-              <option value="IN">India (+91)</option>
-              <option value="US">USA (+1)</option>
-              <option value="GB">UK (+44)</option>
-              <option value="AE">UAE (+971)</option>
-              <option value="CA">Canada (+1)</option>
-            </select>
-            {errors.countryCode && (
-              <p className="text-xs text-red-500 mt-1">{errors.countryCode.message}</p>
+          {/* <div>
+            <label className="text-sm font-medium text-gray-700">Phone</label>
+            <PhoneInput
+              defaultCountry="in"
+              value={phone}
+              onChange={(value) => {
+                setPhone(value);
+                setValue("phoneNumber", value);
+              }}
+              className="mt-1"
+              inputStyle={{
+                width: "100%",
+                borderRadius: "0.75rem",
+                border: errors.phoneNumber
+                  ? "1px solid #FCA5A5"
+                  : "1px solid #E5E7EB",
+                padding: "1.5rem 1rem",
+                fontSize: "0.875rem",
+                outline: "none",
+              }}
+            />
+            {errors.phoneNumber && (
+              <p className="text-xs text-red-500 mt-1">
+                {errors.phoneNumber.message}
+              </p>
             )}
-          </div>
+          </div> */}
 
           {/* Name */}
           <div>
@@ -152,10 +150,11 @@ const selectedCountry = watch("countryCode"); // This tracks the selection
               placeholder="Rohan Mehta"
               {...register("name")}
               className={`w-full mt-1 rounded-xl border px-4 py-3 text-sm outline-none transition 
-              ${errors.name
+              ${
+                errors.name
                   ? "border-red-300 focus:ring-2 focus:ring-red-200"
                   : "border-gray-200 focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
-                }`}
+              }`}
             />
             {errors.name && (
               <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
@@ -170,10 +169,11 @@ const selectedCountry = watch("countryCode"); // This tracks the selection
               placeholder="name@mail.com"
               {...register("email")}
               className={`w-full mt-1 rounded-xl border px-4 py-3 text-sm outline-none transition 
-              ${errors.email
+              ${
+                errors.email
                   ? "border-red-300 focus:ring-2 focus:ring-red-200"
                   : "border-gray-200 focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
-                }`}
+              }`}
             />
             {errors.email && (
               <p className="text-xs text-red-500 mt-1">

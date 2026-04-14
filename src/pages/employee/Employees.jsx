@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../api/api";
-
+import EmployeeSkeleton from "./EmployeeSkeleton";
 import Employee from "./EmployeeForm";
 import EmpSidebar from "./EmpSidebar"
 import { UserPlus} from "lucide-react";
@@ -13,11 +13,10 @@ const Employees = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-
-  //search bar  here   
+  //search bar  here :-
   const [search, setSearch] = useState("");
 
-  // dropdown  row per page  adn  pagination here
+  // dropdown  row per page  and  pagination here
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   //sorting   
@@ -28,23 +27,23 @@ const Employees = () => {
     fetchEmployees();
   },
     [search]);
-
-  const fetchEmployees = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const res = await api.get("/employee",
-        { params: { search: search || undefined } }
-      );
-      const data = res.data;
-      setEmployees(Array.isArray(data) ? data : data.data || data.employees || []);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to fetch employees");
-      setEmployees([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchEmployees = async () => {
+  setLoading(true);
+  setError("");
+  try {
+    const res = await api.get("/employee",
+      { params: { search: search || undefined } }
+    );
+    const data = res.data;
+    setEmployees(Array.isArray(data) ? data : data.data || data.employees || []);
+  } catch (err) {
+    setError(err.response?.data?.message || "Failed to fetch employees");
+    setEmployees([]);
+  } finally {
+    await new Promise((resolve) => setTimeout(resolve, 2000)); 
+    setLoading(false);
+  }
+};
 
   const handleEmployeeAdded = () => {
     setOpen(false);
@@ -144,8 +143,8 @@ const Employees = () => {
       )}
 
       {/* Loading */}
-      {loading ? (
-        <div className="text-center py-10 text-gray-400">Loading employees...</div>
+      {loading ? (  
+       <EmployeeSkeleton />
       ) : (
         <>
           <div className="bg-white rounded-xl shadow overflow-hidden">

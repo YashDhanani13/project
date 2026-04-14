@@ -30,7 +30,7 @@ const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
           className="border p-3 m-3 w-40 font-bold rounded-lg cursor-pointer"
           onChange={(e) => setField(e.target.value)}
         >
-          <option value="">Select</option>
+          <option>Select</option>
           <option value="name">Name</option>
           <option value="phoneNumber">Phone Number</option>
           <option value="tag">Tags</option>

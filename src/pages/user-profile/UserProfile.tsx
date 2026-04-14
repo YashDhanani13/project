@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Mail, User, Edit2, Check, X } from "lucide-react";
 import api from "../../api/api";
 
-// import ProfileSkeleton from "../../components/ProfileSkeleton";
+import ProfileSkeleton from "../../components/ProfileSkeleton";
 
 interface ProfileForm {
   fullName: string;
@@ -28,21 +28,22 @@ const UserProfile = () => {
   });
 
   // ─── GET profile ──────────
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await api.get("/auth/getUserProfile");
-        const { fullName, email } = res.data.data;
-        reset({ fullName, email });
-      } catch (err) {
-        setError("Failed to load profile");
-      } finally {
-        setLoading(false);
-      }
-    };
+useEffect(() => {
+  const fetchProfile = async () => {
+    try {
+      const res = await api.get("/auth/getUserProfile");
+      const { fullName, email } = res.data.data;
+      reset({ fullName, email });
+    } catch (err) {
+      setError("Failed to load profile");
+    } finally {
+      await new Promise((resolve) => setTimeout(resolve, 2000)); 
+      setLoading(false);
+    }
+  };
 
-    fetchProfile();
-  }, []);
+  fetchProfile();
+}, []);
 
   // ─── UPDATE profile ────────────────────
   const onSubmit = async (data: ProfileForm) => {
@@ -58,7 +59,7 @@ const UserProfile = () => {
       console.error("Update failed ", err);
     }
   };
-// if (loading) return <ProfileSkeleton />;
+if (loading) return <ProfileSkeleton />;
   if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
 
   return (

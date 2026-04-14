@@ -161,14 +161,14 @@ const ContactSidebar = ({
             <div className="flex gap-2 mt-4">
               <button
                 onClick={handleSave}
-                className="p-2 m-2 bg-green-600 rounded-lg text-white w-32 cursor-pointer"
+                className="p-2 w-40  bg-white border border-blue-600  text-black rounded-lg hover:bg-black  hover:text-white hover:border-orange-600  cursor-pointer"
               >
                 {" "}
                 Save
               </button>
               <button
                 onClick={() => setIsEditing(false)}
-                className="flex items-center gap-3 px-4 py-2 bg-white  hover:bg-red-500  hover:text-white  hover:border-2  text-black rounded-lg w-38 h-12 border border-gray-400  text-sm font-semibold transition-all"
+                className="flex items-center gap-3 px-4 py-2 bg-white  hover:bg-red-500  hover:text-white  hover:border-2  text-black rounded-lg w-42 h-12 border border-gray-400  text-sm font-semibold transition-all cursor-pointer "
 
               >
                 Cancel
@@ -223,7 +223,7 @@ const ContactSidebar = ({
             <div className="flex gap-2">
               <button
                 onClick={handleEdit}
-                className="flex items-center gap-2 p-3 bg-white- hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  text-blue-500 rounded-lg w-38 h-12 border border-blue-300  text-sm font-semibold transition-all cursor-pointer"
+                className="flex items-center gap-2 p-3 bg-white- hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  text-blue-500 rounded-lg w-42 h-12 border border-blue-300  text-sm font-semibold transition-all cursor-pointer"
               >
                 <Pencil size={16} /> Edit
               </button>
@@ -232,7 +232,7 @@ const ContactSidebar = ({
                   e.stopPropagation();
                   handleDelete(selectedContact.id);
                 }}
-                className="flex items-center gap-3 px-4 py-2 bg-white- hover:bg-red-500  hover:text-white  hover:border-2  text-red-400  rounded-lg w-38 h-12 border border-red-200  text-sm font-semibold transition-all cursor-pointer"
+                className="flex items-center gap-3 px-4 py-2 bg-white- hover:bg-red-500  hover:text-white  hover:border-2  text-red-400  rounded-lg w-42 h-12 border border-red-200  text-sm font-semibold transition-all cursor-pointer"
 
               >
                 <Trash2 size={16} /> Delete
