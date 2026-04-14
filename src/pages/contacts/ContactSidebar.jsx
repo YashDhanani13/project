@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Pencil, Trash2, X } from "lucide-react";
-// import zod from "zod";
-// import { zodResolver } from "@hookform/resolvers/zod";
+import {Save , Pencil, Trash2, X } from "lucide-react";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import api from "../../api/api";
 
 
@@ -15,51 +15,51 @@ const ContactSidebar = ({
   const [formData, setFormData] = useState({});
 
 
-  // const contactSideValidation = z.object({
-  //   name: z
-  //     .string({ required_error: "Name is required" })
-  //     .trim()
-  //     .min(1, "Name is required")
-  //     .max(100, "Name must be under 100 characters")
-  //     .regex(
-  //       /^[a-zA-Z\s'-]+$/,
-  //       "Name can only contain letters, spaces, hyphens, and apostrophes",
-  //     ),
+  const contactSideValidation = z.object({
+    name: z
+      .string({ required_error: "Name is required" })
+      .trim()
+      .min(1, "Name is required")
+      .max(100, "Name must be under 100 characters")
+      .regex(
+        /^[a-zA-Z\s'-]+$/,
+        "Name can only contain letters, spaces, hyphens, and apostrophes",
+      ),
 
-  //   email: z
-  //     .string({ required_error: "Email is required" })
-  //     .trim()
-  //     .toLowerCase()
-  //     .min(1, "Email is required")
-  //     .email("Invalid email address")
-  //     .max(255, "Email must be under 255 characters"),
+    email: z
+      .string({ required_error: "Email is required" })
+      .trim()
+      .toLowerCase()
+      .min(1, "Email is required")
+      .email("Invalid email address")
+      .max(255, "Email must be under 255 characters"),
 
-  //   age: z
-  //     .number({
-  //       required_error: "Age is required",
-  //     })
-  //     .min(18, "Must be at least 18 years old")
-  //     .max(120, "Age seems invalid"),
+    age: z
+      .number({
+        required_error: "Age is required",
+      })
+      .min(18, "Must be at least 18 years old")
+      .max(120, "Age seems invalid"),
 
-  //   tag: z
-  //     .string({ required_error: "Tag is required" })
-  //     .trim()
-  //     .min(1, "Tag is required")
-  //     .max(50, "Tag must be under 50 characters"),
+    tag: z
+      .string({ required_error: "Tag is required" })
+      .trim()
+      .min(1, "Tag is required")
+      .max(50, "Tag must be under 50 characters"),
 
-  //   phoneNumber: z
-  //     .string({ required_error: "Phone number is required" })
-  //     .trim()
-  //     .min(10, "Phone must be at least 10 digits")
-  //     .max(15, "Phone number is too long")
-  //     .regex(/^\+?[0-9\s\-().]+$/, "Invalid phone number format"),
+    phoneNumber: z
+      .string({ required_error: "Phone number is required" })
+      .trim()
+      .min(10, "Phone must be at least 10 digits")
+      .max(15, "Phone number is too long")
+      .regex(/^\+?[0-9\s\-().]+$/, "Invalid phone number format"),
 
-  //   address: z
-  //     .string()
-  //     .trim()
-  //     .max(255, "Address must be under 255 characters")
-  //     .optional(),
-  // });
+    address: z
+      .string()
+      .trim()
+      .max(255, "Address must be under 255 characters")
+      .optional(),
+  });
 
 
   if (!selectedContact) return null;
@@ -77,24 +77,27 @@ const ContactSidebar = ({
   };
 
   const handleSave = async () => {
-    try {
-      const updatedContact = {
-        name: formData.name,
-        email: formData.email,
-        age: Number(formData.age),
-        phoneNumber: formData.phoneNumber,
-        tag: formData.tag,
-        address: formData.address,
-      };
+  try {
+        const validatedData = contactSideValidation.parse({
+      ...formData,
+      age: Number(formData.age),
+    });
 
-      await api.put(`/contacts/${selectedContact.id}`, updatedContact);
-      setIsEditing(false);
-      setSelectedContact(null);
-      fetchContacts();
-    } catch (err) {
+    await api.put(`/contacts/${selectedContact.id}`, validatedData);
+
+    setIsEditing(false);
+    setSelectedContact(null);
+    fetchContacts();
+
+  } catch (err) {
+    if (err.errors) {
+      // Zod error
+      setError(err.errors[0].message);
+    } else {
       setError(err.response?.data?.message || "Failed to update");
     }
-  };
+  }
+};
 
   const handleDelete = async (id) => {
     try {
@@ -157,14 +160,13 @@ const ContactSidebar = ({
                 />
               </div>
             ))}
-
+  
             <div className="flex gap-2 mt-4">
               <button
                 onClick={handleSave}
-                className="p-2 w-40  bg-white border border-blue-600  text-black rounded-lg hover:bg-black  hover:text-white hover:border-orange-600  cursor-pointer"
+                  className="flex items-center justify-center gap-2 p-2 bg-white  rounded-lg text-blue-400 w-40 border  border-blue-400 cursor-pointer hover:bg-black hover:text-white hover:border-orange-400"
               >
-                {" "}
-                Save
+              <Save size={16} /> Save
               </button>
               <button
                 onClick={() => setIsEditing(false)}

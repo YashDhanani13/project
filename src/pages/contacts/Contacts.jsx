@@ -5,6 +5,7 @@ import ContactSidebar from "./ContactSidebar";
 import api from "../../api/api";
 import ReactCountryFlag from "react-country-flag";
 import { UserPlus } from "lucide-react";
+import ContactSkeleton from "./ContactSkeleton";
 
 const Contacts = () => {
   const [contacts, setContacts] = useState([]);
@@ -42,6 +43,7 @@ const Contacts = () => {
     } catch {
       setError("Failed to fetch contacts");
     } finally {
+      //  await new Promise((resolve) => setTimeout(resolve, 2000)); 
       setLoading(false);
     }
   };
@@ -142,7 +144,7 @@ const Contacts = () => {
       )}
 
       {loading && (
-        <div className="text-center py-8 text-gray-500">Loading contacts...</div>
+        <ContactSkeleton />
       )}
 
       {!loading && (

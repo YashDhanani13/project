@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import api from "../../api/api";
-import z from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
-
-
 
 const contactValidation = z.object({
   name: z
@@ -112,34 +110,13 @@ const ContactForm = ({ close }) => {
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* <div>
-            <label className="text-sm font-medium text-gray-700">Phone</label>
+          <div>
             <PhoneInput
-              defaultCountry="in"
+              defaultCountry="ua"
               value={phone}
-              onChange={(value) => {
-                setPhone(value);
-                setValue("phoneNumber", value);
-              }}
-              className="mt-1"
-              inputStyle={{
-                width: "100%",
-                borderRadius: "0.75rem",
-                border: errors.phoneNumber
-                  ? "1px solid #FCA5A5"
-                  : "1px solid #E5E7EB",
-                padding: "1.5rem 1rem",
-                fontSize: "0.875rem",
-                outline: "none",
-              }}
+              onChange={(phone) => setPhone(phone)}
             />
-            {errors.phoneNumber && (
-              <p className="text-xs text-red-500 mt-1">
-                {errors.phoneNumber.message}
-              </p>
-            )}
-          </div> */}
-
+          </div>
           {/* Name */}
           <div>
             <label className="text-sm font-medium text-gray-700">
@@ -150,11 +127,10 @@ const ContactForm = ({ close }) => {
               placeholder="Rohan Mehta"
               {...register("name")}
               className={`w-full mt-1 rounded-xl border px-4 py-3 text-sm outline-none transition 
-              ${
-                errors.name
+              ${errors.name
                   ? "border-red-300 focus:ring-2 focus:ring-red-200"
                   : "border-gray-200 focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
-              }`}
+                }`}
             />
             {errors.name && (
               <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
@@ -169,11 +145,10 @@ const ContactForm = ({ close }) => {
               placeholder="name@mail.com"
               {...register("email")}
               className={`w-full mt-1 rounded-xl border px-4 py-3 text-sm outline-none transition 
-              ${
-                errors.email
+              ${errors.email
                   ? "border-red-300 focus:ring-2 focus:ring-red-200"
                   : "border-gray-200 focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
-              }`}
+                }`}
             />
             {errors.email && (
               <p className="text-xs text-red-500 mt-1">

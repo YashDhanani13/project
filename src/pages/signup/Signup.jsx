@@ -1,11 +1,18 @@
 import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  Mail, Lock, ArrowRight, CheckCircle2, AlertCircle, Loader2, User,
+  Mail,
+  Lock,
+  ArrowRight,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+  User,
 } from "lucide-react";
+
 import api from "../../api/api";
 import { AuthContext } from "../../Authcontext/AuthContext";
 
@@ -16,7 +23,7 @@ const signValdate = z.object({
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
-    .max(100, "Password is too long"), // Added 
+    .max(100, "Password is too long"), // Added
 });
 
 const Signup = () => {
@@ -25,13 +32,12 @@ const Signup = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(signValdate)
+    resolver: zodResolver(signValdate),
   });
 
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [apiSuccess, setApiSuccess] = useState("");
-
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -66,10 +72,11 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-6 bg-gradient-to-r from-slate-400 to-sky-950 pt-28">
-      <div className="w-full max-w-md">
+
+    <div className="min-h-screen w-full flex  items-center  justify-center  bg-gradient-to-r from-slate-400 to-sky-950">
+      <div className="w-full grid grid-rows-5 gap-y-1 max-w-md">
         <div className="bg-white rounded-[2.5rem] p-6 shadow-lg shadow-gray-200 border border-gray-100">
-          <div className="text-center mb-10">
+          <div className="text-center  mb-10">
             <h1 className="text-3xl font-black text-slate-900 tracking-tight">
               Create Account
             </h1>
@@ -92,21 +99,23 @@ const Signup = () => {
             </div>
           )}
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-
+          <form onSubmit={handleSubmit(onSubmit)} >
             {/* full name */}
             <div className="space-y-2">
-              <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+              <label className="text-xs font-black text-mist-
+              400 uppercase tracking-widest ml-1">
                 Full name
               </label>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+                <User
+                  className="absolute left-4 top-1/3 .-translate-y-1/2 text-slate-500"
+                  size={20}
+                />
                 <input
                   type="text"
                   placeholder="Enter Your Full name"
                   className={`w-full bg-slate-50 border-2 ${errors.fullName ? "border-rose-100" : "border-slate-50"} text-slate-900 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-blue-200 focus:bg-white transition-all font-bold placeholder:text-slate-300`}
-                  {...register("fullName")
-                  }
+                  {...register("fullName")}
                 />
               </div>
               {errors.fullName && (
@@ -118,19 +127,27 @@ const Signup = () => {
 
             {/* email */}
             <div className="space-y-2">
-              <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Email Address</label>
+              <label className="text-xs font-black  text-mist-500 uppercase tracking-widest ml-1">
+                Email Address
+              </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+                <Mail
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  size={20}
+                />
                 <input
                   type="email"
                   placeholder="name@example.com"
-                  className={`w-full bg-slate-50 border-2 ${errors.email ? "border-rose-300" : "border-slate-50"} rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-blue-200 transition-all font-bold`}
+                  className={`w-full bg-slate-50 border-2 ${errors.email ? "border-red-300" : "border-slate-50"} rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-blue-200 transition-all font-bold`}
                   {...register("email")}
                 />
               </div>
-              {errors.email && <p className="text-rose-500 text-xs font-bold ml-1">{errors.email.message}</p>}
+              {errors.email && (
+                <p className="text-rose-500 text-xs font-bold ml-1">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
-
 
             {/* organization name */}
             <div className="space-y-2">
@@ -138,11 +155,14 @@ const Signup = () => {
                 Organization Name
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+                <Mail
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  size={20}
+                />
                 <input
                   type="text"
                   placeholder="Enter your organization name"
-                  className={`w-full bg-slate-50 border-2 ${errors.organizationName ? "border-rose-100" : "border-slate-50"} text-slate-900 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-blue-200 focus:bg-white transition-all font-bold placeholder:text-slate-300`}
+                  className={`w-full bg-slate-50 border-2 ${errors.organizationName ? "border-red-300" : "border-slate-50"} text-slate-900 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-blue-200 focus:bg-white transition-all font-bold placeholder:text-slate-300`}
                   {...register("organizationName")}
                 />
               </div>
@@ -153,41 +173,48 @@ const Signup = () => {
               )}
             </div>
 
-
             {/* password  */}
             <div className="space-y-2">
-              <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Password</label>
+              <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">
+                Password
+              </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+                <Lock
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  size={20}
+                />
                 <input
                   type="password"
                   placeholder="Enter your password"
-                  className={`w-full bg-slate-50 border-2 ${errors.password ? "border-rose-300" : "border-slate-50"} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
+                  className={`w-full bg-slate-50 border-2 ${errors.password ? "border-red-300" : "border-slate-50"} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
                   {...register("password")}
                 />
               </div>
-              {errors.password && <p className="text-rose-500 text-xs font-bold ml-1">{errors.password.message}</p>}
+              {errors.password && (
+                <p className="text-rose-500 text-xs font-bold ml-1">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
-
 
             {/* button  */}
             <button
               disabled={loading}
               type="submit"
-              className="w-full bg-slate-900 hover:bg-slate-800 text-white font-black rounded-lg h-10 shadow-xl shadow-slate-200 transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-3 text-lg mt-4"
+              className="w-full bg-white text-blue-400 hover:bg-black hover:text-white   font-bold  rounded-lg  border border-blue-400  border-2  will-change-auto h-14 p-3  shadow-xl shadow-slate-200 transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-3 text-lg mt-4 hover:bg--800 cursor-pointer"
             >
               {loading ? (
                 <Loader2 className="animate-spin" size={20} />
               ) : (
                 <>
-                  <span>Create Account</span>
+                  <span>Sign up</span>
                   <ArrowRight size={20} />
                 </>
               )}
             </button>
           </form>
 
-          <p className="mt-10 text-center text-slate-500 font-bold">
+          <p className="mt-10 text-center text-md text-mist-700 font-bold">
             Already a member?{" "}
             <Link to="/login" className="text-blue-600 hover:underline">
               Log In

@@ -170,7 +170,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
                 {...register("status")}
               >
                 <option value="">Select status</option>
-                <option value="ACTIVE">Active</option>
+                <option value="ACTIVE"> </option>
                 <option value="INACTIVE">Inactive</option>
               </select>
               <ChevronDown
@@ -211,7 +211,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
 
               close?.();
             }}
-           className="flex items-center gap-3 px-4 py-2 bg-white- hover:bg-red-500  hover:text-white  hover:border-2  text-black rounded-lg w-45 h-12 border border-gray-400  text-sm font-semibold transition-all"
+            className="flex items-center gap-3 px-4 py-2 bg-white- hover:bg-red-500  hover:text-white  hover:border-2  text-black rounded-lg w-45 h-12 border border-gray-400  text-sm font-semibold transition-all"
           >
             Cancel
           </button>
