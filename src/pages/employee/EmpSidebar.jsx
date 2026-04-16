@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Save, Pencil, Trash2, X } from "lucide-react";
-import axios from "axios";
-// Add this at the top of ContactSidebar.jsx
 import api from "../../api/api";
 
 
@@ -130,14 +128,12 @@ const EmpSidebar = ({
               </p>
             </div>
 
-
             <div className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
               <p className="text-xs text-gray-500 uppercase">Email</p>
               <p className="font-semibold text-gray-800">
                 {selectedEmployee.email}
               </p>
             </div>
-
 
             <div className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
               <p className="text-xs text-gray-500 uppercase">Role</p>

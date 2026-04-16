@@ -99,11 +99,11 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
           {apiError}
         </div>
       )}
+      {/* --------------------------------------------------------------- */}
 
-      {/* ── Form ── */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-        {/* Name */}
+
         <div>
           <label className="mb-1.5 block text-sm font-semibold text-gray-700">Full Name</label>
           <div className="relative">
@@ -121,7 +121,6 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
           {errors.name?.message && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
         </div>
 
-        {/* Email */}
         <div>
           <label className="mb-1.5 block text-sm font-semibold text-gray-700">Email Address</label>
           <div className="relative">
@@ -139,9 +138,9 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
           {errors.email?.message && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
         </div>
 
-        {/* Role + Status — side by side */}
+
         <div className="grid grid-cols-2 gap-3">
-          {/* Role */}
+
           <div>
             <label className="mb-1.5 block text-sm font-semibold text-gray-700">Role</label>
             <div className="relative">
@@ -161,7 +160,6 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
             {errors.role?.message && <p className="mt-1 text-xs text-red-500">{errors.role.message}</p>}
           </div>
 
-          {/* Status */}
           <div>
             <label className="mb-1.5 block text-sm font-semibold text-gray-700">Status</label>
             <div className="relative">
@@ -182,7 +180,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
           </div>
         </div>
 
-        {/* Phone */}
+
         <div>
           <label className="mb-1.5 block text-sm font-semibold text-gray-700">Phone Number</label>
           <div className="relative">
@@ -199,11 +197,10 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
           </div>
           {errors.phoneNumber?.message && <p className="mt-1 text-xs text-red-500">{errors.phoneNumber.message}</p>}
         </div>
-
-        {/* Divider */}
+        
         <div className="mt-6 border-t border-gray-100" />
 
-        {/* Actions */}
+
         <div className="mt-5 flex gap-2.5">
           <button
             type="button"

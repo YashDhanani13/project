@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {Save , Pencil, Trash2, X } from "lucide-react";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import api from "../../api/api";
-
+import { Save, Pencil, Trash2, X } from "lucide-react";
 
 const ContactSidebar = ({
   selectedContact,
@@ -13,54 +9,6 @@ const ContactSidebar = ({
   const [error, setError] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
-
-
-  const contactSideValidation = z.object({
-    name: z
-      .string({ required_error: "Name is required" })
-      .trim()
-      .min(1, "Name is required")
-      .max(100, "Name must be under 100 characters")
-      .regex(
-        /^[a-zA-Z\s'-]+$/,
-        "Name can only contain letters, spaces, hyphens, and apostrophes",
-      ),
-
-    email: z
-      .string({ required_error: "Email is required" })
-      .trim()
-      .toLowerCase()
-      .min(1, "Email is required")
-      .email("Invalid email address")
-      .max(255, "Email must be under 255 characters"),
-
-    age: z
-      .number({
-        required_error: "Age is required",
-      })
-      .min(18, "Must be at least 18 years old")
-      .max(120, "Age seems invalid"),
-
-    tag: z
-      .string({ required_error: "Tag is required" })
-      .trim()
-      .min(1, "Tag is required")
-      .max(50, "Tag must be under 50 characters"),
-
-    phoneNumber: z
-      .string({ required_error: "Phone number is required" })
-      .trim()
-      .min(10, "Phone must be at least 10 digits")
-      .max(15, "Phone number is too long")
-      .regex(/^\+?[0-9\s\-().]+$/, "Invalid phone number format"),
-
-    address: z
-      .string()
-      .trim()
-      .max(255, "Address must be under 255 characters")
-      .optional(),
-  });
-
 
   if (!selectedContact) return null;
 
@@ -77,27 +25,21 @@ const ContactSidebar = ({
   };
 
   const handleSave = async () => {
-  try {
-        const validatedData = contactSideValidation.parse({
-      ...formData,
-      age: Number(formData.age),
-    });
+    try {
+      await api.put(`/contacts/${selectedContact.id}`, validatedData);
 
-    await api.put(`/contacts/${selectedContact.id}`, validatedData);
-
-    setIsEditing(false);
-    setSelectedContact(null);
-    fetchContacts();
-
-  } catch (err) {
-    if (err.errors) {
-      // Zod error
-      setError(err.errors[0].message);
-    } else {
-      setError(err.response?.data?.message || "Failed to update");
+      setIsEditing(false);
+      setSelectedContact(null);
+      fetchContacts();
+    } catch (err) {
+      if (err.errors) {
+        // Zod error
+        setError(err.errors[0].message);
+      } else {
+        setError(err.response?.data?.message || "Failed to update");
+      }
     }
-  }
-};
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -147,9 +89,10 @@ const ContactSidebar = ({
               { label: "Tag", field: "tag" },
               { label: "Address", field: "address" },
             ].map(({ label, field }) => (
-              <div key={field} className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
-
-
+              <div
+                key={field}
+                className="bg-gray-100 p-3 rounded-lg  border border-mist-500"
+              >
                 <p className="text-xs text-gray-500 uppercase">{label}</p>
                 <input
                   className="w-full font-semibold text-gray-800 bg-transparent  outline-none pt-1"
@@ -160,18 +103,17 @@ const ContactSidebar = ({
                 />
               </div>
             ))}
-  
+
             <div className="flex gap-2 mt-4">
               <button
                 onClick={handleSave}
-                  className="flex items-center justify-center gap-2 p-2 bg-white  rounded-lg text-blue-400 w-40 border  border-blue-400 cursor-pointer hover:bg-black hover:text-white hover:border-orange-400"
+                className="flex items-center justify-center gap-2 p-2 bg-white  rounded-lg text-blue-400 w-40 border  border-blue-400 cursor-pointer hover:bg-black hover:text-white hover:border-orange-400"
               >
-              <Save size={16} /> Save
+                <Save size={16} /> Save
               </button>
               <button
                 onClick={() => setIsEditing(false)}
                 className="flex items-center gap-3 px-4 py-2 bg-white  hover:bg-red-500  hover:text-white  hover:border-2  text-black rounded-lg w-42 h-12 border border-gray-400  text-sm font-semibold transition-all cursor-pointer "
-
               >
                 Cancel
               </button>
@@ -235,7 +177,6 @@ const ContactSidebar = ({
                   handleDelete(selectedContact.id);
                 }}
                 className="flex items-center gap-3 px-4 py-2 bg-white- hover:bg-red-500  hover:text-white  hover:border-2  text-red-400  rounded-lg w-42 h-12 border border-red-200  text-sm font-semibold transition-all cursor-pointer"
-
               >
                 <Trash2 size={16} /> Delete
               </button>

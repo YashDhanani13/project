@@ -3,7 +3,7 @@ import api from "../../api/api";
 import EmployeeSkeleton from "./EmployeeSkeleton";
 import Employee from "./EmployeeForm";
 import EmpSidebar from "./EmpSidebar"
-import { UserPlus} from "lucide-react";
+import { UserPlus } from "lucide-react";
 
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
@@ -13,7 +13,6 @@ const Employees = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  //search bar  here :-
   const [search, setSearch] = useState("");
 
   // dropdown  row per page  and  pagination here
@@ -27,23 +26,24 @@ const Employees = () => {
     fetchEmployees();
   },
     [search]);
-const fetchEmployees = async () => {
-  setLoading(true);
-  setError("");
-  try {
-    const res = await api.get("/employee",
-      { params: { search: search || undefined } }
-    );
-    const data = res.data;
-    setEmployees(Array.isArray(data) ? data : data.data || data.employees || []);
-  } catch (err) {
-    setError(err.response?.data?.message || "Failed to fetch employees");
-    setEmployees([]);
-  } finally {
-    await new Promise((resolve) => setTimeout(resolve, 2000)); 
-    setLoading(false);
-  }
-};
+
+
+  const fetchEmployees = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await api.get("/employee",
+        { params: { search: search || undefined } }
+      );
+      const data = res.data;
+      setEmployees(Array.isArray(data) ? data : data.data || data.employees || []);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to fetch employees");
+      setEmployees([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleEmployeeAdded = () => {
     setOpen(false);
@@ -73,6 +73,7 @@ const fetchEmployees = async () => {
 
 
   const totalEmployees = sorted.length;
+
   const noOfPages = Math.ceil(totalEmployees / rowsPerPage);
   const start = currentPage * rowsPerPage;
   const end = start + rowsPerPage;
@@ -85,21 +86,24 @@ const fetchEmployees = async () => {
     setCurrentPage(0);
   };
 
-
   const handleRowsPerPageChange = (e) => {
-    setRowsPerPage(Number(e.target.value)); // update rows per page
-    setCurrentPage(0);                      // always reset to page 1
+    setRowsPerPage(Number(e.target.value));
+    setCurrentPage(0);
   };
 
   const SortTh = ({ field, label }) => (
+
     <th
       onClick={() => handleSort(field)}
       className="p-3 text-left cursor-pointer select-none hover:text-black  transition-colors"
     >
+
       {label}
+
       <span className={sortField === field ? "text-blue-600 font-bold" : "text-black"}>
         {sortIcon(field)}
       </span>
+
     </th>
   );
 
@@ -131,7 +135,7 @@ const fetchEmployees = async () => {
           className="flex items-center gap-2 px-4 py-2 bg-white cursor-pointer  hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  text-orange-500 rounded-lg w-38 h-12 border border-orange-400  text-sm font-semibold transition-all"
         >
           <UserPlus size={16} />
-           Add Employee
+          Add Employee
         </button>
       </div>
 
@@ -143,8 +147,8 @@ const fetchEmployees = async () => {
       )}
 
       {/* Loading */}
-      {loading ? (  
-       <EmployeeSkeleton />
+      {loading ? (
+        <EmployeeSkeleton />
       ) : (
         <>
           <div className="bg-white rounded-xl shadow overflow-hidden">
@@ -170,14 +174,19 @@ const fetchEmployees = async () => {
                         className="border-t hover:bg-blue-100 cursor-pointer transition-colors"
                         onClick={() => setSelectedEmployee(employee)}
                       >
+
+                        {/* check box  */}
                         <td className="p-3">
                           <input type="checkbox" onClick={(e) => e.stopPropagation()} />
                         </td>
+                        {/* main filed */}
+
                         <td className="p-3 font-medium">{employee.name}</td>
                         <td className="p-3 text-blue-600">{employee.email}</td>
                         <td className="p-3">{employee.role}</td>
                         <td className="p-3">{employee.phoneNumber || "—"}</td>
                         <td className="p-3">
+
                           {employee.status ? (
                             <span style={{
                               background: statusColors[employee.status?.toLowerCase()]?.bg || "#E5E7EB",
@@ -221,12 +230,12 @@ const fetchEmployees = async () => {
                 <span className="text-gray-400">Rows per page:</span>
                 <select
                   className="border border-gray-300 rounded-lg px-2 py-1 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300"
-                  value={rowsPerPage}              // ✅ controlled value
-                  onChange={handleRowsPerPageChange} // ✅ wired handler
+                  value={rowsPerPage}
+                  onChange={handleRowsPerPageChange}
                 >
-                  <option value={3}>3</option>
                   <option value={5}>5</option>
                   <option value={10}>10</option>
+                  <option value="{15}">15</option>
                   <option value={20}>20</option>
                 </select>
               </div>
@@ -236,8 +245,8 @@ const fetchEmployees = async () => {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setCurrentPage((p) => p - 1)}
-                    disabled={currentPage === 0}
-                    className="p-3  w-25  rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition disabled:bg-white disabled:border-red-300 disabled:text-red-500"
+                  disabled={currentPage === 0}
+                  className="p-3  w-25 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition disabled:bg-white disabled:border-red-300 disabled:text-red-500"
                 >
                   ← Prev
                 </button>
@@ -248,9 +257,9 @@ const fetchEmployees = async () => {
                 </span>
 
                 <button
-                onClick={() => setCurrentPage((p) => p + 1)}
-                    disabled={currentPage >= noOfPages - 1}
-                    className="p-3 w-25  border-2  rounded-lg   text-blue-400 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition disabled:bg-white broder  disabled:broder-red-400 disabled:text-red-500"
+                  onClick={() => setCurrentPage((p) => p + 1)}
+                  disabled={currentPage >= noOfPages - 1}
+                  className="p-3 w-25  border-2  rounded-lg   text-blue-400 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition disabled:bg-white broder  disabled:broder-red-400 disabled:text-red-500"
                 >
                   Next →
                 </button>
@@ -259,9 +268,7 @@ const fetchEmployees = async () => {
             </div>
           </div>
 
-          {/* Sidebar for selected employee */}
           {selectedEmployee && (
-
             <EmpSidebar
               employee={selectedEmployee}
               onClose={() => setSelectedEmployee(null)}
@@ -286,6 +293,7 @@ const fetchEmployees = async () => {
                 >
                   ✕
                 </button>
+
                 <div className="overflow-y-auto flex-1">
                   <Employee onSuccess={handleEmployeeAdded} close={() => setOpen(false)} />
                 </div>
@@ -293,14 +301,11 @@ const fetchEmployees = async () => {
             </div>
 
           )}
-
-
           <EmpSidebar
             selectedEmployee={selectedEmployee}
             setSelectedEmployee={setSelectedEmployee}
             fetchEmployees={fetchEmployees}
           />
-
         </>
       )}
     </div>

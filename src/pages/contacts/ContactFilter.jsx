@@ -57,7 +57,7 @@ const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
             className="flex-1 border p-2 rounded-lg bg-blue-500 h-12  text-black  cursor-pointer hover:bg-black hover:text-white "
             onClick={() => {
               if (!field || !value) {
-                // alert("Please select field and enter value");
+
                 return;
               }
               setFilterField(field);

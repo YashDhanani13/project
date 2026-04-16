@@ -284,18 +284,22 @@ const Contacts = () => {
           )}
 
           {open && (
+
             <div
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center"
               onClick={() => setOpen(false)}
             >
+
               <div
                 className="relative w-110 bg-orange-600 shadow-2xl max-h-[93vh] rounded-3xl flex flex-col"
                 onClick={(e) => e.stopPropagation()}
               >
+
                 <button
                   onClick={() => setOpen(false)}
                   className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold text-sm transition"
                 >
+                  
                   ✕
                 </button>
                 <div className="overflow-y-auto flex-1">

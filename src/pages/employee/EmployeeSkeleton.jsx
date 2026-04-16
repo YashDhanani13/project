@@ -9,19 +9,19 @@ const EmployeeSkeleton = () => {
 
       <div className="border rounded-lg overflow-hidden border-gray-200 shadow-sm">
         <table className="w-full text-left border-collapse">
-          <thead className="bg-orange-200"> {/* ✅ orange not purple */}
+          <thead className="bg-orange-200"> 
             <tr>
               <th className="p-4 w-10"><div className="h-4 w-4 bg-orange-300/50 rounded"></div></th>
               <th className="p-4 text-gray-700 font-medium">Name</th>
               <th className="p-4 text-gray-700 font-medium">Email</th>
               <th className="p-4 text-gray-700 font-medium">Role</th>
-              <th className="p-4 text-gray-700 font-medium">Phone</th> 
+              <th className="p-4 text-gray-700 font-medium">Phone</th>
               <th className="p-4 text-gray-700 font-medium">Status</th>
             </tr>
           </thead>
 
-          <tbody className="bg-white">
-            {[...Array(10)].map((_, index) => (   
+          <tbody className="      bg-white">
+            {[...Array(10)].map((_, index) => (
               <tr key={index} className="border-b border-gray-100 animate-pulse">
                 <td className="p-4"><div className="h-4 w-4 bg-gray-200 rounded"></div></td>
                 <td className="p-4"><div className="h-4 bg-gray-300 rounded w-28"></div></td>
@@ -35,7 +35,6 @@ const EmployeeSkeleton = () => {
         </table>
       </div>
 
-     
       <div className="flex items-center justify-between animate-pulse px-1">
         <div className="h-4 bg-gray-200 rounded w-48"></div>
         <div className="flex items-center gap-3">
