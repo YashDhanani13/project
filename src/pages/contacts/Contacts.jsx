@@ -3,7 +3,6 @@ import Contact from "./ContactForm";
 import ContactFilter from "./ContactFilter";
 import ContactSidebar from "./ContactSidebar";
 import api from "../../api/api";
-import ReactCountryFlag from "react-country-flag";
 import { UserPlus } from "lucide-react";
 import ContactSkeleton from "./ContactSkeleton";
 
@@ -43,7 +42,7 @@ const Contacts = () => {
     } catch {
       setError("Failed to fetch contacts");
     } finally {
-      //  await new Promise((resolve) => setTimeout(resolve, 2000)); 
+       await new Promise((resolve) => setTimeout(resolve, 2000)); 
       setLoading(false);
     }
   };
@@ -115,7 +114,7 @@ const Contacts = () => {
       <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
         <button
           onClick={() => setShowFilter(true)}
-          className="border-2 font-extrabold border-black text-gray-800 w-35 h-12 bg-white hover:bg-black hover:text-white hover:border-orange-400 px-5 py-2 rounded-lg text-sm transition cursor-pointer"
+          className="border-2 font-extrabold border-black text-gray-800 w-35 h-12 bg-white hover:bg-black hover:text-white hover:border-gray-600 border-2 px-5 py-2 rounded-lg text-sm transition cursor-pointer"
         >
           Filter
         </button>
@@ -130,7 +129,7 @@ const Contacts = () => {
 
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2 font-bold text-blue-500 rounded-lg w-38 h-12 border cursor-pointer border-black text-sm transition-all"
+          className="flex items-center gap-2 px-4 py-2 hover:bg-black hover:text-white hover:border-blue-600 hover:border-2 font-bold text-black rounded-lg w-38 h-12 border cursor-pointer border-black text-sm transition-all"
         >
           <UserPlus size={16} />
           Add Contact
@@ -195,13 +194,7 @@ const Contacts = () => {
                         </td>
                         <td className="p-3">
 
-                          <ReactCountryFlag
-                            countryCode="US"
-                            svg
-                            cdnUrl="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.3/flags/1x1/"
-                            cdnSuffix="svg"
-                            title="US"
-                          />
+                         
                           {contact.phoneNumber || "—"}
                           <br />
                         </td>
@@ -220,7 +213,7 @@ const Contacts = () => {
             </div>
 
             <div className="px-4 py-3 border-t text-xs text-gray-500 flex items-center justify-between flex-wrap gap-3">
-              <span>
+              <span className="font-bold">
                 Showing{" "}
                 <strong className="text-gray-700">
                   {totalContacts === 0 ? 0 : start + 1}–{Math.min(end, totalContacts)}
@@ -229,9 +222,9 @@ const Contacts = () => {
               </span>
 
               <div className="flex items-center gap-2">
-                <span className="text-gray-400">Rows per page:</span>
+                <span className="text-gray-600 font-bold">Rows per page :</span>
                 <select
-                  className="border border-gray-300 rounded-lg px-2 py-1 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-300"
+                  className="border border-black brounded-lg p-2 rounded-md w-20  text-sm bg-white "
                   value={rowsPerPage}
                   onChange={handleRowsPerPageChange}
                 >

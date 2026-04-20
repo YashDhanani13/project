@@ -168,7 +168,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
                 {...register("status")}
               >
                 <option value="">Select status</option>
-                <option value="ACTIVE"> </option>
+                <option value="ACTIVE">Active</option>
                 <option value="INACTIVE">Inactive</option>
               </select>
               <ChevronDown
@@ -197,7 +197,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
           </div>
           {errors.phoneNumber?.message && <p className="mt-1 text-xs text-red-500">{errors.phoneNumber.message}</p>}
         </div>
-        
+
         <div className="mt-6 border-t border-gray-100" />
 
 

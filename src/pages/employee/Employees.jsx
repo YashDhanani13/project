@@ -41,6 +41,7 @@ const Employees = () => {
       setError(err.response?.data?.message || "Failed to fetch employees");
       setEmployees([]);
     } finally {
+            await new Promise((resolve) => setTimeout(resolve, 2000)); 
       setLoading(false);
     }
   };

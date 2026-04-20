@@ -3,15 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import UserProfile from "../pages/user-profile/UserProfile";
 
-
-import {
-  Home,
-  Users,
-  Briefcase,
-  Settings,
-  LogOut,
-} from "lucide-react";
-
+import { Home, Users, Briefcase, Settings, LogOut } from "lucide-react";
 
 // const navigate / useNavigate();
 
@@ -22,10 +14,9 @@ const mainLinks = [
 ];
 
 const logout = () => {
-  localStorage.removeItem('token'); // Clear it so Interceptor sends nothing
-  window.location.href = '/login';
+  localStorage.removeItem("token"); // Clear it so Interceptor sends nothing
+  window.location.href = "/login";
   // useNavigate("/login");
-
 };
 
 const Sidebar = () => {
@@ -36,9 +27,7 @@ const Sidebar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-
     <div className="flex min-h-screen">
-
       {/* ── Sidebar ── always visible */}
       <aside
         className={`fixed top-0 left-0 h-screen z-50 flex flex-col transition-all duration-300
@@ -80,30 +69,30 @@ const Sidebar = () => {
             </Link>
           ))}
         </nav>
-        <div className="p-4 m-4">        {/* Bottom — Profile Settings */}
-
+        <div className="p-4 m-4">
+          {" "}
+          {/* Bottom — Profile Settings */}
           <button
             onClick={() => setShowProfile(true)}
-            className="flex items-center gap-3 px-1.5 py-3 rounded-lg text-sm font-medium text-indigo-400 cursor-pointer   hover:text-white transition-all w-42 text-left"
+            className="flex items-center gap-3 px-1.5 py-3 rounded-lg text-sm font-medium text-gray-600 cursor-pointer   hover:text-white transition-all w-42 text-left"
           >
             <Settings size={18} />
             {!collapsed && <span>Profile Settings</span>}
           </button>
-
           <button
             onClick={() => logout(true)}
-            className="flex items-center gap-3 px-2 py-2  cursor-pointer rounded-lg text-sm font-medium text-red-300 hover:bg-white/10 hover:text-white transition-all w-full text-left"
+            className="flex items-center gap-3 px-2 py-2  cursor-pointer rounded-lg text-sm font-medium text-red-200  hover:bg-white/10 hover:text-white transition-all w-full text-left"
           >
             <LogOut size={18} />
             {!collapsed && <span>Log out</span>}
           </button>
-
         </div>
-
       </aside>
 
       {/* ── Main Content — Outlet renders here ── */}
-      <main className={`flex-1 transition-all duration-300 ${collapsed ? "ml-16" : "ml-52"}`}>
+      <main
+        className={`flex-1 transition-all duration-300 ${collapsed ? "ml-16" : "ml-52"}`}
+      >
         <Outlet /> {/* pages render here, outside sidebar */}
       </main>
 

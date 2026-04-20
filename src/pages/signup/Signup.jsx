@@ -38,6 +38,8 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [apiSuccess, setApiSuccess] = useState("");
+  const [navigate, useNavigate] = useState("");
+
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -58,7 +60,7 @@ const Signup = () => {
         setApiSuccess("Account created successfully!");
         setTimeout(() => navigate("/"), 1500);
       } else {
-        setApiError("No token received from server");
+        // setApiError("No token received from server");
       }
     } catch (error) {
       if (error.response) {
@@ -68,15 +70,20 @@ const Signup = () => {
       }
     } finally {
       setLoading(false);
+      // redireact(navigate("/login"));
+      // navigate('/login');
+      window.location.href = "/login";
     }
   };
 
   return (
 
-    <div className="min-h-screen w-full flex  items-center  justify-center  bg-gradient-to-r from-slate-400 to-sky-950">
+    <div className="min-h-screen w-full flex  items-center  justify-center  bg-gradient-to-r from-slate-400 to-mist-700">
+
       <div className="w-full grid grid-rows-5 gap-y-1 max-w-md">
         <div className="bg-white rounded-[2.5rem] p-6 shadow-lg shadow-gray-200 border border-gray-100">
-          <div className="text-center  mb-10">
+          <div className="text-center   mb-10">
+            <User className=" p-1  m-1 text-xl font-bold  bg-white text-blue-400  border border-blue-300  rounded-lg   " />
             <h1 className="text-3xl font-black text-slate-900 tracking-tight">
               Create Account
             </h1>
@@ -114,8 +121,8 @@ const Signup = () => {
                 <input
                   type="text"
                   placeholder="Enter Your Full name"
-                  className={`w-full bg-slate-50 border-2 ${errors.fullName ? "border-rose-100" : "border-slate-50"} text-slate-900 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-blue-200 focus:bg-white transition-all font-bold placeholder:text-slate-300`}
-                  {...register("fullName")}
+                  className={`w-full bg-slate-50 border-2 ${errors.password ? "border-red-300" : "border-gray-200"} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
+                {...register("fullName")}
                 />
               </div>
               {errors.fullName && (
@@ -138,7 +145,7 @@ const Signup = () => {
                 <input
                   type="email"
                   placeholder="name@example.com"
-                  className={`w-full bg-slate-50 border-2 ${errors.email ? "border-red-300" : "border-slate-50"} rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-blue-200 transition-all font-bold`}
+                  className={`w-full bg-slate-50 border-2 ${errors.password ? "border-red-300" : "border-gray-200"} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
                   {...register("email")}
                 />
               </div>
@@ -162,7 +169,7 @@ const Signup = () => {
                 <input
                   type="text"
                   placeholder="Enter your organization name"
-                  className={`w-full bg-slate-50 border-2 ${errors.organizationName ? "border-red-300" : "border-slate-50"} text-slate-900 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-blue-200 focus:bg-white transition-all font-bold placeholder:text-slate-300`}
+                  className={`w-full bg-slate-50 border-2 ${errors.password ? "border-red-300" : "border-gray-200"} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
                   {...register("organizationName")}
                 />
               </div>
@@ -186,7 +193,7 @@ const Signup = () => {
                 <input
                   type="password"
                   placeholder="Enter your password"
-                  className={`w-full bg-slate-50 border-2 ${errors.password ? "border-red-300" : "border-slate-50"} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
+                  className={`w-full bg-slate-50 border-2 ${errors.password ? "border-red-300" : "border-gray-200"} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
                   {...register("password")}
                 />
               </div>

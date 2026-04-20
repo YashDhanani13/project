@@ -109,14 +109,15 @@ const ContactForm = ({ close }) => {
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4"> 
+          {/* <div>
             <PhoneInput
               defaultCountry="ua"
               value={phone}
               onChange={(phone) => setPhone(phone)}
             />
-          </div>
+          </div>  */}
+
           {/* Name */}
           <div>
             <label className="text-sm font-medium text-gray-700">
@@ -233,7 +234,7 @@ const ContactForm = ({ close }) => {
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-black hover:text-white hover:border-gray-500  hover:border-2  text-blue-500 rounded-lg w-38 h-12 border cursor-pointer border-blue-400  text-sm font-semibold transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-black hover:text-white hover:border-gray-500  hover:border-2  text-blue-500 rounded-lg w-43 h-12 border cursor-pointer border-blue-400  text-sm font-semibold transition-all"
             >
               {loading ? "Loading..." : "Create Contact"}
             </button>

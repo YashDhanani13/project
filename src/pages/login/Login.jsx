@@ -39,7 +39,7 @@ const Login = () => {
 
     try {
       const response = await api.post("/auth/login", data);
-      console.log("Login response:", response.data); // Debug: see what the backend returns
+      // console.log("Login response:", response.data); // Debug: see what the backend returns
 
       // Handle different response structures
       let token = response.data.token || response.data.accessToken || response.data.data;
@@ -50,7 +50,7 @@ const Login = () => {
         setTimeout(() => navigate("/"), 1500);
       } else {
         console.error("Token not found in response:", response.data);
-        setApiError("No token received from server. Check console for details.");
+        // setApiError("No token received from server. Check console for details.");
       }
     } catch (error) {
       setApiError(error.response?.data?.message || "Invalid credentials.");
