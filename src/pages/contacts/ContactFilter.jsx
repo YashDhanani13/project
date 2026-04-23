@@ -21,13 +21,14 @@ const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
       <div className="fixed inset-0 bg-black/20 " onClick={close} />
       <div
         ref={filterRef}
-        className="bg-white p-4 rounded-lg shadow-lg  relative z-50"
+        className=" text-blue-200    p-4 rounded-lg shadow-lg  relative z-50"
       >
         <h1 className="font-bold">Filter Contact</h1>
 
         <hr />
-        <select
-          className="border p-3 m-3 w-40 font-bold rounded-lg cursor-pointer"
+        <div className="flex">
+   <select
+          className="border p-3 m-2 w-36 font-bold rounded-lg cursor-pointer"
           onChange={(e) => setField(e.target.value)}
         >
           <option>Select</option>
@@ -39,16 +40,19 @@ const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
 
         {field && (
           <input
-            className="border p-2 w-45 m-2 font-bold rounded-lg cursor-pointer"
+            className="border p-2 w-40 m-2 font-bold rounded-lg cursor-pointer"
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder="Enter value"
           />
         )}
 
-        <div className="flex gap-2 mt-3">
+
+
+        </div>
+             <div className="flex gap-2 mt-3">
           <button
-            className="flex-1   border rounded-lg bg-white hover:bg-red-500 hover:text-white  hover:border-blue-400  cursor-pointer"
+            className="flex-1   border rounded-lg bg-white hover:bg-red-500 hover:text-white text-black border-black  hover:border-blue-400  cursor-pointer"
             onClick={close}
           >
             Cancel

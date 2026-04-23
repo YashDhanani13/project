@@ -1,20 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import api from "../../api/api";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   User,
   Mail,
   Phone,
   ArrowRight,
-  CheckCircle2,
-  AlertCircle,
-  Loader2,
   ChevronDown,
+  Loader2,
+  X,
 } from "lucide-react";
-
-import EmpSidebar from "./EmpSidebar";
-import { z } from "zod"
-import { zodResolver } from '@hookform/resolvers/zod';
 
 const Empvalidation = z.object({
   name: z.string().min(1, "Name is required"),
@@ -24,43 +21,28 @@ const Empvalidation = z.object({
   status: z.string().min(1, "Status is required"),
 });
 
-
-/* ── main component ──────────────────────────────────────────────────────── */
 const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-
-  } = useForm({
-    resolver: zodResolver
-      (Empvalidation)
-  });
+  } = useForm({ resolver: zodResolver(Empvalidation) });
 
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [apiSuccess, setApiSuccess] = useState("");
-
-  const [open, setOpen] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const fetchEmployees = () => { };
-  const handleEmployeeAdded = () => fetchEmployees();
 
   const onSubmit = async (data) => {
     setLoading(true);
     setApiError("");
     setApiSuccess("");
     try {
-      await api.post("/employee", {
-        name: data.name,
-        email: data.email,
-        role: data.role,
-        phoneNumber: data.phoneNumber,
-        status: data.status,
-      });
+      await api.post("/employee", data);
       setApiSuccess("Employee created successfully!");
-      if (onSuccess) onSuccess();
-      if (inModal && close) close();
+      setTimeout(() => {
+        onSuccess?.();
+        close?.();
+      }, 1000);
     } catch (error) {
       setApiError(error.response?.data?.message || "Server connection failed.");
     } finally {
@@ -68,197 +50,180 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
     }
   };
 
-  const inner = (
-    <div className={
-      inModal
-        ? "w-full"
-        : "w-full max-w-[460px] rounded-2xl border border-gray-200 bg-white p-10 shadow-sm"
-    }
-    >
-      {/* ── Header ── */}
-      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-900">
-        <User size={18} color="#fff" />
-      </div>
-      <h1 className="mt-3 text-2xl font-semibold tracking-tight text-gray-900">
-        Add Employee
-      </h1>
-      <p className="mb-7 mt-1 text-sm text-gray-400">
-        Fill in the details to create a new team member.
-      </p>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden">
 
-      {/* ── Alerts ── */}
-      {apiSuccess && (
-        <div className="mb-5 flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
-          <CheckCircle2 size={15} className="shrink-0" />
-          {apiSuccess}
-        </div>
-      )}
-      {apiError && (
-        <div className="mb-5 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
-          <AlertCircle size={15} className="shrink-0" />
-          {apiError}
-        </div>
-      )}
-      {/* --------------------------------------------------------------- */}
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
-
-        <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-700">Full Name</label>
-          <div className="relative">
-            <User
-              size={14}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-            />
-            <input
-              type="text"
-              placeholder="e.g. Rohan Mehta"
-              className={`w-full border-2 rounded-xl py-2.5 pl-10 pr-4 text-sm font-medium outline-none transition-all ${errors.name ? "border-red-300 focus:border-red-400" : "border-gray-100 focus:border-gray-900"}`}
-              {...register("name")}
-            />
-          </div>
-          {errors.name?.message && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
-        </div>
-
-        <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-700">Email Address</label>
-          <div className="relative">
-            <Mail
-              size={14}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-            />
-            <input
-              type="email"
-              placeholder="name@company.com"
-              className={`w-full border-2 rounded-xl py-2.5 pl-10 pr-4 text-sm font-medium outline-none transitio-all ${errors.email ? "border-nred-300 focus:border-red-400" : "border-gray-100 focus:border-gray-900"}`}
-              {...register("email")}
-            />
-          </div>
-          {errors.email?.message && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
-        </div>
-
-
-        <div className="grid grid-cols-2 gap-3">
-
+        {/* Header */}
+        <div className="bg-gradient-to-r  to-blue-400 px-8 py-5 flex items-center justify-between">
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Role</label>
-            <div className="relative">
-              <select
-                className={`w-full border-2 rounded-xl py-2.5 pl-4 pr-10 text-sm font-medium outline-none transition-all appearance-none bg-white ${errors.role ? "border-red-300 focus:border-red-400" : "border-gray-100 focus:border-gray-900"}`}
-                {...register("role", { required: "Role is required" })}
-              >
-                <option value="">Select role</option>
-                <option value="ADMIN">Admin</option>
-                <option value="EMPLOYEE">Employee</option>
-              </select>
-              <ChevronDown
-                size={13}
-                className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-            </div>
-            {errors.role?.message && <p className="mt-1 text-xs text-red-500">{errors.role.message}</p>}
+            <h1 className="text-lg font-bold text-white tracking-tight">Add Employee</h1>
+            <p className="text-orange-100 text-xs mt-0.5 opacity-80">Fill in the details below</p>
           </div>
-
-          <div>
-            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Status</label>
-            <div className="relative">
-              <select
-                className={`w-full border-2 rounded-xl py-2.5 pl-4 pr-10 text-sm font-medium outline-none transition-all appearance-none bg-white ${errors.status ? "border-red-300 focus:border-red-400" : "border-gray-100 focus:border-gray-900"}`}
-                {...register("status")}
-              >
-                <option value="">Select status</option>
-                <option value="ACTIVE">Active</option>
-                <option value="INACTIVE">Inactive</option>
-              </select>
-              <ChevronDown
-                size={13}
-                className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-            </div>
-            {errors.status?.message && <p className="mt-1 text-xs text-red-500">{errors.status.message}</p>}
-          </div>
-        </div>
-
-
-        <div>
-          <label className="mb-1.5 block text-sm font-semibold text-gray-700">Phone Number</label>
-          <div className="relative">
-            <Phone
-              size={14}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-            />
-            <input
-              type="text"
-              placeholder="+91 98765 43210"
-              className={`w-full border-2 rounded-xl py-2.5 pl-10 pr-4 text-sm font-medium outline-none transition-all ${errors.phoneNumber ? "border-red-300 focus:border-red-400" : "border-gray-100 focus:border-gray-900"}`}
-              {...register("phoneNumber")}
-            />
-          </div>
-          {errors.phoneNumber?.message && <p className="mt-1 text-xs text-red-500">{errors.phoneNumber.message}</p>}
-        </div>
-
-        <div className="mt-6 border-t border-gray-100" />
-
-
-        <div className="mt-5 flex gap-2.5">
           <button
             type="button"
-            onClick={() => {
-
-              close?.();
-            }}
-            className="flex items-center gap-3 px-4 py-2 bg-white- hover:bg-red-500  hover:text-white  hover:border-2  text-black rounded-lg w-45 h-12 border border-gray-400  text-sm font-semibold transition-all"
+            onClick={() => close?.()}
+            className="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white transition-colors cursor-pointer"
           >
-            Cancel
-          </button>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gray-900 py-2.5
-                       text-sm font-semibold text-white transition-all hover:opacity-90
-                       active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {loading ? (
-              <Loader2 size={15} className="animate-spin" />
-            ) : (
-              <>
-                Create Employee <ArrowRight size={14} />
-              </>
-            )}
+            <X size={15} />
           </button>
         </div>
-      </form>
-    </div>
-  );
 
-  return inModal ? (
-    <div className="w-full">{inner}</div>
-  ) : (
-    <div className="flex min-h-screen items-start justify-center bg-gray-50 px-4 py-12">
-      {inner}
+        {/* Body */}
+        <div className="px-8 py-7 space-y-5">
 
-      {open && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-          onClick={() => setOpen(false)}
-        >
-          <div onClick={(e) => e.stopPropagation()}>
-            <EmployeeForm
-              onSuccess={handleEmployeeAdded}
-              close={() => setOpen(false)}
-              inModal
-            />
-          </div>
+          {/* Success Alert */}
+          {apiSuccess && (
+            <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-xl px-4 py-3 text-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+              {apiSuccess}
+            </div>
+          )}
+
+          {/* Error Alert */}
+          {apiError && (
+            <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl px-4 py-3 text-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
+              {apiError}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+
+            {/* Full Name */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                Full Name
+              </label>
+              <div className={`flex items-center gap-2.5 rounded-xl border bg-slate-900/60 px-3 py-2.5 transition-colors focus-within:ring-2 focus-within:ring-orange-500/40 ${errors.name ? "border-red-500/60 focus-within:border-red-500" : "border-slate-700 focus-within:border-orange-500/70 hover:border-slate-600"}`}>
+                <User size={14} className={errors.name ? "text-red-400 shrink-0" : "text-slate-500 shrink-0"} />
+                <input
+                  type="text"
+                  placeholder="e.g. Rohan Mehta"
+                  className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                  {...register("name")}
+                />
+              </div>
+              {errors.name?.message && (
+                <p className="text-xs text-red-400">{errors.name.message}</p>
+              )}
+            </div>
+
+            {/* Email */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                Email Address
+              </label>
+              <div className={`flex items-center gap-2.5 rounded-xl border bg-slate-900/60 px-3 py-2.5 transition-colors focus-within:ring-2 focus-within:ring-orange-500/40 ${errors.email ? "border-red-500/60 focus-within:border-red-500" : "border-slate-700 focus-within:border-orange-500/70 hover:border-slate-600"}`}>
+                <Mail size={14} className={errors.email ? "text-red-400 shrink-0" : "text-slate-500 shrink-0"} />
+                <input
+                  type="email"
+                  placeholder="name@company.com"
+                  className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                  {...register("email")}
+                />
+              </div>
+              {errors.email?.message && (
+                <p className="text-xs text-red-400">{errors.email.message}</p>
+              )}
+            </div>
+
+            {/* Role + Status */}
+            <div className="grid grid-cols-2 gap-4">
+
+              {/* Role */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  Role
+                </label>
+                <div className={`relative flex items-center rounded-xl border bg-slate-900/60 px-3 py-2.5 transition-colors focus-within:ring-2 focus-within:ring-orange-500/40 ${errors.role ? "border-red-500/60 focus-within:border-red-500" : "border-slate-700 focus-within:border-orange-500/70 hover:border-slate-600"}`}>
+                  <select
+                    className="w-full bg-transparent text-sm text-slate-100 outline-none appearance-none pr-5 cursor-pointer"
+                    {...register("role")}
+                  >
+                    <option value="" className="bg-slate-800">Select role</option>
+                    <option value="ADMIN" className="bg-slate-800">Admin</option>
+                    <option value="EMPLOYEE" className="bg-slate-800">Employee</option>
+                  </select>
+                  <ChevronDown size={13} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                </div>
+                {errors.role?.message && (
+                  <p className="text-xs text-red-400">{errors.role.message}</p>
+                )}
+              </div>
+
+              {/* Status */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  Status
+                </label>
+                <div className={`relative flex items-center rounded-xl border bg-slate-900/60 px-3 py-2.5 transition-colors focus-within:ring-2 focus-within:ring-orange-500/40 ${errors.status ? "border-red-500/60 focus-within:border-red-500" : "border-slate-700 focus-within:border-orange-500/70 hover:border-slate-600"}`}>
+                  <select
+                    className="w-full bg-transparent text-sm text-slate-100 outline-none appearance-none pr-5 cursor-pointer"
+                    {...register("status")}
+                  >
+                    <option value="" className="bg-slate-800">Select status</option>
+                    <option value="ACTIVE" className="bg-slate-800">Active</option>
+                    <option value="INACTIVE" className="bg-slate-800">Inactive</option>
+                  </select>
+                  <ChevronDown size={13} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                </div>
+                {errors.status?.message && (
+                  <p className="text-xs text-red-400">{errors.status.message}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Phone */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                Phone Number
+              </label>
+              <div className={`flex items-center gap-2.5 rounded-xl border bg-slate-900/60 px-3 py-2.5 transition-colors focus-within:ring-2 focus-within:ring-orange-500/40 ${errors.phoneNumber ? "border-red-500/60 focus-within:border-red-500" : "border-slate-700 focus-within:border-orange-500/70 hover:border-slate-600"}`}>
+                <Phone size={14} className={errors.phoneNumber ? "text-red-400 shrink-0" : "text-slate-500 shrink-0"} />
+                <input
+                  type="text"
+                  placeholder="+91 98765 43210"
+                  className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                  {...register("phoneNumber")}
+                />
+              </div>
+              {errors.phoneNumber?.message && (
+                <p className="text-xs text-red-400">{errors.phoneNumber.message}</p>
+              )}
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-slate-700" />
+
+            {/* Buttons */}
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => close?.()}
+                className="px-5 py-2.5 rounded-xl border border-slate-600 text-slate-300 text-sm font-medium hover:bg-slate-700 hover:text-white hover:border-slate-500 active:scale-95 transition-all duration-150 cursor-pointer"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r  to-blue-400 py-2.5 text-sm font-semibold text-white hover:from-black hover:to-blue-700 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150 shadow-lg shadow-orange-500/20 cursor-pointer"
+              >
+                {loading ? (
+                  <Loader2 size={15} className="animate-spin" />
+                ) : (
+                  <>
+                    Create Employee <ArrowRight size={14} />
+                  </>
+                )}
+              </button>
+            </div>
+
+          </form>
         </div>
-      )}
-
-      <EmpSidebar
-        selectedEmployee={selectedEmployee}
-        setSelectedemployee={setSelectedEmployee}
-        fetchEmployeee={fetchEmployees}
-      />
+      </div>
     </div>
   );
 };

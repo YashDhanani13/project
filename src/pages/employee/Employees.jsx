@@ -1,62 +1,53 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import api from "../../api/api";
 import EmployeeSkeleton from "./EmployeeSkeleton";
-import Employee from "./EmployeeForm";
-import EmpSidebar from "./EmpSidebar"
-import { UserPlus } from "lucide-react";
+import EmployeeForm from "./EmployeeForm";
+import EmpSidebar from "./EmpSidebar";
+import { UserPlus, Search } from "lucide-react";
 
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-
-  const [open, setOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
   const [search, setSearch] = useState("");
-
-  // dropdown  row per page  and  pagination here
+  const [filterField, setFilterField] = useState("");
+  const [filterValue, setFilterValue] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  //sorting   
   const [sortField, setSortField] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
 
-  useEffect(() => {
-    fetchEmployees();
-  },
-    [search]);
-
+  useEffect(() => { fetchEmployees(); }, [search, filterField, filterValue]);
 
   const fetchEmployees = async () => {
     setLoading(true);
     setError("");
     try {
-      const res = await api.get("/employee",
-        { params: { search: search || undefined } }
-      );
-      const data = res.data;
+      const response = await api.get("/employee", {
+        params: {
+          search: search || undefined,
+          field: filterField || undefined,
+          value: filterValue || undefined,
+        },
+      });
+      const data = response.data;
       setEmployees(Array.isArray(data) ? data : data.data || data.employees || []);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch employees");
       setEmployees([]);
     } finally {
-            await new Promise((resolve) => setTimeout(resolve, 2000)); 
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       setLoading(false);
     }
   };
 
-  const handleEmployeeAdded = () => {
-    setOpen(false);
-    fetchEmployees();
-  };
+  const handleEmployeeAdded = () => { setIsFormOpen(false); fetchEmployees(); };
 
   const handleSort = (field) => {
-    if (sortField === field) setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    else {
-      setSortField(field);
-      setSortOrder("asc");
-    }
+    if (sortField === field) setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+    else { setSortField(field); setSortOrder("asc"); }
     setCurrentPage(0);
   };
 
@@ -68,97 +59,84 @@ const Employees = () => {
   const sorted = [...employees].sort((a, b) => {
     const valA = (a[sortField] ?? "").toString().toLowerCase();
     const valB = (b[sortField] ?? "").toString().toLowerCase();
-    if (sortOrder === "asc") return valA.localeCompare(valB);
-    return valB.localeCompare(valA);
+    return sortOrder === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
   });
 
-
   const totalEmployees = sorted.length;
-
-  const noOfPages = Math.ceil(totalEmployees / rowsPerPage);
+  const totalPages = Math.max(Math.ceil(totalEmployees / rowsPerPage), 1);
   const start = currentPage * rowsPerPage;
   const end = start + rowsPerPage;
-  const paginatedEmployees = sorted.slice(start, end);
+  const pageEmployees = sorted.slice(start, end);
 
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-    setFilterField("");
-    setFilterValue("");
-    setCurrentPage(0);
-  };
-
-  const handleRowsPerPageChange = (e) => {
-    setRowsPerPage(Number(e.target.value));
-    setCurrentPage(0);
+  const STATUS_STYLES = {
+    active: "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30",
+    inactive: "bg-red-500/15 text-red-400 border border-red-500/30",
+    pending: "bg-amber-500/15 text-amber-400 border border-amber-500/30",
   };
 
   const SortTh = ({ field, label }) => (
-
     <th
       onClick={() => handleSort(field)}
-      className="p-3 text-left cursor-pointer select-none hover:text-black  transition-colors"
+      className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider cursor-pointer select-none hover:text-orange-400 transition-colors"
     >
-
       {label}
-
-      <span className={sortField === field ? "text-blue-600 font-bold" : "text-black"}>
+      <span className={sortField === field ? "text-orange-400 ml-1" : "text-slate-600 ml-1"}>
         {sortIcon(field)}
       </span>
-
     </th>
   );
 
-  const statusColors = {
-    active: { bg: "#D1FAE5", color: "#065F46" },
-    inactive: { bg: "#FEE2E2", color: "#991B1B" },
-    pending: { bg: "#FFF3CD", color: "#856404" },
-  };
-
   return (
-    <div className="min-h-screen bg-orange-50 text-slate-900 p-6">
+    <div className="min-h-screen bg-slate-900 text-slate-100 p-6">
 
-      {/* Page Title */}
-      <h1 className="text-2xl font-bold text-slate-800 mb-6">Employee Management</h1>
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-white tracking-tight">Employee Management</h1>
+        <p className="text-slate-400 text-sm mt-1">Manage and organise your team</p>
+      </div>
 
       {/* Toolbar */}
-      <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
-        <input
-          className="flex-1  font-bold  h-13 text-1xl text-black  max-w-2xl bg-white border border-gray-300 px-4 py-2 rounded-lg  outline-none focus:ring-2 focus:ring-black"
-          type="search"
-          placeholder="Search employees..."
-          value={search}
-          onChange={handleSearchChange}
-        />
-
+      <div className="flex items-center gap-3 mb-6 flex-wrap">
+        <div className="flex flex-1 max-w-2xl items-center gap-2.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-2.5 focus-within:ring-2 focus-within:ring-orange-500/40 focus-within:border-orange-500/70 hover:border-slate-600 transition-colors">
+          <Search size={15} className="text-slate-500 shrink-0" />
+          <input
+            type="search"
+            placeholder="Search employees..."
+            value={search}
+            onChange={(e) => { setSearch(e.target.value); setCurrentPage(0); }}
+            className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+          />
+        </div>
 
         <button
-          onClick={() => setOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-white cursor-pointer  hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  text-orange-500 rounded-lg w-38 h-12 border border-orange-400  text-sm font-semibold transition-all"
+          onClick={() => setIsFormOpen(true)}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-purple-600 to-mist-400 text-white text-sm font-semibold hover:from-gray-600 hover:to-blue-500 active:scale-[0.98] transition-all shadow-lg shadow-orange-500/20 cursor-pointer"
         >
-          <UserPlus size={16} />
+          <UserPlus size={15} />
           Add Employee
         </button>
       </div>
 
       {/* Error */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-600 p-4 rounded-lg mb-4">
+        <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl px-4 py-3 text-sm mb-5">
+          <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
           {error}
         </div>
       )}
 
-      {/* Loading */}
       {loading ? (
         <EmployeeSkeleton />
       ) : (
         <>
-          <div className="bg-white rounded-xl shadow overflow-hidden">
-            <div className="overflow-x-auto  ">
+          {/* Table Card */}
+          <div className="bg-slate-800 border border-slate-700 rounded-2xl shadow-xl overflow-hidden">
+            <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
-                <thead className="bg-orange-200  text-black  p-">
+                <thead className="bg-slate-900/60 border-b border-slate-700">
                   <tr>
-                    <th className="p-3">
-                      <input type="checkbox" />
+                    <th className="px-4 py-3">
+                      <input type="checkbox" className="accent-orange-500 w-4 h-4" />
                     </th>
                     <SortTh field="name" label="Name" />
                     <SortTh field="email" label="Email" />
@@ -167,36 +145,24 @@ const Employees = () => {
                     <SortTh field="status" label="Status" />
                   </tr>
                 </thead>
-                <tbody>
-                  {paginatedEmployees.length > 0 ? (
-                    paginatedEmployees.map((employee) => (
+                <tbody className="divide-y divide-slate-700/50">
+                  {pageEmployees.length > 0 ? (
+                    pageEmployees.map((employee) => (
                       <tr
                         key={employee.id}
-                        className="border-t hover:bg-blue-100 cursor-pointer transition-colors"
                         onClick={() => setSelectedEmployee(employee)}
+                        className="hover:bg-slate-700/50 cursor-pointer transition-colors"
                       >
-
-                        {/* check box  */}
-                        <td className="p-3">
-                          <input type="checkbox" onClick={(e) => e.stopPropagation()} />
+                        <td className="px-4 py-3">
+                          <input type="checkbox" className="accent-orange-500 w-4 h-4" onClick={(e) => e.stopPropagation()} />
                         </td>
-                        {/* main filed */}
-
-                        <td className="p-3 font-medium">{employee.name}</td>
-                        <td className="p-3 text-blue-600">{employee.email}</td>
-                        <td className="p-3">{employee.role}</td>
-                        <td className="p-3">{employee.phoneNumber || "—"}</td>
-                        <td className="p-3">
-
+                        <td className="px-4 py-3 font-medium text-slate-100">{employee.name}</td>
+                        <td className="px-4 py-3 text-orange-400">{employee.email}</td>
+                        <td className="px-4 py-3 text-slate-300">{employee.role}</td>
+                        <td className="px-4 py-3 text-slate-300">{employee.phoneNumber || "—"}</td>
+                        <td className="px-4 py-3">
                           {employee.status ? (
-                            <span style={{
-                              background: statusColors[employee.status?.toLowerCase()]?.bg || "#E5E7EB",
-                              color: statusColors[employee.status?.toLowerCase()]?.color || "#374151",
-                              padding: "3px 10px",
-                              borderRadius: 20,
-                              fontSize: 12,
-                              fontWeight: 700,
-                            }}>
+                            <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${STATUS_STYLES[employee.status?.toLowerCase()] || "bg-slate-700 text-slate-300"}`}>
                               {employee.status}
                             </span>
                           ) : "—"}
@@ -205,103 +171,82 @@ const Employees = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-gray-400">
-                        {search ? "No employees match your search" : "No employees found — click + Add Employee"}
+                      <td colSpan={6} className="px-4 py-12 text-center text-slate-500">
+                        {search ? "No employees match your search" : "No employees found — click Add Employee"}
                       </td>
                     </tr>
                   )}
                 </tbody>
               </table>
             </div>
+
             {/* Footer */}
-
-            <div className="px-4 py-3 border-t text-xs text-gray-500 flex items-center justify-between flex-wrap gap-3">
-
-              {/* Left: showing count */}
-              <span>
+            <div className="px-5 py-3 border-t border-slate-700 flex items-center justify-between flex-wrap gap-3 bg-slate-900/40">
+              <span className="text-xs text-slate-400">
                 Showing{" "}
-                <strong className="text-gray-700">
-                  {totalEmployees === 0 ? 0 : start + 1}–{Math.min(end, totalEmployees)}
-                </strong>{" "}
-                of <strong className="text-gray-700">{totalEmployees}</strong> employees
+                <strong className="text-slate-200">{totalEmployees === 0 ? 0 : start + 1}–{Math.min(end, totalEmployees)}</strong>
+                {" "}of{" "}
+                <strong className="text-slate-200">{totalEmployees}</strong> employees
               </span>
 
-              {/* here  drop down  manu throguh  */}
-              <div className="flex items-center gap-2">
-                <span className="text-gray-400">Rows per page:</span>
+              <div className="flex items-center gap-2 text-xs text-slate-400">
+                <span>Rows per page:</span>
                 <select
-                  className="border border-gray-300 rounded-lg px-2 py-1 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300"
                   value={rowsPerPage}
-                  onChange={handleRowsPerPageChange}
+                  onChange={(e) => { setRowsPerPage(Number(e.target.value)); setCurrentPage(0); }}
+                  className="bg-slate-800 border border-slate-600 text-slate-200 text-xs rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-orange-500/40 cursor-pointer"
                 >
                   <option value={5}>5</option>
                   <option value={10}>10</option>
-                  <option value="{15}">15</option>
+                  <option value={15}>15</option>
                   <option value={20}>20</option>
                 </select>
               </div>
-
-              {/*  here  prev and  next button  */}
 
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setCurrentPage((p) => p - 1)}
                   disabled={currentPage === 0}
-                  className="p-3  w-25 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition disabled:bg-white disabled:border-red-300 disabled:text-red-500"
+                  className="px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300 text-xs font-medium hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
                 >
                   ← Prev
                 </button>
-
-                <span className="text-gray-500 font-bold">
-                  Page <strong className="text-gray-700">{currentPage + 1}</strong> of{" "}
-                  <strong className="text-gray-700">{Math.max(noOfPages, 1)}</strong>
+                <span className="text-xs text-slate-400 font-medium">
+                  Page <strong className="text-slate-200">{currentPage + 1}</strong> of{" "}
+                  <strong className="text-slate-200">{totalPages}</strong>
                 </span>
-
                 <button
                   onClick={() => setCurrentPage((p) => p + 1)}
-                  disabled={currentPage >= noOfPages - 1}
-                  className="p-3 w-25  border-2  rounded-lg   text-blue-400 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition disabled:bg-white broder  disabled:broder-red-400 disabled:text-red-500"
+                  disabled={currentPage >= totalPages - 1}
+                  className="px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300 text-xs font-medium hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
                 >
                   Next →
                 </button>
               </div>
-
             </div>
           </div>
 
-          {selectedEmployee && (
-            <EmpSidebar
-              employee={selectedEmployee}
-              onClose={() => setSelectedEmployee(null)}
-              onUpdated={fetchEmployees}
-            />
-          )}
-
-          {/* Add employee modal */}
-
-          {open && (
+          {/* Add Employee Modal */}
+          {isFormOpen && (
             <div
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-              onClick={() => setOpen(false)}
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              onClick={() => setIsFormOpen(false)}
             >
               <div
-                className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl h-170 flex flex-col"
+                className="relative w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
-                <button
-                  onClick={() => setOpen(false)}
-                  className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold text-sm transition"
-                >
-                  ✕
-                </button>
-
                 <div className="overflow-y-auto flex-1">
-                  <Employee onSuccess={handleEmployeeAdded} close={() => setOpen(false)} />
+                  <EmployeeForm
+                    inModal={true}
+                    onSuccess={handleEmployeeAdded}
+                    close={() => setIsFormOpen(false)}
+                  />
                 </div>
               </div>
             </div>
-
           )}
+
           <EmpSidebar
             selectedEmployee={selectedEmployee}
             setSelectedEmployee={setSelectedEmployee}

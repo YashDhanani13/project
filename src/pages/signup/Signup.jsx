@@ -208,7 +208,7 @@ const Signup = () => {
             <button
               disabled={loading}
               type="submit"
-              className="w-full bg-white text-blue-400 hover:bg-black hover:text-white   font-bold  rounded-lg  border border-blue-400  border-2  will-change-auto h-14 p-3  shadow-xl shadow-slate-200 transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-3 text-lg mt-4 hover:bg--800 cursor-pointer"
+              className="w-full bg-white text-blue-400 hover:bg-black hover:text-white   font-bold  rounded-lg  border border-blue-400    will-change-auto h-14 p-3  shadow-xl shadow-slate-200 transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-3 text-lg mt-4 hover:bg--800 cursor-pointer"
             >
               {loading ? (
                 <Loader2 className="animate-spin" size={20} />

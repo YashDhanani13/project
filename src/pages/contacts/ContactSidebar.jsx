@@ -33,7 +33,6 @@ const ContactSidebar = ({
       fetchContacts();
     } catch (err) {
       if (err.errors) {
-        // Zod error
         setError(err.errors[0].message);
       } else {
         setError(err.response?.data?.message || "Failed to update");
@@ -93,7 +92,9 @@ const ContactSidebar = ({
                 key={field}
                 className="bg-gray-100 p-3 rounded-lg  border border-mist-500"
               >
+
                 <p className="text-xs text-gray-500 uppercase">{label}</p>
+                
                 <input
                   className="w-full font-semibold text-gray-800 bg-transparent  outline-none pt-1"
                   value={formData[field] || ""}

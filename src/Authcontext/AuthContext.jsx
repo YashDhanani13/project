@@ -15,8 +15,8 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setToken(null);
     localStorage.removeItem("token"); //   Interceptor sends nothing
-    window.location.href = "/login";
-    // navigate('/login');
+    // window.location.href = "/login";
+    navigate('/login');
   };
 
   return (

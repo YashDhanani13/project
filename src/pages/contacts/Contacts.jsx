@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import Contact from "./ContactForm";
 import ContactFilter from "./ContactFilter";
 import ContactSidebar from "./ContactSidebar";
 import api from "../../api/api";
-import { UserPlus } from "lucide-react";
+import { UserPlus, SlidersHorizontal, Search } from "lucide-react";
 import ContactSkeleton from "./ContactSkeleton";
+import ContactForm from "./ContactForm";
 
 const Contacts = () => {
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
@@ -21,10 +21,7 @@ const Contacts = () => {
   const [sortField, setSortField] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
 
-
-  useEffect(() => {
-    fetchContacts();
-  }, [search, filterField, filterValue]);
+  useEffect(() => { fetchContacts(); }, [search, filterField, filterValue]);
 
   const fetchContacts = async () => {
     setLoading(true);
@@ -42,20 +39,13 @@ const Contacts = () => {
     } catch {
       setError("Failed to fetch contacts");
     } finally {
-       await new Promise((resolve) => setTimeout(resolve, 2000)); 
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       setLoading(false);
     }
   };
 
-  const handleContactAdded = () => {
-    setOpen(false);
-    fetchContacts();
-  };
-
-  const handlesearchChange = (e) => {
-    setSearch(e.target.value);
-    setCurrentPage(0);
-  };
+  const handleContactAdded = () => { setIsFormOpen(false); fetchContacts(); };
+  const handlesearchChange = (e) => { setSearch(e.target.value); setCurrentPage(0); };
 
   const handleSort = (field) => {
     if (sortField === field) setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -82,129 +72,125 @@ const Contacts = () => {
   const end = start + rowsPerPage;
   const paginatedContacts = sorted.slice(start, end);
 
-  const handleRowsPerPageChange = (e) => {
-    setRowsPerPage(Number(e.target.value));
-    setCurrentPage(0);
-  };
+  const handleRowsPerPageChange = (e) => { setRowsPerPage(Number(e.target.value)); setCurrentPage(0); };
 
-  const tagColors = {
-    VIP: { bg: "#FFF3CD", color: "#856404" },
-    VVIP: { bg: "#F3E8FF", color: "#6B21A8" },
-    regular: { bg: "#D1FAE5", color: "#065F46" },
+  const TAG_STYLES = {
+    VIP: "bg-amber-100 text-amber-700 border border-amber-200",
+    VVIP: "bg-purple-100 text-purple-700 border border-purple-200",
+    regular: "bg-emerald-100 text-emerald-700 border border-emerald-200",
   };
 
   const SortTh = ({ field, label }) => (
     <th
       onClick={() => handleSort(field)}
-      className="p-3 text-left cursor-pointer select-none hover:text-blue-600 transition-colors"
+      className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider cursor-pointer select-none hover:text-blue-400 transition-colors"
     >
       {label}
-      <span className={sortField === field ? "text-blue-600 font-bold" : "text-gray-400"}>
+      <span className={sortField === field ? "text-blue-400 ml-1" : "text-slate-600 ml-1"}>
         {sortIcon(field)}
       </span>
     </th>
   );
 
   return (
-    <div className="min-h-screen bg-orange-50 text-slate-900 p-6">
-      <h1 className="text-3xl font-bold">Contact Management</h1>
-      <br />
+    <div className="min-h-screen bg-slate-900 text-slate-100 p-6">
+
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-white tracking-tight">Contact Management</h1>
+        <p className="text-slate-400 text-sm mt-1">Manage and organise your contacts</p>
+      </div>
 
       {/* Toolbar */}
-      <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
+      <div className="flex items-center gap-3 mb-6 flex-wrap">
         <button
           onClick={() => setShowFilter(true)}
-          className="border-2 font-extrabold border-black text-gray-800 w-35 h-12 bg-white hover:bg-black hover:text-white hover:border-gray-600 border-2 px-5 py-2 rounded-lg text-sm transition cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 text-sm font-medium hover:bg-slate-700 hover:border-slate-600 hover:text-white transition-all cursor-pointer"
         >
+          <SlidersHorizontal size={15} />
           Filter
         </button>
 
-        <input
-          className="flex-1 font-bold h-13 text-black max-w-2xl bg-white border border-gray-300 px-4 py-2 rounded-lg outline-none focus:ring-2 focus:ring-black"
-          type="search"
-          placeholder="Search contacts..." cd
-          value={search}
-          onChange={handlesearchChange}
-        />
+        <div className="flex flex-1 max-w-2xl items-center gap-2.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-2.5 focus-within:ring-2 focus-within:ring-blue-500/40 focus-within:border-blue-500/70 hover:border-slate-600 transition-colors">
+          <Search size={15} className="text-slate-500 shrink-0" />
+          <input
+            type="search"
+            placeholder="Search contacts..."
+            value={search}
+            onChange={handlesearchChange}
+            className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+          />
+        </div>
 
         <button
-          onClick={() => setOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 hover:bg-black hover:text-white hover:border-blue-600 hover:border-2 font-bold text-black rounded-lg w-38 h-12 border cursor-pointer border-black text-sm transition-all"
+          onClick={() => setIsFormOpen(true)}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white text-sm font-semibold hover:from-blue-600 hover:to-cyan-500 active:scale-[0.98] transition-all shadow-lg shadow-blue-500/20 cursor-pointer"
         >
-          <UserPlus size={16} />
+          <UserPlus size={15} />
           Add Contact
         </button>
       </div>
 
+      {/* Error */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-600 p-4 rounded-lg mb-4">
+        <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl px-4 py-3 text-sm mb-5">
+          <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
           {error}
         </div>
       )}
 
-      {loading && (
-        <ContactSkeleton />
-      )}
+      {loading && <ContactSkeleton />}
 
       {!loading && (
         <>
-          <div className="bg-white rounded-xl shadow overflow-hidden">
+          {/* Table Card */}
+          <div className="bg-slate-800 border border-slate-700 rounded-2xl shadow-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
-                <thead className="bg-purple-500 text-white">
+                <thead className="bg-slate-900/60 border-b border-slate-700">
                   <tr>
-                    <th className="p-3"><input type="checkbox" /></th>
+                    <th className="px-4 py-3">
+                      <input type="checkbox" className="accent-blue-500 w-4 h-4" />
+                    </th>
                     <SortTh field="name" label="Name" />
                     <SortTh field="email" label="Email" />
                     <SortTh field="age" label="Age" />
-                    <SortTh field="tag" label="Tags" />
+                    <SortTh field="tag" label="Tag" />
                     <SortTh field="phoneNumber" label="Mobile" />
                     <SortTh field="address" label="Address" />
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-slate-700/50">
                   {paginatedContacts.length > 0 ? (
                     paginatedContacts.map((contact) => (
                       <tr
                         key={contact.id}
-                        className="border-t hover:bg-orange-50 cursor-pointer transition-colors"
                         onClick={() => setSelectedContact(contact)}
+                        className="hover:bg-slate-700/50 cursor-pointer transition-colors"
                       >
-                        <td className="p-3">
-                          <input type="checkbox" onClick={(e) => e.stopPropagation()} />
+                        <td className="px-4 py-3">
+                          <input type="checkbox" className="accent-blue-500 w-4 h-4" onClick={(e) => e.stopPropagation()} />
                         </td>
-                        <td className="p-3 font-medium">{contact.name}</td>
-                        <td className="p-3 text-blue-600">{contact.email}</td>
-                        <td className="p-3">{contact.age}</td>
-                        <td className="p-3">
+                        <td className="px-4 py-3 font-medium text-slate-100">{contact.name}</td>
+                        <td className="px-4 py-3 text-blue-400">{contact.email}</td>
+                        <td className="px-4 py-3 text-slate-300">{contact.age}</td>
+                        <td className="px-4 py-3">
                           {contact.tag ? (
-                            <span style={{
-                              background: tagColors[contact.tag]?.bg || "#E5E7EB",
-                              color: tagColors[contact.tag]?.color || "#374151",
-                              padding: "3px 10px",
-                              borderRadius: 20,
-                              fontSize: 12,
-                              fontWeight: 700,
-                            }}>
+                            <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${TAG_STYLES[contact.tag] || "bg-slate-700 text-slate-300"}`}>
                               {contact.tag}
                             </span>
                           ) : (
-                            <span className="text-gray-300 text-xs">—</span>
+                            <span className="text-slate-600">—</span>
                           )}
                         </td>
-                        <td className="p-3">
-
-                         
-                          {contact.phoneNumber || "—"}
-                          <br />
-                        </td>
-                        <td className="p-3 text-gray-500 max-w-xs truncate">{contact.address || "—"}</td>
+                        <td className="px-4 py-3 text-slate-300">{contact.phoneNumber || "—"}</td>
+                        <td className="px-4 py-3 text-slate-400 max-w-xs truncate">{contact.address || "—"}</td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={7} className="p-8 text-center text-gray-400">
-                        {search ? "No contacts match your search" : "No contacts found — click + Add Contact"}
+                      <td colSpan={7} className="px-4 py-12 text-center text-slate-500">
+                        {search ? "No contacts match your search" : "No contacts found — click Add Contact"}
                       </td>
                     </tr>
                   )}
@@ -212,21 +198,21 @@ const Contacts = () => {
               </table>
             </div>
 
-            <div className="px-4 py-3 border-t text-xs text-gray-500 flex items-center justify-between flex-wrap gap-3">
-              <span className="font-bold">
+            {/* Footer */}
+            <div className="px-5 py-3 border-t border-slate-700 flex items-center justify-between flex-wrap gap-3 bg-slate-900/40">
+              <span className="text-xs text-slate-400">
                 Showing{" "}
-                <strong className="text-gray-700">
-                  {totalContacts === 0 ? 0 : start + 1}–{Math.min(end, totalContacts)}
-                </strong>{" "}
-                of <strong className="text-gray-700">{totalContacts}</strong> contacts
+                <strong className="text-slate-200">{totalContacts === 0 ? 0 : start + 1}–{Math.min(end, totalContacts)}</strong>
+                {" "}of{" "}
+                <strong className="text-slate-200">{totalContacts}</strong> contacts
               </span>
 
-              <div className="flex items-center gap-2">
-                <span className="text-gray-600 font-bold">Rows per page :</span>
+              <div className="flex items-center gap-2 text-xs text-slate-400">
+                <span>Rows per page:</span>
                 <select
-                  className="border border-black brounded-lg p-2 rounded-md w-20  text-sm bg-white "
                   value={rowsPerPage}
                   onChange={handleRowsPerPageChange}
+                  className="bg-slate-800 border border-slate-600 text-slate-200 text-xs rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-blue-500/40 cursor-pointer"
                 >
                   <option value={3}>3</option>
                   <option value={5}>5</option>
@@ -239,18 +225,18 @@ const Contacts = () => {
                 <button
                   onClick={() => setCurrentPage((p) => p - 1)}
                   disabled={currentPage === 0}
-                  className="p-3  w-25  rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition disabled:bg-white disabled:border-red-300 disabled:text-red-500"
+                  className="px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300 text-xs font-medium hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
                 >
                   ← Prev
                 </button>
-                <span className="text-black  font-bold text-md">
-                  Page <strong className="text-gray-700">{currentPage + 1}</strong> of{" "}
-                  <strong className="text-gray-700">{Math.max(noOfPages, 1)}</strong>
+                <span className="text-xs text-slate-400 font-medium">
+                  Page <strong className="text-slate-200">{currentPage + 1}</strong> of{" "}
+                  <strong className="text-slate-200">{Math.max(noOfPages, 1)}</strong>
                 </span>
                 <button
                   onClick={() => setCurrentPage((p) => p + 1)}
                   disabled={currentPage >= noOfPages - 1}
-                  className="p-3 w-25  border-2  rounded-lg   text-blue-400 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition disabled:bg-white broder  disabled:broder-red-400 disabled:text-red-500"
+                  className="px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300 text-xs font-medium hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
                 >
                   Next →
                 </button>
@@ -258,12 +244,13 @@ const Contacts = () => {
             </div>
           </div>
 
+          {/* Filter Panel */}
           {showFilter && (
-            <div className="absolute top-40 items-center z-50">
-              <div className="bg-gray-500 rounded-xl shadow-xl p-4 w-116">
+            <div className="absolute top-40 z-50">
+              <div className="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-4 w-96">
                 <button
                   onClick={() => setShowFilter(false)}
-                  className="absolute top-3 right-3 w-4 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-500 hover:text-white text-gray-500 font-bold text-xs transition"
+                  className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-full bg-slate-700 hover:bg-red-500 hover:text-white text-slate-400 text-xs transition cursor-pointer"
                 >
                   ✕
                 </button>
@@ -276,27 +263,18 @@ const Contacts = () => {
             </div>
           )}
 
-          {open && (
-
+          {/* Add Contact Modal */}
+          {isFormOpen && (
             <div
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center"
-              onClick={() => setOpen(false)}
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              onClick={() => setIsFormOpen(false)}
             >
-
               <div
-                className="relative w-110 bg-orange-600 shadow-2xl max-h-[93vh] rounded-3xl flex flex-col"
+                className="relative w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl max-h-[93vh] flex flex-col overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
-
-                <button
-                  onClick={() => setOpen(false)}
-                  className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold text-sm transition"
-                >
-                  
-                  ✕
-                </button>
                 <div className="overflow-y-auto flex-1">
-                  <Contact onSuccess={handleContactAdded} close={() => setOpen(false)} />
+                  <ContactForm onSuccess={handleContactAdded} close={() => setIsFormOpen(false)} />
                 </div>
               </div>
             </div>
