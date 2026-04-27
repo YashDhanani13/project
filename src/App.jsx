@@ -10,7 +10,7 @@ import EmployeeForm from "./pages/employee/EmployeeForm";
 import UserProfile from "./pages/user-profile/UserProfile";
 import Contacts from "./pages/contacts/Contacts";
 import Employees from "./pages/employee/Employees";
-
+// import pi from "./api/Api"
 // Layout
 import Sidebar from "./components/Sidebar";
 
@@ -22,7 +22,7 @@ const ProtectedLayout = ({ children }) => {
   const { token } = useContext(AuthContext);
 
   if (!token) {
-    return <Navigate to="/login" replace />;
+    // return <N to="/login" replace />;
   }
 
   return <Sidebar />;
@@ -49,6 +49,7 @@ const router = createBrowserRouter([
       { path: "employees", element: <Employees />    },
       { path: "employee-form", element: <EmployeeForm /> },
       { path: "profile",  element: <UserProfile />  },
+      // {path : "api"     , element :<Api />}
     ],
   },
 

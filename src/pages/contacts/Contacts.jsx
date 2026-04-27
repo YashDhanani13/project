@@ -105,13 +105,13 @@ const Contacts = () => {
       <div className="flex items-center gap-3 mb-6 flex-wrap">
         <button
           onClick={() => setShowFilter(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 text-sm font-medium hover:bg-slate-700 hover:border-slate-600 hover:text-white transition-all cursor-pointer"
+          className="flex items-center gap-2  px-4 py-3 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 text-sm font-bold hover:bg-slate-700 hover:border-slate-600 hover:text-white transition-all cursor-pointer  w-38"
         >
           <SlidersHorizontal size={15} />
           Filter
         </button>
 
-        <div className="flex flex-1 max-w-2xl items-center gap-2.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-2.5 focus-within:ring-2 focus-within:ring-blue-500/40 focus-within:border-blue-500/70 hover:border-slate-600 transition-colors">
+        <div className="flex flex-1 max-w-2xl items-center gap-2.5 rounded-xl border border-slate-700 bg-slate-800 font-bold px-3 py-2.5 focus-within:ring-2 focus-within:ring-blue-500/40 focus-within:border-blue-500/70 hover:border-slate-600 transition-colors">
           <Search size={15} className="text-slate-500 shrink-0" />
           <input
             type="search"
@@ -124,7 +124,7 @@ const Contacts = () => {
 
         <button
           onClick={() => setIsFormOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white text-sm font-semibold hover:from-blue-600 hover:to-cyan-500 active:scale-[0.98] transition-all shadow-lg shadow-blue-500/20 cursor-pointer"
+          className="flex items-center gap-2 p-3  border border-zinc-700 border-2 w-40 rounded-lg bg-linear-to-r from-blue-500 to-orange-200 text-white text-sm font-semibold hover:from-mist-600 hover:to-indigo-400 hover:text-black border hover:border-black active:scale-[0.98] transition-all shadow-lg shadow-blue-500/20 cursor-pointer"
         >
           <UserPlus size={15} />
           Add Contact
@@ -212,7 +212,7 @@ const Contacts = () => {
                 <select
                   value={rowsPerPage}
                   onChange={handleRowsPerPageChange}
-                  className="bg-slate-800 border border-slate-600 text-slate-200 text-xs rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-blue-500/40 cursor-pointer"
+                  className="bg-slate-800 border border-slate-600 text-slate-200 text-xs rounded-lg px-2 py-1.5 outline-none cursor-pointer"
                 >
                   <option value={3}>3</option>
                   <option value={5}>5</option>
@@ -270,7 +270,7 @@ const Contacts = () => {
               onClick={() => setIsFormOpen(false)}
             >
               <div
-                className="relative w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl max-h-[93vh] flex flex-col overflow-hidden"
+                className="relative w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl max-h-[93 vh] flex flex-col overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="overflow-y-auto flex-1">

@@ -62,11 +62,11 @@ const EmpSidebar = ({
         }}
         className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
       />
-      <div className="fixed right-0 top-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 p-6 overflow-y-auto">
+       <div className="fixed right-0 top-0 h-full w-full sm:w-96 bg-slate-800  shadow-2xl z-50 p-6 overflow-y-auto transition-transform duration-300">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-extralight text-gray-800">
-            {isEditing ? "Edit Employee" : "Employee Details"}
-            <p className="text-2xl font-bold">{selectedEmployee.name}</p>
+          <h2 className="text-xl font-extralight text-slate-500">
+            {isEditing ? "Edit Employee" : "Employee Details : "}
+            <p className="text-2xl text-white font-bold">{selectedEmployee.name}</p>
           </h2>
           <button
             onClick={() => {
@@ -122,34 +122,34 @@ const EmpSidebar = ({
           </div>
         ) : (
           <div className=" grid grid-rows-5 gap-y-3.5  ">
-            <div className="bg-gray-100  p-3 border border-mist-500 rounded-lg ">
+            <div className="bg-gray-100  p-3 border border-black  border-2  rounded-lg ">
               <p className="text-xs text-gray-500 uppercase">Name</p>
               <p className="font-semibold text-gray-800">
                 {selectedEmployee.name}
               </p>
             </div>
 
-            <div className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
+            <div className="bg-gray-100 p-3 rounded-lg  border border-black   border-2 ">
               <p className="text-xs text-gray-500 uppercase">Email</p>
               <p className="font-semibold text-gray-800">
                 {selectedEmployee.email}
               </p>
             </div>
 
-            <div className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
+            <div className="bg-gray-100 p-3 rounded-lg  border border-black  border-2 ">
               <p className="text-xs text-gray-500 uppercase">Role</p>
               <p className="font-semibold text-gray-800">
                 {selectedEmployee.role}
               </p>
             </div>
-            <div className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
+            <div className="bg-gray-100 p-3 rounded-lg  border border-black border-2 ">
               <p className="text-xs text-gray-500 uppercase">Phone</p>
               <p className="font-semibold text-gray-800">
                 {selectedEmployee.phoneNumber}
               </p>
             </div>
 
-            <div className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
+            <div className="bg-gray-100 p-3 rounded-lg  border border-black border-2">
               <p className="text-xs text-gray-500 uppercase">Status</p>
               <span
                 className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full ${selectedEmployee.status === "ACTIVE"
@@ -173,7 +173,7 @@ const EmpSidebar = ({
                   e.stopPropagation();
                   handleDelete(selectedEmployee.id);
                 }}
-                className="flex items-center gap-3 px-4 py-2 bg-white- hover:bg-red-600  hover:text-white  hover:border-2  text-red-600  rounded-lg w-42 h-12 border border-red-600  hover:border-gray-400  text-sm font-semibold transition-all cursor-pointer"
+                className="flex items-center gap-3 px-4 py-2 bg-slate-800  hover:bg-red-600  hover:text-white  hover:border-2  text-red-600  rounded-lg w-42 h-12 border border-red-600  hover:border-gray-400  text-sm font-semibold transition-all cursor-pointer"
               >
                 <Trash2 size={16} /> Delete
               </button>

@@ -157,7 +157,7 @@ const Employees = () => {
                           <input type="checkbox" className="accent-orange-500 w-4 h-4" onClick={(e) => e.stopPropagation()} />
                         </td>
                         <td className="px-4 py-3 font-medium text-slate-100">{employee.name}</td>
-                        <td className="px-4 py-3 text-orange-400">{employee.email}</td>
+                        <td className="px-4 py-3 text-blue-400">{employee.email}</td>
                         <td className="px-4 py-3 text-slate-300">{employee.role}</td>
                         <td className="px-4 py-3 text-slate-300">{employee.phoneNumber || "—"}</td>
                         <td className="px-4 py-3">
@@ -229,11 +229,11 @@ const Employees = () => {
           {/* Add Employee Modal */}
           {isFormOpen && (
             <div
-              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-2"
               onClick={() => setIsFormOpen(false)}
             >
               <div
-                className="relative w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden"
+                className="relative w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl  max-h-[80vh] flex flex-col overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="overflow-y-auto flex-1">

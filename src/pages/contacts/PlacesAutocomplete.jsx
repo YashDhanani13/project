@@ -1,66 +1,54 @@
-import React from 'react';
-import PlacesAutocomplete, {
-  geocodeByAddress,
+import usePlacesAutocomplete, {
+  getGeocode,
   getLatLng,
-} from 'react-places-autocomplete';
- 
-class LocationSearchInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { address: '' };
-  }
- 
-  handleChange = address => {
-    this.setState({ address });
+} from "use-places-autocomplete";
+
+const AddressInput = ({ value, onChange }) => {
+  const { suggestions: { data, loading }, setValue } =
+    usePlacesAutocomplete();
+
+  const handleSelect = async (address) => {
+    setValue(address, false);
+    try {
+      const results = await getGeocode({ address });
+      const { lat, lng } = getLatLng(results[0]);
+      onChange({ address, lat, lng });
+    } catch (err) {
+      console.error("Geocode error:", err);
+      onChange({ address, lat: null, lng: null });
+    }
   };
- 
-  handleSelect = address => {
-    geocodeByAddress(address)
-      .then(results => getLatLng(results[0]))
-      .then(latLng => console.log('Success', latLng))
-      .catch(error => console.error('Error', error));
-  };
- 
-  render() {
-    return (
-      <PlacesAutocomplete
-        value={this.state.address}
-        onChange={this.handleChange}
-        onSelect={this.handleSelect}
-      >
-        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div>
-            <input
-              {...getInputProps({
-                placeholder: 'Search Places ...',
-                className: 'location-search-input',
-              })}
-            />
-            <div className="autocomplete-dropdown-container">
-              {loading && <div>Loading...</div>}
-              {suggestions.map(suggestion => {
-                const className = suggestion.active
-                  ? 'suggestion-item--active'
-                  : 'suggestion-item';
-                // inline style for demonstration purpose
-                const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                return (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                      style,
-                    })}
-                  >
-                    <span>{suggestion.description}</span>
-                  </div>
-                );
-              })}
+
+  return (
+    <div className="relative">
+      <input
+        value={value}
+        onChange={(e) => {
+          setValue(e.target.value);
+          onChange({ address: e.target.value, lat: null, lng: null });
+        }}
+        placeholder="Search address…"
+        className="w-full font-semibold text-gray-800 bg-transparent outline-none pt-1"
+      />
+
+      {(loading || data.length > 0) && (
+        <div className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+          {loading && (
+            <div className="px-4 py-2 text-sm text-gray-400">Loading…</div>
+          )}
+          {data.map((suggestion) => (
+            <div
+              key={suggestion.place_id}
+              onClick={() => handleSelect(suggestion.description)}
+              className="flex items-center gap-2 px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-50"
+            >
+              {suggestion.description}
             </div>
-          </div>
-        )}
-      </PlacesAutocomplete>
-    );
-  }
-}
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AddressInput;

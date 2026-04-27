@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import UserProfile from "../pages/user-profile/UserProfile";
 
-import { Home, Users, Briefcase, Settings, LogOut } from "lucide-react";
+import { Home, Users, Briefcase, Settings, Power } from "lucide-react";
 
 // const navigate / useNavigate();
 
@@ -32,7 +32,7 @@ const Sidebar = () => {
       <aside
         className={`fixed top-0 left-0 h-screen z-50 flex flex-col transition-all duration-300
           ${collapsed ? "w-16" : "w-52"}
-          bg-mist-800 text-black`}
+          bg-slate-800 text-black`}
       >
         {/* Logo */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">
@@ -74,16 +74,18 @@ const Sidebar = () => {
           {/* Bottom — Profile Settings */}
           <button
             onClick={() => setShowProfile(true)}
-            className="flex items-center gap-3 px-1.5 py-3 rounded-lg text-sm font-medium text-gray-600 cursor-pointer   hover:text-white transition-all w-42 text-left"
+            className="flex items-center gap-3 px-1.5 py-3 rounded-lg text-sm font-medium text-white cursor-pointer   hover:text-orange-300 transition-all w-42 text-left"
           >
             <Settings size={18} />
             {!collapsed && <span>Profile Settings</span>}
           </button>
           <button
             onClick={() => logout(true)}
-            className="flex items-center gap-3 px-2 py-2  cursor-pointer rounded-lg text-sm font-medium text-red-200  hover:bg-white/10 hover:text-white transition-all w-full text-left"
+            className="flex items-center gap-3 px-2 py-2  cursor-pointer rounded-lg text-sm font-medium text-red-400  hover:text-gray-400  transition-all w-full text-left"
           >
-            <LogOut size={18} />
+
+            <Power size={19} />
+            {/* <LogOut size={18} /> */}
             {!collapsed && <span>Log out</span>}
           </button>
         </div>

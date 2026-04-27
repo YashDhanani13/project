@@ -122,7 +122,7 @@ const Signup = () => {
                   type="text"
                   placeholder="Enter Your Full name"
                   className={`w-full bg-slate-50 border-2 ${errors.password ? "border-red-300" : "border-gray-200"} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
-                {...register("fullName")}
+                  {...register("fullName")}
                 />
               </div>
               {errors.fullName && (

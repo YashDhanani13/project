@@ -1,55 +1,38 @@
-import React, { useState, useCallback, memo } from 'react'
-import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api'
+import { GoogleMap, Marker } from "@react-google-maps/api";
 
-const containerStyle = {
-  width: '100%',
-  height: '500px',
-  borderRadius: '12px',
-  border: '1px solid #ddd'
-}
+// ─── Google Maps config ────────────────────────────────────────────────────────
+const mapContainerStyle = {
+  width: "100%",
+  height: "200px",
+  borderRadius: "10px",
+  border: "1px solid #e5e7eb",
+};
 
-const center = {
-  lat: 21.1702, // Surat, India coordinates
-  lng: 72.8311,
-}
+// ─── ContactMap (view mode) ────────────────────────────────────────────────────
+// Shows a small Google Map pinned to the contact's address coordinates.
+// Falls back gracefully if coords are missing.
+const ContactMap = ({ address, lat, lng, isLoaded }) => {
+  if (!lat || !lng) return null;
 
-function map() {
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    // We pull the key from the .env file
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, 
-  })
-
-  const [selected, setSelected] = useState(null)
-
-  if (!isLoaded) return <div>Loading Map...</div>
+  const position = { lat, lng };
 
   return (
-    <GoogleMap
-      mapContainerStyle={containerStyle}
-      center={center}
-      zoom={13}
-    >
-      {/* A Marker shows where the person is located */}
-      <Marker 
-        position={center} 
-        onClick={() => setSelected(center)}
-      />
-
-      {/* InfoWindow shows text when you click the marker */}
-      {selected   && (
-        <InfoWindow
-          position={center}
-          onCloseClick={() => setSelected(null)}
+    <div className="mt-1">
+      {!isLoaded ? (
+        <div className="h-48 flex items-center justify-center bg-gray-100 rounded-lg">
+          Loading map...
+        </div>
+      ) : (
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          center={position}
+          zoom={15}
         >
-          <div>
-            <h3>Contact Location</h3>
-            <p>Main Office - Surat</p>
-          </div>
-        </InfoWindow>
+          <Marker position={position} title={address} />
+        </GoogleMap>
       )}
-    </GoogleMap>
-  )
-}
+    </div>
+  );
+};
 
-export default map
+export default ContactMap;
