@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import { Save, Pencil, Trash2, X } from "lucide-react";
-import { useJsApiLoader } from "@react-google-maps/api";
-
 import api from "../../api/api";
-
-// ✅ FIX 3: Stable constant reference — prevents useJsApiLoader re-render loop
-import AddressInput from "./PlacesAutocomplete";
-import ContactMap from "./map";
-
-const LIBRARIES = ["places"];
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 // ─── ContactSidebar ────────────────────────────────────────────────────────────
 const ContactSidebar = ({ selectedContact, setSelectedContact, fetchContacts }) => {
@@ -16,16 +11,54 @@ const ContactSidebar = ({ selectedContact, setSelectedContact, fetchContacts }) 
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
 
-  // ✅ FIX 3: Use stable LIBRARIES constant instead of inline array literal
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    libraries: LIBRARIES,
+  if (!selectedContact) return null;
+
+
+  const contactValidation2 = z.object({
+    name: z
+      .string({ required_error: "Name is required" })
+      .trim()
+      .min(1, "Name is required")
+      .max(100, "Name must be under 100 characters")
+      .regex(/^[a-zA-Z\s'-]+$/, "Name can only contain letters, spaces, hyphens, and apostrophes"),
+    email: z
+      .string({ required_error: "Email is required" })
+      .trim()
+      .toLowerCase()
+      .min(1, "Email is required")
+      .email("Invalid email address")
+      .max(255, "Email must be under 255 characters"),
+    age: z
+      .string({ required_error: "Age is required" })
+      .min(18, "Must be at least 18 years old")
+      .max(120, "Age seems invalid"),
+    tag: z
+      .string({ required_error: "Tag is required" })
+      .trim()
+      .min(1, "Tag is required")
+      .max(50, "Tag must be under 50 characters"),
+    phoneNumber: z
+      .string({ required_error: "Phone number is required" })
+      .trim()
+      .min(10, "Phone must be at least 10 digits")
+      .max(11, "Phone number is too long")
+      .regex(/^\+?[0-9\s\-().]+$/, "Invalid phone number format"),
+    address: z
+      .string({ required_error: "Address is required" })
+      .trim()
+      .min(10, "Address must be at least 10 characters")
+      .max(255, "Address must be under 255 characters"),
   });
 
-  // ✅ FIX 2: Check selectedContact BEFORE isLoaded so a closed sidebar
-  //           never shows the "Loading Google API..." banner
-  if (!selectedContact) return null;
-  if (!isLoaded) return <div className="p-4">Loading Google API...</div>;
+
+const {
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ 
+     resolver: zodResolver(contactValidation2) });
+
+
+
 
   const handleEdit = () => {
     setFormData({
@@ -35,24 +68,30 @@ const ContactSidebar = ({ selectedContact, setSelectedContact, fetchContacts }) 
       phoneNumber: selectedContact.phoneNumber,
       tag: selectedContact.tag,
       address: selectedContact.address,
-      lat: selectedContact.lat ?? null,
-      lng: selectedContact.lng ?? null,
+
     });
     setIsEditing(true);
   };
 
   const handleSave = async () => {
     try {
-      await api.put(`/contacts/${selectedContact.id}`, formData);
+
+      const updatedContact = {
+        name: formData.name,
+        email: formData.email,
+        phoneNumber: formData.phoneNumber,
+        tag: formData.tag,
+        status: formData.status,
+        address: formData.address
+      };
+
+
+      await api.put(`/contacts/${selectedContact.id}`, updatedEmployee);
       setIsEditing(false);
       setSelectedContact(null);
       fetchContacts();
     } catch (err) {
-      setError(
-        err.errors?.[0]?.message ??
-          err.response?.data?.message ??
-          "Failed to update"
-      );
+      setError(err.response?.data?.message || "Failed to update");
     }
   };
 
@@ -84,7 +123,7 @@ const ContactSidebar = ({ selectedContact, setSelectedContact, fetchContacts }) 
     { label: "Phone number", field: "phoneNumber" },
     { label: "Tag", field: "tag" },
   ];
-
+  
   return (
     <div className="space-y-4">
       {/* Backdrop */}
@@ -111,104 +150,110 @@ const ContactSidebar = ({ selectedContact, setSelectedContact, fetchContacts }) 
 
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-        {/* ── EDIT MODE ── */}
-        {isEditing ? (
-          <div className="space-y-3">
-            {textFields.map(({ label, field }) => (
-              <div
-                key={field}
-                className="bg-gray-100 p-3 rounded-lg border border-gray-200"
-              >
-                <p className="text-xs text-gray-500 uppercase">{label}</p>
-                <input
-                  className="w-full font-semibold text-gray-800 bg-transparent outline-none pt-1"
-                  value={formData[field] || ""}
-                  onChange={(e) => handleFieldChange(field, e.target.value)}
-                />
-              </div>
-            ))}
 
-            {/* Address field — uses PlacesAutocomplete via AddressInput */}
-            <div className="bg-gray-100 p-3 rounded-lg border border-gray-200">
-              <p className="text-xs text-gray-500 uppercase">Address</p>
-              {/* ✅ FIX 4: Imported from its own file instead of duplicating */}
-              <AddressInput
-                value={formData.address || ""}
-                onChange={handleAddressChange}
+        {/* -[---------------------------------------------------------------------------------------------] */}
+
+        {isEditing ? (
+
+          <form className="space-y-4">
+            <div>
+              <input
+                value={formData.name}
+                onChange={(e) => handleFieldChange("name", e.target.value)}
+                placeholder="Name"
+              />{selectedContact.name}
+            </div>
+
+            <div>
+              <input
+                value={formData.email}
+                onChange={(e) => handleFieldChange("email", e.target.value)}
+                placeholder="Email"
               />
+              {selectedContact.email}
+            </div>
+            <div>            <input
+              value={formData.age}
+              onChange={(e) => handleFieldChange("name", e.target.value)}
+              placeholder="age"
+            />
+              {selectedContact.age}
+            </div>
+            <div>
+              <input
+                value={formData.tag}
+                onChange={(e) => handleFieldChange("name", e.target.value)}
+                placeholder="tag"
+              />
+              {selectedContact.tag}
+            </div>
+
+            <div>       <input
+              value={formData.phoneNumber}
+              onChange={(e) => handleFieldChange("name", e.target.value)}
+              placeholder="phonenumber"
+            />
+              {selectedContact.phoneNumber}
+            </div>
+            <div>            <input
+              value={formData.address}
+              onChange={(e) => handleFieldChange("name", e.target.value)}
+              placeholder="address"
+            />
             </div>
 
             <div className="flex gap-2 mt-4">
               <button
                 onClick={handleSave}
-                className="flex items-center justify-center gap-2 p-2 h-11 bg-white rounded-lg text-blue-400 w-40 border border-blue-400 cursor-pointer hover:bg-black hover:text-white hover:border-orange-400"
+                className="flex items-center justify-center gap-2 p-2 bg-white  rounded-lg text-blue-400 w-40 border  border-blue-400 cursor-pointer hover:bg-black hover:text-white hover:border-orange-400"
               >
                 <Save size={16} /> Save
               </button>
               <button
                 onClick={() => setIsEditing(false)}
-                className="flex items-center gap-4 p-2  h-11 bg-white hover:bg-red-500 hover:text-white text-black rounded-lg h border border-gray-400 w-40  text-sm font-semibold transition-all cursor-pointer"
+                className="flex items-center justify-center gap-2 h-12 bg-white  rounded-lg text-red-600 w-40 border  border-red-600 cursor-pointer hover:bg-red-600  hover:text-white hover:border-gray-600"
               >
-                <X size={14} /> Cancel
+                <X size={14} />
+                Cancel
               </button>
             </div>
-          </div>
+          </form>
         ) : (
-          /* ── VIEW MODE ── */
-          <div className="grid    grid-rows-5 gap-y-3.5">
-            {[
-              { label: "Name", value: selectedContact.name },
-              { label: "Email", value: selectedContact.email },
-              { label: "Age", value: selectedContact.age },
-              { label: "Phone number", value: selectedContact.phoneNumber },
-              { label: "Tag", value: selectedContact.tag },
-            ].map(({ label, value }) => (
-              <div
-                key={label}
-                className="bg-gray-100 p-3 rounded-lg border border-gray-200"
-              >
-                <p className="text-xs text-gray-500 uppercase">{label}</p>
-                <p className="font-semibold text-gray-800">{value}</p>
-              </div>
-            ))}
 
-            {/* Address + Map */}
-            <div className="bg-gray-100 p-3 rounded-lg border border-gray-200">
-              <p className="text-xs text-gray-500 uppercase">Address</p>
-              <p className="font-semibold text-gray-800">
-                {selectedContact.address}
-              </p>
-              {/* ✅ FIX 4: Imported from its own file instead of duplicating */}
-              <ContactMap
-                isLoaded={isLoaded}
-                address={selectedContact.address}
-                lat={selectedContact.lat}
-                lng={selectedContact.lng}
-              />
-            </div>
+          <div className="space-y-4">
 
+            <p>Name: {selectedContact.name}</p>
+            <p>Email: {selectedContact.email}</p>
+
+            <p>age: {selectedContact.age} </p>
+            <p>tag: {selectedContact.tag}</p>
+            <p>PhoneNumber: {selectedContact.phoneNumber}</p>
+            <p > address : {selectedContact.address} </p>
             <div className="flex gap-2">
               <button
                 onClick={handleEdit}
-                className="flex items-center gap-2 p-3 hover:bg-black hover:text-white hover:border-blue-600 hover:border-2 text-blue-600 rounded-lg w-40  h-12 border border-gray-600 border-2 text-sm font-semibold transition-all cursor-pointer"
+                className="flex items-center gap-2 p-3 bg-white- hover:bg-black hover:text-white hover:border-gray-600 hover:border-2  text-blue-600 rounded-lg w-42 h-12 border border-blue-400  text-sm font-semibold transition-all cursor-pointer"
               >
                 <Pencil size={16} /> Edit
               </button>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleDelete();
+                  handleDelete(selectedEmployee.id);
                 }}
-                className="flex items-center gap-3 px-4 py-2 hover:bg-red-500 hover:text-white hover:border-gray-800 hover:border-2 text-gray-300 rounded-lg h-12 border w-40 border-2  border-gray-600 text-sm font-semibold transition-all cursor-pointer"
+                className="flex items-center gap-3 px-4 py-2 bg-slate-800  hover:bg-red-600  hover:text-white  hover:border-2  text-red-600  rounded-lg w-42 h-12 border border-red-600  hover:border-gray-400  text-sm font-semibold transition-all cursor-pointer"
               >
                 <Trash2 size={16} /> Delete
               </button>
             </div>
           </div>
-        )}
+        )
+        }
+
+
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ContactSidebar;
+export default ContactSidebar

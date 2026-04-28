@@ -42,7 +42,7 @@ const contactValidation = z.object({
     .string({ required_error: "Phone number is required" })
     .trim()
     .min(10, "Phone must be at least 10 digits")
-    .max(15, "Phone number is too long")
+    .max(11, "Phone number is too long")
     .regex(/^\+?[0-9\s\-().]+$/, "Invalid phone number format"),
   address: z
     .string({ required_error: "Address is required" })
@@ -85,7 +85,7 @@ const ContactForm = ({ inModal = false, onSuccess = null, close }) => {
       <div className="w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden">
 
         {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-30 to-mist-700   border-black px-8 py-5 flex items-center justify-between border border-black ">
+        <div className=" ent-to-r from-indigo-30 to-mist-700   border-black px-8 py-5 flex items-center justify-between border border-black ">
           <div>
             <h1 className="text-lg font-bold text-white tracking-tight">Add Contact</h1>
             <p className="text-blue-100 text-xs mt-0.5 opacity-80">Fill in the details below</p>

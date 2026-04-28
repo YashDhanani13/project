@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Save, Pencil, Trash2, X } from "lucide-react";
 import api from "../../api/api";
 
-
 const EmpSidebar = ({
   selectedEmployee,
   setSelectedEmployee,

@@ -44,6 +44,17 @@ const Contacts = () => {
     }
   };
 
+
+  function debounce(func, delay) {
+  let debounceTimer;
+  return function() {
+    const context = this;
+    const args = arguments;
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => func.apply(context, args), delay);
+  };
+}  
+
   const handleContactAdded = () => { setIsFormOpen(false); fetchContacts(); };
   const handlesearchChange = (e) => { setSearch(e.target.value); setCurrentPage(0); };
 

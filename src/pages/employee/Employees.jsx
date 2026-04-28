@@ -110,7 +110,7 @@ const Employees = () => {
 
         <button
           onClick={() => setIsFormOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-purple-600 to-mist-400 text-white text-sm font-semibold hover:from-gray-600 hover:to-blue-500 active:scale-[0.98] transition-all shadow-lg shadow-orange-500/20 cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-blue-800 to-mist-800 hover:text-black text-white text-sm font-semibold hover:from-gray-600 hover:to-blue-500 active:scale-[0.98] transition-all shadow-lg shadow-orange-500/20 cursor-pointer"
         >
           <UserPlus size={15} />
           Add Employee
@@ -136,7 +136,7 @@ const Employees = () => {
                 <thead className="bg-slate-900/60 border-b border-slate-700">
                   <tr>
                     <th className="px-4 py-3">
-                      <input type="checkbox" className="accent-orange-500 w-4 h-4" />
+                      <input type="checkbox" className=" w-4 h-4" />
                     </th>
                     <SortTh field="name" label="Name" />
                     <SortTh field="email" label="Email" />
@@ -154,7 +154,7 @@ const Employees = () => {
                         className="hover:bg-slate-700/50 cursor-pointer transition-colors"
                       >
                         <td className="px-4 py-3">
-                          <input type="checkbox" className="accent-orange-500 w-4 h-4" onClick={(e) => e.stopPropagation()} />
+                          <input type="checkbox" className="accent-black -500 w-4 h-4" onClick={(e) => e.stopPropagation()} />
                         </td>
                         <td className="px-4 py-3 font-medium text-slate-100">{employee.name}</td>
                         <td className="px-4 py-3 text-blue-400">{employee.email}</td>

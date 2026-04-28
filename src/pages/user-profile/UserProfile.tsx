@@ -63,7 +63,7 @@ if (loading) return <ProfileSkeleton />;
   if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
 
   return (
-    <div className=" rounded-lg bg-slate-900 h-130 p-4 ">
+    <div className=" rounded-lg border  border-gray-600    bg-slate-900 h-130 p-4 ">
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-white">Profile</h1>

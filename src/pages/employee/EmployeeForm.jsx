@@ -14,10 +14,28 @@ import {
 } from "lucide-react";
 
 const Empvalidation = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().min(1, "Email is required").email("Invalid email"),
+   name: z
+    .string({ required_error: "Name is required" })
+    .trim()
+    .min(1, "Name is required")
+    .max(100, "Name must be under 100 characters")
+    .regex(/^[a-zA-Z\s'-]+$/, "Name can only contain letters, spaces, hyphens, and apostrophes"),
+    // .string(),
+
+   email: z
+    .string({ required_error: "Email is required" })
+    .trim()
+    .toLowerCase()
+    .min(1, "Email is required")
+    .email("Invalid email address")
+    .max(255, "Email must be under 255 characters"),
   role: z.string().min(1, "Role is required"),
-  phoneNumber: z.string().min(10, "Phone must be at least 10 digits"),
+  phoneNumber: z
+    .string({ required_error: "Phone number is required" })
+    .trim()
+    .min(10, "Phone must be at least 10 digits")
+    .max(11   , "Phone number is too long")
+    .regex(/^\+?[0-9\s\-().]+$/, "Invalid phone number format"),
   status: z.string().min(1, "Status is required"),
 });
 
@@ -51,14 +69,14 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-800  to-slate-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden">
 
         {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-30 to-mist-700   border-black px-8 py-4 flex items-center justify-between border border-black ">
+        <div className="bg-gradient-to-r from-gray-800 to-mist-700   border-black px-8 py-4 flex items-center justify-between border border-black ">
           <div>
             <h1 className="text-lg font-bold text-white tracking-tight">Add Employee</h1>
-            <p className="text-orange-100 text-xs mt-0.5 opacity-80">Fill in the details below</p>
+            <p className="text-gray-500  text-md mt-0.5 opacity-80">Fill in the details below</p>
           </div>
           <button
             type="button"
@@ -95,7 +113,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
               <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
                 Full Name
               </label>
-              <div className={`flex items-center gap-2.5 rounded-xl border bg-slate-900/60 px-3 py-2.5 transition-colors focus-within:ring-2 focus-within:ring-orange-500/40 ${errors.name ? "border-red-500/60 focus-within:border-red-500" : "border-slate-700 focus-within:border-orange-500/70 hover:border-slate-600"}`}>
+              <div className={`flex items-center gap-2.5 rounded-xl border bg-slate-900/60 px-3 py-2.5 transition-colors  ${errors.name ? "border-red-500/60 focus-within:border-red-500" : "border-slate-700  hover:border-slate-600"}`}>
                 <User size={14} className={errors.name ? "text-red-400 shrink-0" : "text-slate-500 shrink-0"} />
                 <input
                   type="text"
@@ -114,7 +132,7 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
               <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
                 Email Address
               </label>
-              <div className={`flex items-center gap-2.5 rounded-xl border bg-slate-900/60 px-3 py-2.5 transition-colors focus-within:ring-2 focus-within:ring-orange-500/40 ${errors.email ? "border-red-500/60 focus-within:border-red-500" : "border-slate-700 focus-within:border-orange-500/70 hover:border-slate-600"}`}>
+              <div className={`flex items-center gap-2.5 rounded-xl border bg-slate-900/60 px-3 py-2.5 transition-colors focus-within:ring-2 focus-within:ring-orange-500/40 ${errors.email ? "border-red-500/60 focus-within:border-red-500" : "border-slate-700 over:border-slate-600"}`}>
                 <Mail size={14} className={errors.email ? "text-red-400 shrink-0" : "text-slate-500 shrink-0"} />
                 <input
                   type="email"
