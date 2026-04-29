@@ -70,10 +70,10 @@ const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-800  to-slate-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden">
+      <div className="w-full max-w-md rounded-t-lg bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden">
 
         {/* Header */}
-        <div className="bg-gradient-to-r from-gray-800 to-mist-700   border-black px-8 py-4 flex items-center justify-between border border-black ">
+        <div className="bg-gradient-to-r from-gray-800 to-mist-700   border-black px-8 py-4 flex  rounded-t-lg items-center justify-between border border-black ">
           <div>
             <h1 className="text-lg font-bold text-white tracking-tight">Add Employee</h1>
             <p className="text-gray-500  text-md mt-0.5 opacity-80">Fill in the details below</p>

@@ -47,8 +47,6 @@ const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
           />
         )}
 
-
-
         </div>
              <div className="flex gap-2 mt-3">
           <button

@@ -21,7 +21,9 @@ const Contacts = () => {
   const [sortField, setSortField] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
 
-  useEffect(() => { fetchContacts(); }, [search, filterField, filterValue]);
+  useEffect(() => {
+    fetchContacts();
+  }, [search, filterField, filterValue]);
 
   const fetchContacts = async () => {
     setLoading(true);
@@ -35,7 +37,9 @@ const Contacts = () => {
         },
       });
       const data = response.data;
-      setContacts(Array.isArray(data) ? data : data.data || data.contacts || []);
+      setContacts(
+        Array.isArray(data) ? data : data.data || data.contacts || [],
+      );
     } catch {
       setError("Failed to fetch contacts");
     } finally {
@@ -44,23 +48,31 @@ const Contacts = () => {
     }
   };
 
+  //   function debounce(func, delay) {
+  //   let debounceTimer;
+  //   return function() {
+  //     const context = this;
+  //     const args = arguments;
+  //     clearTimeout(debounceTimer);
+  //     debounceTimer = setTimeout(() => func.apply(context, args), delay);
+  //   };
+  // }
 
-  function debounce(func, delay) {
-  let debounceTimer;
-  return function() {
-    const context = this;
-    const args = arguments;
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => func.apply(context, args), delay);
+  const handleContactAdded = () => {
+    setIsFormOpen(false);
+    fetchContacts();
   };
-}  
-
-  const handleContactAdded = () => { setIsFormOpen(false); fetchContacts(); };
-  const handlesearchChange = (e) => { setSearch(e.target.value); setCurrentPage(0); };
+  const handlesearchChange = (e) => {
+    setSearch(e.target.value);
+    setCurrentPage(0);
+  };
 
   const handleSort = (field) => {
     if (sortField === field) setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    else { setSortField(field); setSortOrder("asc"); }
+    else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
     setCurrentPage(0);
   };
 
@@ -97,7 +109,11 @@ const Contacts = () => {
       className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider cursor-pointer select-none hover:text-blue-400 transition-colors"
     >
       {label}
-      <span className={sortField === field ? "text-blue-400 ml-1" : "text-slate-600 ml-1"}>
+      <span
+        className={
+          sortField === field ? "text-blue-400 ml-1" : "text-slate-600 ml-1"
+        }
+      >
         {sortIcon(field)}
       </span>
     </th>
@@ -105,11 +121,14 @@ const Contacts = () => {
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 p-6">
-
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white tracking-tight">Contact Management</h1>
-        <p className="text-slate-400 text-sm mt-1">Manage and organise your contacts</p>
+        <h1 className="text-2xl font-bold text-white tracking-tight">
+          Contact Management
+        </h1>
+        <p className="text-slate-400 text-sm mt-1">
+          Manage and organise your contacts
+        </p>
       </div>
 
       {/* Toolbar */}
@@ -135,7 +154,7 @@ const Contacts = () => {
 
         <button
           onClick={() => setIsFormOpen(true)}
-          className="flex items-center gap-2 p-3  border border-zinc-700 border-2 w-40 rounded-lg bg-linear-to-r from-blue-500 to-orange-200 text-white text-sm font-semibold hover:from-mist-600 hover:to-indigo-400 hover:text-black border hover:border-black active:scale-[0.98] transition-all shadow-lg shadow-blue-500/20 cursor-pointer"
+          className="flex items-center gap-2 p-3  border border-zinc-700 border-2 w-40 rounded-lg bg-linear-to-r from-blue-500 to-orange-200 text-gray-800  text-sm font-semibold hover:from-mist-600 hover:to-indigo-400 hover:text-black border hover:border-black active:scale-[0.98] transition-all shadow-lg shadow-blue-500/20 cursor-pointer"
         >
           <UserPlus size={15} />
           Add Contact
@@ -155,13 +174,16 @@ const Contacts = () => {
       {!loading && (
         <>
           {/* Table Card */}
-          <div className="bg-slate-800 border border-slate-700 rounded-2xl shadow-xl overflow-hidden">
+          <div className="bg-slate-800 border border-slate-700 rounded-md shadow-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead className="bg-slate-900/60 border-b border-slate-700">
                   <tr>
                     <th className="px-4 py-3">
-                      <input type="checkbox" className="accent-blue-500 w-4 h-4" />
+                      <input
+                        type="checkbox"
+                        className="accent-blue-500 w-4 h-4"
+                      />
                     </th>
                     <SortTh field="name" label="Name" />
                     <SortTh field="email" label="Email" />
@@ -172,6 +194,9 @@ const Contacts = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-700/50">
+
+
+                  {/* // map the datya  */}
                   {paginatedContacts.length > 0 ? (
                     paginatedContacts.map((contact) => (
                       <tr
@@ -180,28 +205,49 @@ const Contacts = () => {
                         className="hover:bg-slate-700/50 cursor-pointer transition-colors"
                       >
                         <td className="px-4 py-3">
-                          <input type="checkbox" className="accent-blue-500 w-4 h-4" onClick={(e) => e.stopPropagation()} />
+                          <input
+                            type="checkbox"
+                            className="accent-blue-500 w-4 h-4"
+                            onClick={(e) => e.stopPropagation()}
+                          />
                         </td>
-                        <td className="px-4 py-3 font-medium text-slate-100">{contact.name}</td>
-                        <td className="px-4 py-3 text-blue-400">{contact.email}</td>
-                        <td className="px-4 py-3 text-slate-300">{contact.age}</td>
+                        <td className="px-4 py-3 font-medium text-slate-100">
+                          {contact.name}
+                        </td>
+                        <td className="px-4 py-3 text-blue-400">
+                          {contact.email}
+                        </td>
+                        <td className="px-4 py-3 text-slate-300">
+                          {contact.age}
+                        </td>
                         <td className="px-4 py-3">
                           {contact.tag ? (
-                            <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${TAG_STYLES[contact.tag] || "bg-slate-700 text-slate-300"}`}>
+                            <span
+                              className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${TAG_STYLES[contact.tag] || "bg-slate-700 text-slate-300"}`}
+                            >
                               {contact.tag}
                             </span>
                           ) : (
                             <span className="text-slate-600">—</span>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-slate-300">{contact.phoneNumber || "—"}</td>
-                        <td className="px-4 py-3 text-slate-400 max-w-xs truncate">{contact.address || "—"}</td>
+                        <td className="px-4 py-3 text-slate-300">
+                          {contact.phoneNumber || "—"}
+                        </td>
+                        <td className="px-4 py-3 text-slate-400 max-w-xs truncate">
+                          {contact.address || "—"}
+                        </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={7} className="px-4 py-12 text-center text-slate-500">
-                        {search ? "No contacts match your search" : "No contacts found — click Add Contact"}
+                      <td
+                        colSpan={7}
+                        className="px-4 py-12 text-center text-slate-500"
+                      >
+                        {search
+                          ? "No contacts match your search"
+                          : "No contacts found — click Add Contact"}
                       </td>
                     </tr>
                   )}
@@ -213,9 +259,12 @@ const Contacts = () => {
             <div className="px-5 py-3 border-t border-slate-700 flex items-center justify-between flex-wrap gap-3 bg-slate-900/40">
               <span className="text-xs text-slate-400">
                 Showing{" "}
-                <strong className="text-slate-200">{totalContacts === 0 ? 0 : start + 1}–{Math.min(end, totalContacts)}</strong>
-                {" "}of{" "}
-                <strong className="text-slate-200">{totalContacts}</strong> contacts
+                <strong className="text-slate-200">
+                  {totalContacts === 0 ? 0 : start + 1}–
+                  {Math.min(end, totalContacts)}
+                </strong>{" "}
+                of <strong className="text-slate-200">{totalContacts}</strong>{" "}
+                contacts
               </span>
 
               <div className="flex items-center gap-2 text-xs text-slate-400">
@@ -241,8 +290,12 @@ const Contacts = () => {
                   ← Prev
                 </button>
                 <span className="text-xs text-slate-400 font-medium">
-                  Page <strong className="text-slate-200">{currentPage + 1}</strong> of{" "}
-                  <strong className="text-slate-200">{Math.max(noOfPages, 1)}</strong>
+                  Page{" "}
+                  <strong className="text-slate-200">{currentPage + 1}</strong>{" "}
+                  of{" "}
+                  <strong className="text-slate-200">
+                    {Math.max(noOfPages, 1)}
+                  </strong>
                 </span>
                 <button
                   onClick={() => setCurrentPage((p) => p + 1)}
@@ -285,7 +338,10 @@ const Contacts = () => {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="overflow-y-auto flex-1">
-                  <ContactForm onSuccess={handleContactAdded} close={() => setIsFormOpen(false)} />
+                  <ContactForm
+                    onSuccess={handleContactAdded}
+                    close={() => setIsFormOpen(false)}
+                  />
                 </div>
               </div>
             </div>

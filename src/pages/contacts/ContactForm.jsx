@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import api from "../../api/api";
-import { z } from "zod";
+import { coerce, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowRight,
@@ -29,11 +29,11 @@ const contactValidation = z.object({
     .min(1, "Email is required")
     .email("Invalid email address")
     .max(255, "Email must be under 255 characters"),
-  age: z
-    .number({ required_error: "Age is required" })
+  age: z.coerce
+    .string({ required_error: "Age is required" })
     .min(18, "Must be at least 18 years old")
     .max(120, "Age seems invalid"),
-  tag: z
+  tag: z.coerce
     .string({ required_error: "Tag is required" })
     .trim()
     .min(1, "Tag is required")
@@ -81,11 +81,10 @@ const ContactForm = ({ inModal = false, onSuccess = null, close }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden">
-
+     <div className="min-h-screen bg-gradient-to-br from-slate-800  to-slate-900 flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl rounded-t-lg overflow-hidden">
         {/* Header */}
-        <div className=" ent-to-r from-indigo-30 to-mist-700   border-black px-8 py-5 flex items-center justify-between border border-black ">
+              <div className="bg-gradient-to-r rounded-t-lg from-gray-800 to-mist-700  px-8 py-4 flex items-center justify-between border border-black ">
           <div>
             <h1 className="text-lg font-bold text-white tracking-tight">Add Contact</h1>
             <p className="text-blue-100 text-xs mt-0.5 opacity-80">Fill in the details below</p>
@@ -118,6 +117,9 @@ const ContactForm = ({ inModal = false, onSuccess = null, close }) => {
             </div>
           )}
 
+
+
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
             {/* Full Name */}
@@ -130,7 +132,7 @@ const ContactForm = ({ inModal = false, onSuccess = null, close }) => {
                 <input
                   type="text"
                   placeholder="Rohan Mehta"
-                  className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                  className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none not-odd:"
                   {...register("name")}
                 />
               </div>

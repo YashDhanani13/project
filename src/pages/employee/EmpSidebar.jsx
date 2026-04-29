@@ -51,7 +51,6 @@ const EmpSidebar = ({
     }
   };
 
-
   return (
     <>
       <div
@@ -61,11 +60,14 @@ const EmpSidebar = ({
         }}
         className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
       />
-       <div className="fixed right-0 top-0 h-full w-full sm:w-96 bg-slate-800  shadow-2xl z-50 p-6 overflow-y-auto transition-transform duration-300">
+
+      <div className="fixed right-0 top-0 h-full w-full sm:w-96 bg-slate-800  shadow-2xl z-50 p-6 overflow-y-auto transition-transform duration-300">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-extralight text-slate-500">
             {isEditing ? "Edit Employee" : "Employee Details : "}
-            <p className="text-2xl text-white font-bold">{selectedEmployee.name}</p>
+            <p className="text-2xl text-white font-bold">
+              {selectedEmployee.name}
+            </p>
           </h2>
           <button
             onClick={() => {
@@ -89,12 +91,14 @@ const EmpSidebar = ({
               { label: "Phone Number", field: "phoneNumber" },
               { label: "Status", field: "status" },
             ].map(({ label, field }) => (
-              <div key={field} className="bg-gray-100 p-3 rounded-lg  border border-mist-500">
-
-
+              <div
+                key={field}
+                className="bg-slate-800 border border-slate-700 
+            rounded-lg p-3 hover:bg-slate-700 transition"
+              >
                 <p className="text-xs text-gray-500 uppercase">{label}</p>
                 <input
-                  className="w-full font-semibold text-gray-800 bg-transparent  outline-none pt-1"
+                  className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
                   value={formData[field] || ""}
                   onChange={(e) =>
                     setFormData({ ...formData, [field]: e.target.value })
@@ -114,46 +118,55 @@ const EmpSidebar = ({
                 onClick={() => setIsEditing(false)}
                 className="flex items-center justify-center gap-2 h-12 bg-white  rounded-lg text-red-600 w-40 border  border-red-600 cursor-pointer hover:bg-red-600  hover:text-white hover:border-gray-600"
               >
-                    <X size={14} /> 
+                <X size={14} />
                 Cancel
               </button>
             </div>
           </div>
         ) : (
           <div className=" grid grid-rows-5 gap-y-3.5  ">
-            <div className="bg-gray-100  p-3 border border-black  border-2  rounded-lg ">
-              <p className="text-xs text-gray-500 uppercase">Name</p>
-              <p className="font-semibold text-gray-800">
-                {selectedEmployee.name}
-              </p>
+            <div
+              className="bg-slate-800 border border-slate-700 
+            rounded-lg p-3 hover:bg-slate-700 transition"
+            >
+              <p className="text-xs text-gray-500 uppercase">Name</p>{" "}
+              <p className="text-white font-medium">{selectedEmployee.name}</p>
             </div>
 
-            <div className="bg-gray-100 p-3 rounded-lg  border border-black   border-2 ">
+            <div
+              className="bg-slate-800 border border-slate-700 
+            rounded-lg p-3 hover:bg-slate-700 transition"
+            >
               <p className="text-xs text-gray-500 uppercase">Email</p>
-              <p className="font-semibold text-gray-800">
-                {selectedEmployee.email}
-              </p>
+              <p className="text-white font-medium">{selectedEmployee.email}</p>
             </div>
 
-            <div className="bg-gray-100 p-3 rounded-lg  border border-black  border-2 ">
+            <div
+              className="bg-slate-800 border border-slate-700 
+            rounded-lg p-3 hover:bg-slate-700 transition"
+            >
               <p className="text-xs text-gray-500 uppercase">Role</p>
-              <p className="font-semibold text-gray-800">
-                {selectedEmployee.role}
-              </p>
+              <p className="text-white font-medium">{selectedEmployee.role}</p>
             </div>
-            <div className="bg-gray-100 p-3 rounded-lg  border border-black border-2 ">
-              <p className="text-xs text-gray-500 uppercase">Phone</p>
-              <p className="font-semibold text-gray-800">
+            <div
+              className="bg-slate-800 border border-slate-700 
+            rounded-lg p-3 hover:bg-slate-700 transition"
+            >
+              <p className="text-xs text-slate-400 uppercase">Phone</p>
+              <p className="text-white font-medium">
                 {selectedEmployee.phoneNumber}
               </p>
             </div>
 
-            <div className="bg-gray-100 p-3 rounded-lg  border border-black border-2">
-              <p className="text-xs text-gray-500 uppercase">Status</p>
+            <div
+              className="bg-slate-800 border border-slate-700 
+            rounded-lg p-3 hover:bg-slate-700 transition"
+            >
+              <p className="text-xs text-gray-500 uppercase">Status</p>{" "}
               <span
                 className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full ${selectedEmployee.status === "ACTIVE"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
+                    ? "bg-green-100 text-green-700"
+                    : "bg-red-100 text-red-700"
                   }`}
               >
                 {selectedEmployee.status}
@@ -163,7 +176,9 @@ const EmpSidebar = ({
             <div className="flex gap-2">
               <button
                 onClick={handleEdit}
-                className="flex items-center gap-2 p-3 bg-white- hover:bg-black hover:text-white hover:border-gray-600 hover:border-2  text-blue-600 rounded-lg w-42 h-12 border border-blue-400  text-sm font-semibold transition-all cursor-pointer"
+                className="flex-1 flex items-center justify-center gap-2 
+            py-2 rounded-lg bg-blue-600 hover:bg-blue-700 
+            text-white transition"
               >
                 <Pencil size={16} /> Edit
               </button>
@@ -172,7 +187,9 @@ const EmpSidebar = ({
                   e.stopPropagation();
                   handleDelete(selectedEmployee.id);
                 }}
-                className="flex items-center gap-3 px-4 py-2 bg-slate-800  hover:bg-red-600  hover:text-white  hover:border-2  text-red-600  rounded-lg w-42 h-12 border border-red-600  hover:border-gray-400  text-sm font-semibold transition-all cursor-pointer"
+                className="flex-1 flex items-center justify-center gap-2 
+            py-2 rounded-lg bg-red-600 hover:bg-red-700 
+            text-white transition cursor-pointer "
               >
                 <Trash2 size={16} /> Delete
               </button>

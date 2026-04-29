@@ -86,7 +86,7 @@ if (loading) return <ProfileSkeleton />;
             {!isEditing ? (
               <button
                 onClick={() => setIsEditing(true)}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-200    rounded-xl text-sm  text-gray-700 hover:border-gray-900 hover:text-gray-400   hover:bg-orange-2x00 transition-all w-35 h-13 font-bold relative left-4 cursor-pointer "
+                className="flex items-center gap-2 px-4 py-2 border border-gray-200    rounded-md transform-border  text-gray-500 hover:border-black   -700 hover:text-black  hover:bg-white transition-colors w-35 h-13 font-bold  relative left-4 cursor-pointer "
               >
                 <Edit2 className="relative left-1 gap-2 "  size={14} /> Edit
               </button>
@@ -101,7 +101,7 @@ if (loading) return <ProfileSkeleton />;
  
                 <button
                   onClick={handleSubmit(onSubmit)}
-                  className="flex items-center gap-2 px-4 py-2 bg-white- hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  text-blue-500 rounded-lg w-38 h-12 border border-gray-500  text-sm font-semibold  cursor-pointer transition-all"
+                  className="flex items-center gap-2 px-4 py-2 bg-white- hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  text-gray-400 rounded-lg w-38 h-12 border border-gray-500  text-sm font-semibold  cursor-pointer transition-all"
                 >
                   <Check size={14} /> Save Changes
                 </button>

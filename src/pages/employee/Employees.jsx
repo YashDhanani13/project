@@ -87,7 +87,7 @@ const Employees = () => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 p-6">
+    <div className="min-h-screen  bg-slate-900 text-slate-100 p-6">
 
       {/* Header */}
       <div className="mb-8">
@@ -103,14 +103,16 @@ const Employees = () => {
             type="search"
             placeholder="Search employees..."
             value={search}
-            onChange={(e) => { setSearch(e.target.value); setCurrentPage(0); }}
+            onChange={(e) => { setSearch(e.target.value); 
+              
+              setCurrentPage(0); }}
             className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
           />
         </div>
 
         <button
           onClick={() => setIsFormOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-blue-800 to-mist-800 hover:text-black text-white text-sm font-semibold hover:from-gray-600 hover:to-blue-500 active:scale-[0.98] transition-all shadow-lg shadow-orange-500/20 cursor-pointer"
+        className="flex items-center gap-2 p-3  border border-zinc-700 border-2 w-40 rounded-lg bg-linear-to-r from-blue-500 to-orange-200 text-gray-800  text-sm font-semibold hover:from-mist-600 hover:to-indigo-400 hover:text-black border hover:border-black active:scale-[0.98] transition-all shadow-lg shadow-blue-500/20 cursor-pointer"
         >
           <UserPlus size={15} />
           Add Employee
@@ -130,7 +132,7 @@ const Employees = () => {
       ) : (
         <>
           {/* Table Card */}
-          <div className="bg-slate-800 border border-slate-700 rounded-2xl shadow-xl overflow-hidden">
+          <div className="bg-slate-800 border border-slate-700 rounded-md shadow-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead className="bg-slate-900/60 border-b border-slate-700">
@@ -146,6 +148,10 @@ const Employees = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-700/50">
+
+
+
+                
                   {pageEmployees.length > 0 ? (
                     pageEmployees.map((employee) => (
                       <tr
