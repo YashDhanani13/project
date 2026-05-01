@@ -1,6 +1,6 @@
-import { GoogleMap, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
+import { useState } from "react";
 
-// ─── Google Maps config ────────────────────────────────────────────────────────
 const mapContainerStyle = {
   width: "100%",
   height: "200px",
@@ -8,13 +8,15 @@ const mapContainerStyle = {
   border: "1px solid #e5e7eb",
 };
 
-// ─── ContactMap (view mode) ────────────────────────────────────────────────────
-// Shows a small Google Map pinned to the contact's address coordinates.
-// Falls back gracefully if coords are missing.
 const ContactMap = ({ address, lat, lng, isLoaded }) => {
-  if (!lat || !lng) return null;
+  const [showInfo, setShowInfo] = useState(false);
+
+  if (lat == null || lng == null) return null;
 
   const position = { lat, lng };
+
+  const shortAddress =
+    address?.length > 60 ? address.slice(0, 60) + "..." : address;
 
   return (
     <div className="mt-1">
@@ -23,12 +25,14 @@ const ContactMap = ({ address, lat, lng, isLoaded }) => {
           Loading map...
         </div>
       ) : (
-        <GoogleMap
-          mapContainerStyle={mapContainerStyle}
-          center={position}
-          zoom={15}
-        >
-          <Marker position={position} title={address} />
+        <GoogleMap mapContainerStyle={mapContainerStyle} center={position} zoom={15}>
+          <Marker position={position} onClick={() => setShowInfo(true)}>
+            {showInfo && (
+              <InfoWindow position={position} onCloseClick={() => setShowInfo(false)}>
+                <p className="text-sm text-gray-800">{shortAddress}</p>
+              </InfoWindow>
+            )}
+          </Marker>
         </GoogleMap>
       )}
     </div>

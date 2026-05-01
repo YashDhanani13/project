@@ -1,328 +1,379 @@
-import React, { useState, useEffect } from "react";
-import { Save, Pencil, Trash2, X } from "lucide-react";
-import api from "../../api/api";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from 'react'
+import { Save, Pencil, Trash2, X } from 'lucide-react'
+import api from '../../api/api'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 
 const contactValidation2 = z.object({
-  name: z
-    .string({ required_error: "Name is required" })
-    .trim()
-    .min(1, "Name is required")
-    .max(100, "Name must be under 100 characters")
-    .regex(
-      /^[a-zA-Z\s'-]+$/,
-      "Name can only contain letters, spaces, hyphens, and apostrophes",
-    ),
-  email: z
-    .string({ required_error: "Email is required" })
-    .trim()
-    .toLowerCase()
-    .min(1, "Email is required")
-    .email("Invalid email address")
-    .max(255, "Email must be under 255 characters"),
-  age: z
-    .string({ required_error: "Age is required" })
-    .min(18, "Must be at least 18 years old")
-    .max(120, "Age seems invalid"),
-  tag: z
-    .string({ required_error: "Age is required" })
-    .min(18, "Must be at least 18 years old")
-    .max(120, "Age seems invalid"),
-  phoneNumber: z
-    .string({ required_error: "Phone number is required" })
-    .trim()
-    .min(10, "Phone must be at least 10 digits")
-    .max(11, "Phone number is too long")
-    .regex(/^\+?[0-9\s\-().]+$/, "Invalid phone number format"),
-  address: z
-    .string({ required_error: "Address is required" })
-    .trim()
-    .min(10, "Address must be at least 10 characters")
-    .max(255, "Address must be under 255 characters"),
-});
+    name: z
+        .string({ required_error: 'Name is required' })
+        .trim()
+        .min(1, 'Name is required')
+        .max(100, 'Name must be under 100 characters')
+        .regex(
+            /^[a-zA-Z\s'-]+$/,
+            'Name can only contain letters, spaces, hyphens, and apostrophes'
+        ),
+    email: z
+        .string({ required_error: 'Email is required' })
+        .trim()
+        .toLowerCase()
+        .min(1, 'Email is required')
+        .email('Invalid email address')
+        .max(255, 'Email must be under 255 characters'),
+    age: z
+        .string()
+        .trim()
+        .min(1, 'Age is required')
+        .regex(/^\d+$/, 'Age must be a valid number')
+        .transform((val) => Number(val))
+        .refine((val) => val >= 17, {
+            message: 'Age must be at least 17',
+        })
+        .refine((val) => val <= 100, {
+            message: 'Age must be at most 100',
+        }),
+
+    tag: z.string({ required_error: 'tag is required' }),
+    phoneNumber: z
+        .string({ required_error: 'Phone number is required' })
+        .trim()
+        .min(10, 'Phone must be at least 10 digits')
+        .max(11, 'Phone number is too long')
+        .regex(/^\+?[0-9\s\-().]+$/, 'Invalid phone number format'),
+    address: z
+        .string({ required_error: 'Address is required' })
+        .trim()
+        .min(10, 'Address must be at least 10 characters')
+        .max(255, 'Address must be under 255 characters'),
+})
 
 const ContactSidebar = ({
-  selectedContact,
-  setSelectedContact,
-  fetchContacts,
+    selectedContact,
+    setSelectedContact,
+    fetchContacts,
 }) => {
-  const [error, setError] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
+    const [error, setError] = useState('')
+    const [isEditing, setIsEditing] = useState(false)
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: zodResolver(contactValidation2),
-  });
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors, isSubmitting },
+    } = useForm({
+        resolver: zodResolver(contactValidation2),
+    })
 
-  // 🔥 Fill form when sidebar opens
-  useEffect(() => {
-    if (selectedContact) {
-      reset({
-        name: selectedContact.name,
-        email: selectedContact.email,
-        age: selectedContact.age,
-        tag: selectedContact.tag,
-        phoneNumber: selectedContact.phoneNumber,
-        address: selectedContact.address,
-      });
+    // 🔥 Fill form when sidebar opens
+    useEffect(() => {
+        if (selectedContact) {
+            reset({
+                name: selectedContact.name,
+                email: selectedContact.email,
+                age: String(selectedContact.age),
+                tag: selectedContact.tag,
+                phoneNumber: selectedContact.phoneNumber,
+                address: selectedContact.address,
+            })
+        }
+    }, [selectedContact, reset])
+
+    if (!selectedContact) return null
+
+    //UPDATE THE DATA
+    const onSubmit = async (data) => {
+        try {
+            const updatedContact = {
+                name: data.name,
+                email: data.email,
+                age: data.age,
+                tag: data.tag,
+                phoneNumber: data.phoneNumber,
+                address: data.address,
+            }
+
+            await api.put(`/contacts/${selectedContact.id}`, updatedContact)
+
+            setIsEditing(false)
+            setSelectedContact(null)
+            fetchContacts()
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to update')
+        }
     }
-  }, [selectedContact, reset]);
-
-  if (!selectedContact) return null;
-
-  //UPDATE THE DATA
-  const onSubmit = async (data) => {
-    try {
-      const updatedContact = {
-        name: selectedContact.name,
-        email: selectedContact.email,
-        age: selectedContact.age,
-        tag: selectedContact.tag,
-        phoneNumber: selectedContact.phoneNumber,
-        address: selectedContact.address,
-
-      };
-
-      await api.put(`/contacts/${selectedContact.id}`, updatedContact);
-
-      setIsEditing(false);
-      setSelectedContact(null);
-      fetchContacts();
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to update");
+    //DELETE THE DATA
+    const handleDelete = async () => {
+        try {
+            await api.delete(`/contacts/${selectedContact.id}`)
+            setSelectedContact(null)
+            fetchContacts()
+        } catch (err) {
+            setError(err.response?.data?.message ?? 'Failed to delete')
+        }
     }
-  };
 
-  //DELETE THE DATA
-  const handleDelete = async () => {
-    try {
-      await api.delete(`/contacts/${selectedContact.id}`);
-      setSelectedContact(null);
-      fetchContacts();
-    } catch (err) {
-      setError(err.response?.data?.message ?? "Failed to delete");
+    const closePanel = () => {
+        setSelectedContact(null)
+        setIsEditing(false)
     }
-  };
 
-  const closePanel = () => {
-    setSelectedContact(null);
-    setIsEditing(false);
-  };
-
-  return (
-    <div>
-      <div
-        onClick={closePanel}
-        className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
-      />
-
-      {/* Slide-in panel */}
-      <div className="fixed right-0 top-0 h-full w-full sm:w-96  bg-gradient-to-br from-slate-800  to-gray--800 shadow-2xl z-50 p-6 overflow-y-auto transition-transform duration-300">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-extralight text-slate-500">
-            {isEditing ? "Edit Employee" : "Employee Details : "}
-            <p className="text-xs text-gray-500 uppercase">
-              {selectedContact.name}
-            </p>
-          </h2>
-          <button
-            onClick={closePanel}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold"
-          >
-            <X size={16} />
-          </button>
-        </div>
-
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-
-        {isEditing ? (
-          <form className="space-y-4">
+    return (
+        <div>
             <div
-              className="bg-slate-800 border border-slate-700 
-            rounded-lg p-3 hover:bg-slate-700 transition"
-            >
-              <p className="text-xs text-gray-500 uppercase">Name </p>
-              <input
-                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
-                {...register("name")}
-                placeholder="Name"
-              />
-              {errors.name && (
-                <p className="text-red-500">{errors.name.message}</p>
-              )}
-            </div>
+                onClick={closePanel}
+                className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+            />
 
-            <div
-              className="bg-slate-800 border border-slate-700 
-            rounded-lg p-3 hover:bg-slate-700 transition"
-            >
-              <p className="text-xs text-gray-500 uppercase">Email</p>
-              <input
-                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
-                {...register("email")}
-                placeholder="Email"
-              />
-              {errors.email && (
-                <p className="text-red-500">{errors.email.message}</p>
-              )}
-            </div>
+            {/* Slide-in panel */}
+            <div className="fixed right-0 top-0 h-full w-full sm:w-96  bg-gradient-to-br from-slate-800   shadow-2xl z-50 p-6 overflow-y-auto transition-transform duration-300">
+                {/* Header */}
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-xl font-extralight text-slate-500">
+                        {isEditing ? 'Edit Contact ' : 'Contact Details : '}
+                        <p className="text-xs text-gray-00 uppercase">
+                            {selectedContact.name}
+                        </p>
+                    </h2>
+                    <button
+                        onClick={closePanel}
+                        className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold"
+                    >
+                        <X size={16} />
+                    </button>
+                </div>
 
-            <div
-              className="bg-slate-800 border border-slate-700 
-            rounded-lg p-3 hover:bg-slate-700 transition"
-            >
-              <p className="text-xs text-gray-500 uppercase">Age</p>
-              <input
-                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
-                {...register("age")}
-                placeholder="Age"
-              />
-              {errors.age && (
-                <p className="text-red-500">{errors.age.message}</p>
-              )}
-            </div>
+                {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-            <div
-              className="bg-slate-800 border border-slate-700 
+                {isEditing ? (
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="space-y-4"
+                    >
+                        <div
+                            className="bg-slate-800 border border-slate-700 
             rounded-lg p-3 hover:bg-slate-700 transition"
-            >
-              <p className="text-xs text-gray-500 uppercase">Phone Number </p>
-              <input
-                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none" {...register("phoneNumber")}
-                placeholder="Phone"
-              />
-              {errors.phoneNumber && (
-                <p className="text-red-500">{errors.phoneNumber.message}</p>
-              )}
-            </div>
+                        >
+                            <p className="text-xs text-gray-500 uppercase">
+                                Name{' '}
+                            </p>
+                            <input
+                                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                                {...register('name')}
+                                placeholder="Name"
+                            />
+                            {errors.name && (
+                                <p className="text-red-500">
+                                    {errors.name.message}
+                                </p>
+                            )}
+                        </div>
 
-            <div
-              className="bg-slate-800 border border-slate-700 
+                        <div
+                            className="bg-slate-800 border border-slate-700 
             rounded-lg p-3 hover:bg-slate-700 transition"
-            >
-              <p className="text-xs text-gray-500 uppercase">Tag </p>
-              <input
-                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
-                {...register("tag")}
-                placeholder="Tag"
-              />
-              {error.tag && (
-                <p className="text-red-500">{errors.tag.message}</p>
-              )}
-            </div>
+                        >
+                            <p className="text-xs text-gray-500 uppercase">
+                                Email
+                            </p>
+                            <input
+                                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                                {...register('email')}
+                                placeholder="Email"
+                            />
+                            {errors.email && (
+                                <p className="text-red-500">
+                                    {errors.email.message}
+                                </p>
+                            )}
+                        </div>
 
-            <div
-              className="bg-slate-800 border border-slate-700 
+                        <div
+                            className="bg-slate-800 border border-slate-700 
             rounded-lg p-3 hover:bg-slate-700 transition"
-            >
-              <p className="text-xs text-gray-500 uppercase">Address </p>
-              <input
-                className="w-full font-semibold text-gray-800 bg-transparent  outline-none pt-1"
-                {...register("address")}
-                placeholder="Address"
-              />
-              {errors.address && (
-                <p className="text-red-500">{errors.address.message}</p>
-              )}
-            </div>
+                        >
+                            <p className="text-xs text-gray-500 uppercase">
+                                Age
+                            </p>
+                            <input
+                                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                                {...register('age')}
+                                placeholder="Age"
+                            />
+                            {errors.age && (
+                                <p className="text-red-500">
+                                    {errors.age.message}
+                                </p>
+                            )}
+                        </div>
 
-            <div className="flex gap-2">
-              <button
-                type="submit"
-                className="flex items-center justify-center gap-2 p-2 bg-white rounded-lg text-blue-400 w-40 border border-blue-400 cursor-pointer hover:bg-black hover:text-white hover:border-orange-400"
-              >
-                <Save size={16} /> Save
-              </button>
+                        <div
+                            className="bg-slate-800 border border-slate-700 
+            rounded-lg p-3 hover:bg-slate-700 transition"
+                        >
+                            <p className="text-xs text-gray-500 uppercase">
+                                Tag{' '}
+                            </p>
+                            <input
+                                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                                {...register('tag')}
+                                placeholder="Tag"
+                            />
+                            {error.tag && (
+                                <p className="text-red-500">
+                                    {errors.tag.message}
+                                </p>
+                            )}
+                        </div>
 
-              <button
-                className="flex items-center gap-3 px-4 py-2 bg-white hover:bg-red-600  hover:text-white  hover:border-2  text-red-600  rounded-lg w-42 h-12 border border-red-600  hover:border-gray-400  text-sm font-semibold transition-all cursor-pointer"
-                type="button"
-                onClick={() => setIsEditing(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        ) : (
-          <div className=" grid grid-rows-5 gap-y-3.5  ">
-            <div
-              className="bg-slate-800 border border-slate-700 
+                        <div
+                            className="bg-slate-800 border border-slate-700 
             rounded-lg p-3 hover:bg-slate-700 transition"
-            >
-              <p className="text-xs text-gray-500 uppercase">Name</p>{" "}
-              <p className="text-white font-medium">{selectedContact.name}</p>
-            </div>
-            <div
-              className="bg-slate-800 border border-slate-700 
+                        >
+                            <p className="text-xs text-gray-500 uppercase">
+                                Phone Number{' '}
+                            </p>
+                            <input
+                                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                                {...register('phoneNumber')}
+                                placeholder="Phone"
+                            />
+                            {errors.phoneNumber && (
+                                <p className="text-red-500">
+                                    {errors.phoneNumber.message}
+                                </p>
+                            )}
+                        </div>
+                        <div
+                            className="bg-slate-800 border border-slate-700 
             rounded-lg p-3 hover:bg-slate-700 transition"
-            >
-              <p className="text-xs text-gray-500 uppercase">Email</p>
-              <p className="text-white font-medium">{selectedContact.email}</p>
-            </div>
-            <div
-              className="bg-slate-800 border border-slate-700 
-            rounded-lg p-3 hover:bg-slate-700 transition"
-            >
-              <p className="text-xs text-slate-400 uppercase">Age</p>
-              <p className="text-white font-medium">{selectedContact.age}</p>
-            </div>
-            <div
-              className="bg-slate-800 border border-slate-700 
-            rounded-lg p-3 hover:bg-slate-700 transition"
-            >
-              <p className="text-xs text-slate-400 uppercase">Tag</p>
-              <p className="text-white font-medium">{selectedContact.tag}</p>
-            </div>
+                        >
+                            <p className="text-xs text-gray-500 uppercase">
+                                Address{' '}
+                            </p>
+                            <input
+                                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                                {...register('address')}
+                                placeholder="Address"
+                            />
+                            {errors.address && (
+                                <p className="text-red-500">
+                                    {errors.address.message}
+                                </p>
+                            )}
+                        </div>
 
-            <div
-              className="bg-slate-800 border border-slate-700 
+                        <div className="flex gap-2">
+                            <button
+                                type="submit"
+                                className="flex items-center justify-center gap-2 p-2 bg-white rounded-lg text-blue-400 w-40 border border-blue-400 cursor-pointer hover:bg-black hover:text-white hover:border-orange-400"
+                            >
+                                <Save size={16} /> Save
+                            </button>
+
+                            <button
+                                className="flex items-center gap-3 px-4 py-2 bg-white hover:bg-red-600  hover:text-white  hover:border-2  text-red-600  rounded-lg w-42 h-12 border border-red-600  hover:border-gray-400  text-sm font-semibold transition-all cursor-pointer"
+                                type="button"
+                                onClick={() => setIsEditing(false)}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                ) : (
+                    <div className=" grid grid-rows-5 gap-y-3.5  ">
+                        <div
+                            className="bg-slate-800 border border-slate-700 
             rounded-lg p-3 hover:bg-slate-700 transition"
-            >
-              <p className="text-xs text-slate-400 uppercase">Phone</p>
-              <p className="text-white font-medium">
-                {selectedContact.phoneNumber}
-              </p>
-            </div>
-            <div
-              className="bg-slate-800 border border-slate-700 
+                        >
+                            <p className="text-xs text-gray-500 uppercase">
+                                Name
+                            </p>{' '}
+                            <p className="text-white font-medium">
+                                {selectedContact.name}
+                            </p>
+                        </div>
+                        <div
+                            className="bg-slate-800 border border-slate-700 
             rounded-lg p-3 hover:bg-slate-700 transition"
-            >
-              <p className="text-xs text-slate-400 uppercase">Address</p>
-              <p className="text-white font-medium">
-                {selectedContact.address}
-              </p>
-            </div>
-            <div className="flex gap-2 mt-4">
-              <button
-                className="flex-1 flex items-center justify-center gap-2 
+                        >
+                            <p className="text-xs text-gray-500 uppercase">
+                                Email
+                            </p>
+                            <p className="text-white font-medium">
+                                {selectedContact.email}
+                            </p>
+                        </div>
+                        <div
+                            className="bg-slate-800 border border-slate-700 
+            rounded-lg p-3 hover:bg-slate-700 transition"
+                        >
+                            <p className="text-xs text-slate-400 uppercase">
+                                Age
+                            </p>
+                            <p className="text-white font-medium">
+                                {selectedContact.age}
+                            </p>
+                        </div>
+                        <div
+                            className="bg-slate-800 border border-slate-700 
+            rounded-lg p-3 hover:bg-slate-700 transition"
+                        >
+                            <p className="text-xs text-slate-400 uppercase">
+                                Tag
+                            </p>
+                            <p className="text-white font-medium">
+                                {selectedContact.tag}
+                            </p>
+                        </div>
+
+                        <div
+                            className="bg-slate-800 border border-slate-700 
+            rounded-lg p-3 hover:bg-slate-700 transition"
+                        >
+                            <p className="text-xs text-slate-400 uppercase">
+                                Phone
+                            </p>
+                            <p className="text-white font-medium">
+                                {selectedContact.phoneNumber}
+                            </p>
+                        </div>
+                        <div
+                            className="bg-slate-800 border border-slate-700 
+            rounded-lg p-3 hover:bg-slate-700 transition"
+                        >
+                            <p className="text-xs text-slate-400 uppercase">
+                                Address
+                            </p>
+                            <p className="text-white font-medium">
+                                {selectedContact.address}
+                            </p>
+                        </div>
+                        <div className="flex gap-2 mt-4">
+                            <button
+                                className="flex-1 flex items-center justify-center gap-2 
             py-2 rounded-lg bg-blue-600 hover:bg-blue-700 
             text-white transition cursor-pointer"
-                onClick={() => setIsEditing(true)}
-              >
-                <Pencil /> Edit
-              </button>
+                                onClick={() => setIsEditing(true)}
+                            >
+                                <Pencil /> Edit
+                            </button>
 
-              <button
-                className="flex-1 flex items-center justify-center gap-2 
+                            <button
+                                className="flex-1 flex items-center justify-center gap-2 
             py-2 rounded-lg bg-red-600 hover:bg-red-700 
             text-white transition  cursor-pointer"
-                onClick={handleDelete}
-              >
-                <Trash2 /> Delete
-              </button>
+                                onClick={handleDelete}
+                            >
+                                <Trash2 /> Delete
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+        </div>
+    )
+}
 
-export default ContactSidebar;
+export default ContactSidebar
