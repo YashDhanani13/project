@@ -18,7 +18,7 @@ import Sidebar from "./components/Sidebar";
 import { AuthContext } from "./Authcontext/AuthContext";
 
 // Route Protection Component
-const ProtectedLayout = ({ children }) => {
+const ProtectedLayout = () => {
   const { token } = useContext(AuthContext);
 
   if (!token) {

@@ -70,7 +70,7 @@ const AddressInput = ({ value, onChange }) => {
       const results = await getGeocode({ address });
       const { lat, lng } = getLatLng(results[0]);
       onChange({ address, lat, lng });
-    } catch (err) {
+    } catch {
       onChange({ address, lat: null, lng: null });
     }
   };

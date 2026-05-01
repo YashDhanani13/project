@@ -2,12 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import {
     FiArrowRight,
-    FiCheckCircle,
-    FiPackage,
-    FiCreditCard,
-    FiStar,
-    FiZap,
-    FiShield,
 } from 'react-icons/fi'
 
 const Home = () => {

@@ -42,7 +42,7 @@ const Empvalidation = z.object({
     status: z.string().min(1, 'Status is required'),
 })
 
-const EmployeeForm = ({ inModal = false, onSuccess = null, close }) => {
+const EmployeeForm = ({ onSuccess = null, close }) => {
     const {
         register,
         handleSubmit,

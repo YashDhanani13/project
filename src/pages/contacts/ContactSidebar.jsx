@@ -61,7 +61,7 @@ const ContactSidebar = ({
         register,
         handleSubmit,
         reset,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm({
         resolver: zodResolver(contactValidation2),
     })

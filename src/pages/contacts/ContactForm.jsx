@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import api from '../../api/api'
-import { coerce, z } from 'zod'
+import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
     ArrowRight,
@@ -56,7 +56,7 @@ const contactValidation = z.object({
         .max(255, 'Address must be under 255 characters'),
 })
 
-const ContactForm = ({ inModal = false, onSuccess = null, close }) => {
+const ContactForm = ({ onSuccess = null, close }) => {
     const {
         register,
         handleSubmit,

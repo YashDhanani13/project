@@ -38,7 +38,8 @@ const Signup = () => {
     const [loading, setLoading] = useState(false)
     const [apiError, setApiError] = useState('')
     const [apiSuccess, setApiSuccess] = useState('')
-    const [navigate, useNavigate] = useState('')
+    const navigate = useNavigate()
+    const { login } = useContext(AuthContext)
 
     const onSubmit = async (data) => {
         setLoading(true)
