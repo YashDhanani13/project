@@ -106,11 +106,11 @@ const Sidebar = () => {
 
             {/* ── Profile Modal ── */}
             {showProfile && (
-                <div className="fixed inset-0   flex items-center justify-center z-40 bg-black/40">
-                    <div className=" bg-gradient-to-b  from-slate-800 to-slate-700 -950 relative rounded-xl shadow-xl p-6 w-220  h-140 m-2">
+                <div className="fixed inset-0   flex items-center justify-center  z-60 bg-black/60">
+                    <div className="border  border-x-violet-400  border-2  bg-gradient-to-b  from-slate-800 to-slate-700  relative rounded-xl shadow-xl p-6 w-220  h-140 m-2">
                         <button
                             onClick={() => setShowProfile(false)}
-                            className="absolute top-0   right-0 w-9 h-8 flex rounded-xs items-center justify-center p-4 bg-gray-100 hover:bg-red-500 hover:text-white text-gray-500 font-bold text-xs transition"
+                            className="absolute top-0   right-0 w-9 h-8 flex rounded-xs items-center justify-center p-4 bg-gray-100 hover:bg-red-500 hover:text-white text-gray-500 font-bold text-xs transition cursor-pointer"
                         >
                             ✕
                         </button>

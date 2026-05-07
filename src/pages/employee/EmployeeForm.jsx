@@ -74,10 +74,10 @@ const EmployeeForm = ({ onSuccess = null, close }) => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-800  to-slate-900 flex items-center justify-center p-4">
-            <div className="w-full max-w-md rounded-t-lg bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden">
+        <div className="min-h-screen  rounded-2xl flex items-center justify-center p-3    ">
+            <div className="w-full max-w-120 rounded-t-lg bg-slate-800 border border-gray-700 rounded-xl shadow-2xl overflow-hidden">
                 {/* Header */}
-                <div className="bg-gradient-to-r from-gray-800 to-mist-700   border-black px-8 py-4 flex  rounded-t-lg items-center justify-between border border-black ">
+                <div className="bg-gradient-to-r from-gray-800 to-mist-700    px-8 py-4 flex  rounded-t-lg items-center justify-between border border-black ">
                     <div>
                         <h1 className="text-lg font-bold text-white tracking-tight">
                             Add Employee

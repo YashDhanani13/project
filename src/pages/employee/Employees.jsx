@@ -3,7 +3,7 @@ import api from '../../api/api'
 import EmployeeSkeleton from './EmployeeSkeleton'
 import EmployeeForm from './EmployeeForm'
 import EmpSidebar from './EmpSidebar'
-import { UserPlus, Search } from 'lucide-react'
+import { UserPlus, Search, Hand } from 'lucide-react'
 
 const Employees = () => {
     const [employees, setEmployees] = useState([])
@@ -12,16 +12,17 @@ const Employees = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [search, setSearch] = useState('')
-    // const [filterField, setFilterField] = useState("");
-    // const [filterValue, setFilterValue] = useState("");
+    const [filterField, setFilterField] = useState("");
+    const [filterValue, setFilterValue] = useState("");
     const [currentPage, setCurrentPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [sortField, setSortField] = useState('name')
     const [sortOrder, setSortOrder] = useState('asc')
+       
 
     useEffect(() => {
         fetchEmployees()
-    }, [search])
+    }, [search , filterField, filterValue])
 
     const fetchEmployees = async () => {
         setLoading(true)
@@ -30,8 +31,8 @@ const Employees = () => {
             const response = await api.get('/employee', {
                 params: {
                     search: search || undefined,
-                    // field: filterField || undefined,
-                    // value: filterValue || undefined,
+                    field: filterField || undefined,
+                    value: filterValue || undefined,
                 },
             })
             const data = response.data
@@ -52,6 +53,11 @@ const Employees = () => {
         fetchEmployees()
     }
 
+        const handlesearchChange = (e) => {
+        setSearch(e.target.value)
+        setCurrentPage(0)
+    }
+
     const handleSort = (field) => {
         if (sortField === field)
             setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))
@@ -63,7 +69,7 @@ const Employees = () => {
     }
 
     const sortIcon = (field) => {
-        if (sortField !== field) return ' ↕'
+        if (sortField !== field) return ''
         return sortOrder === 'asc' ? ' ↑' : ' ↓'
     }
 
@@ -119,24 +125,20 @@ const Employees = () => {
 
             {/* Toolbar */}
             <div className="flex items-center gap-3 mb-6 flex-wrap">
-                <div className="flex flex-1 max-w-2xl items-center gap-2.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-2.5 focus-within:ring-2 focus-within:ring-orange-500/40 focus-within:border-orange-500/70 hover:border-slate-600 transition-colors">
+                <div className="flex flex-1 max-w-2xl text-2xl items-center gap-2.5 rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-3.5 focus-within:ring-2 hover:border-slate-600 transition-colors">
                     <Search size={15} className="text-slate-500 shrink-0" />
                     <input
                         type="search"
                         placeholder="Search employees..."
                         value={search}
-                        onChange={(e) => {
-                            setSearch(e.target.value)
-
-                            setCurrentPage(0)
-                        }}
+                            onChange={handlesearchChange}
                         className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
                     />
                 </div>
 
                 <button
                     onClick={() => setIsFormOpen(true)}
-                    className="flex items-center gap-2 p-3  border border-zinc-700 border-2 w-40 rounded-lg bg-linear-to-r from-blue-500 to-orange-200 text-gray-800  text-sm font-semibold hover:from-mist-600 hover:to-indigo-400 hover:text-black border hover:border-black active:scale-[0.98] transition-all shadow-lg shadow-blue-500/20 cursor-pointer"
+                    className="flex items-center gap-2 p-3  border border-blue-950 border-2 w-40 rounded-lg bg-linear-to-r from-slate-800  to-pink-900  text-black   text-sm font-semibold hover:from-mist-600 hover:to-indigo-400 hover:text-black border hover:border-black active:scale-[0.98] transition-all shadow-lg shadow-blue-500/20 cursor-pointer"
                 >
                     <UserPlus size={15} />
                     Add Employee
@@ -304,11 +306,11 @@ const Employees = () => {
                     {/* Add Employee Modal */}
                     {isFormOpen && (
                         <div
-                            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-2"
+                            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-1"
                             onClick={() => setIsFormOpen(false)}
                         >
                             <div
-                                className="relative w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl  max-h-[80vh] flex flex-col overflow-hidden"
+                                className="relative w-full max-w-120 bg-slate-800 border border-orange-900 rounded-2xl  max-h-[92vh] "
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <div className="overflow-y-auto flex-1">

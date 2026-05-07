@@ -15,8 +15,6 @@ const Empvalidation2 = z.object({
             /^[a-zA-Z\s'-]+$/,
             'Name can only contain letters, spaces, hyphens, and apostrophes'
         ),
-    // .string(),
-
     email: z
         .string({ required_error: 'Email is required' })
         .trim()
@@ -41,8 +39,6 @@ const EmpSidebar = ({
 }) => {
     const [error, setError] = useState('')
     const [isEditing, setIsEditing] = useState(false)
-    // const [formData, setFormData] = useState({});
-
     const {
         register,
         handleSubmit,
@@ -70,11 +66,11 @@ const EmpSidebar = ({
     const onSubmit = async (data) => {
         try {
             const updatedEmployee = {
-                name: data.name,
-                email: data.email,
-                phoneNumber: data.phoneNumber,
-                role: data.role,
-                status: data.status,
+                name: selectedEmployee.name,
+                email: selectedEmployee.email,
+                phoneNumber: selectedEmployee.phoneNumber,
+                role: selectedEmployee.role,
+                status: selectedEmployee.status,
             }
 
             await api.put(`/employee/${selectedEmployee.id}`, updatedEmployee)
@@ -90,9 +86,9 @@ const EmpSidebar = ({
     //   setIsEditing(true);
     // };
 
-    const handleDelete = async (id) => {
+    const handleDelete = async () => {
         try {
-            await api.delete(`/employee/${id}`)
+            await api.delete(`/employee/${selectedEmployee.id}`)
             setSelectedEmployee(null)
             fetchEmployees()
         } catch (err) {
@@ -307,11 +303,10 @@ const EmpSidebar = ({
                                 Status
                             </p>{' '}
                             <span
-                                className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full ${
-                                    selectedEmployee.status === 'ACTIVE'
-                                        ? 'bg-green-100 text-green-700'
-                                        : 'bg-red-100 text-red-700'
-                                }`}
+                                className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full ${selectedEmployee.status === 'ACTIVE'
+                                    ? 'bg-green-100 text-green-700'
+                                    : 'bg-red-100 text-red-700'
+                                    }`}
                             >
                                 {selectedEmployee.status}
                             </span>

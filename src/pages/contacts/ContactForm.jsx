@@ -86,8 +86,8 @@ const ContactForm = ({ onSuccess = null, close }) => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-800  to-slate-900 flex items-center justify-center p-4">
-            <div className="w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl rounded-t-lg overflow-hidden">
+        <div className="min-h-screen bg-gradient-to-br from-slate-800  to-slate-900 flex items-center justify-center ">
+            <div className="w-full max-w-md bg-slate-800 border border-slate-700 h-160 rounded-2xl shadow-2xl rounded-t-lg">
                 {/* Header */}
                 <div className="bg-gradient-to-r rounded-t-lg from-gray-800 to-mist-700  px-8 py-4 flex items-center justify-between border border-black ">
                     <div>
@@ -148,7 +148,7 @@ const ContactForm = ({ onSuccess = null, close }) => {
                                 <input
                                     type="text"
                                     placeholder="Rohan Mehta"
-                                    className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none not-odd:"
+                                    className="w-full  text-sm   placeholder-00 outline-none not-odd:"
                                     {...register('name')}
                                 />
                             </div>
@@ -309,7 +309,7 @@ const ContactForm = ({ onSuccess = null, close }) => {
                                 Address
                             </label>
                             <div
-                                className={`flex items-start gap-2.5 rounded-xl border bg-slate-900/60 px-3 py-2.5 transition-colors focus-within:ring-2 focus-within:ring-blue-500/40 ${errors.address ? 'border-red-500/60 focus-within:border-red-500' : 'border-slate-700 focus-within:border-blue-500/70 hover:border-slate-600'}`}
+                                className={`flex items-start gap-1.5 rounded-xl border bg-slate-900/60 px-3 py-2.5 transition-colors focus-within:ring-2 focus-within:ring-blue-500/40 ${errors.address ? 'border-red-500/60 focus-within:border-red-500' : 'border-slate-700 focus-within:border-blue-500/70 hover:border-slate-600'}`}
                             >
                                 <MapPin
                                     size={14}
@@ -337,7 +337,7 @@ const ContactForm = ({ onSuccess = null, close }) => {
                             <button
                                 type="button"
                                 onClick={() => close?.()}
-                                className="flex items-center gap-3 px-4 py-2 bg-white- hover:bg-red-500  hover:text-white  border border-gray-500 hover:border-2  text-gray-300 rounded-lg w-42 h-12  text-sm font-semibold transition-all cursor-pointer"
+                                className="flex items-center gap-3 px-4 py-2 bg-white- hover:bg-red-500  hover:text-white  border border-gray-500 hover:border-2  text-gray-300 rounded-lg w-45 h-12  text-sm font-semibold transition-all cursor-pointer"
                             >
                                 Cancel
                             </button>
@@ -345,7 +345,7 @@ const ContactForm = ({ onSuccess = null, close }) => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="flex items-center gap-2 px-4 py-2 bg-white  text-black border border-black border-2 hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  rounded-lg w-42 h-12  text-sm font-semibold  cursor-pointer transition-all"
+                                className="flex items-center gap-2 px-4 py-2 bg-white  text-black border border-black border-2 hover:bg-black hover:text-white hover:border-indigo-500 hover:border-2  rounded-lg w-45  h-12  text-sm font-semibold  cursor-pointer transition-all"
                             >
                                 {loading ? (
                                     <Loader2

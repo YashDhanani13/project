@@ -10,12 +10,12 @@ const ContactSkeleton = () => {
               <th className="p-4 w-10">
                 <div className="h-4 w-4 bg-purple-300/50 rounded"></div>
               </th>
-              <th className="p-4  font-medium">Name</th>
-              <th className="p-4 font-medium">Email</th>
-              <th className="p-4 font-medium">Age</th>
-              <th className="p-4 font-medium">Tags</th>
-              <th className="p-4 font-medium">Mobile</th>
-              <th className="p-4 font-medium">Address</th>
+              <th className="p-4  font-medium">NAME</th>
+              <th className="p-4 font-medium">EMAIL</th>
+              <th className="p-4 font-medium">AGE</th>
+              <th className="p-4 font-medium">TAGS</th>
+              <th className="p-4 font-medium">PHONENUMBER</th>
+              <th className="p-4 font-medium">ADDRESS</th>
             </tr>
           </thead>
 

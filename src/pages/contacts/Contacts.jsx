@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import ContactFilter from './ContactFilter'
 import ContactSidebar from './ContactSidebar'
 import api from '../../api/api'
-import { UserPlus, SlidersHorizontal, Search } from 'lucide-react'
+import { UserPlus, SlidersHorizontal, Search , Funnel } from 'lucide-react'
 import ContactSkeleton from './ContactSkeleton'
 import ContactForm from './ContactForm'
 
@@ -78,7 +78,7 @@ const Contacts = () => {
     }
 
     const sortIcon = (field) => {
-        if (sortField !== field) return ' ↕'
+        if (sortField !== field) return ''
         return sortOrder === 'asc' ? ' ↑' : ' ↓'
     }
 
@@ -141,26 +141,26 @@ const Contacts = () => {
             <div className="flex items-center gap-3 mb-6 flex-wrap">
                 <button
                     onClick={() => setShowFilter(true)}
-                    className="flex items-center gap-2  px-4 py-3 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 text-sm font-bold hover:bg-slate-700 hover:border-slate-600 hover:text-white transition-all cursor-pointer  w-38"
+                    className="flex items-center gap-2  px-5 py-4 text-2xl rounded-xl border border-slate-700 bg-slate-800 text-slate-300  w-14  font-bold hover:bg-slate-700 hover:border-slate-600 text-xl hover:text-white transition-all cursor-pointer   "
                 >
-                    <SlidersHorizontal size={15} />
-                    Filter
+                   <Funnel size={18 } />
+                    
                 </button>
 
-                <div className="flex flex-1 max-w-2xl items-center gap-2.5 rounded-xl border border-slate-700 bg-slate-800 font-bold px-3 py-2.5 focus-within:ring-2 focus-within:ring-blue-500/40 focus-within:border-blue-500/70 hover:border-slate-600 transition-colors">
+                <div className="flex flex-1 max-w-2xl items-center gap-2.5   rounded-xl border border-slate-700 bg-slate-800 font-bold px-4 py-4 focus-within:ring-2 focus-within:ring-blue-500/40 focus-within:border-blue-500/70 hover:border-slate-600 transition-colors ">
                     <Search size={15} className="text-slate-500 shrink-0" />
                     <input
                         type="search"
                         placeholder="Search contacts..."
                         value={search}
                         onChange={handlesearchChange}
-                        className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                        className="w-full bg-transparent  text-white  outline-none"
                     />
                 </div>
 
                 <button
                     onClick={() => setIsFormOpen(true)}
-                    className="flex items-center gap-2 p-3  border border-zinc-700 border-2 w-40 rounded-lg bg-linear-to-r from-blue-500 to-orange-200 text-gray-800  text-sm font-semibold hover:from-mist-600 hover:to-indigo-400 hover:text-black border hover:border-black active:scale-[0.98] transition-all shadow-lg shadow-blue-500/20 cursor-pointer"
+                    className="flex items-center gap-2 p-4   border border-zinc-700 border-2 w-45 font-extrabold  rounded-lg bg-linear-to-r from-gray-700 to-slate-800 text-gray-200  text-sm hover:from-mist-600 hover:to-indigo-400 hover:text-gray-800 border hover:border-black active:scale-[0.98] transition-all shadow-lg shadow-blue-500/20 cursor-pointer"
                 >
                     <UserPlus size={15} />
                     Add Contact
@@ -228,7 +228,7 @@ const Contacts = () => {
                                                 <td className="px-4 py-3 font-medium text-slate-100">
                                                     {contact.name}
                                                 </td>
-                                                <td className="px-4 py-3 text-blue-400">
+                                                <td className="px-4 py-3 text-gradient-to-text from-blue-800  to-slate-900 ">
                                                     {contact.email}
                                                 </td>
                                                 <td className="px-4 py-3 text-slate-300">
@@ -351,11 +351,11 @@ const Contacts = () => {
                     {/* Add Contact Modal */}
                     {isFormOpen && (
                         <div
-                            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-2"
                             onClick={() => setIsFormOpen(false)}
                         >
                             <div
-                                className="relative w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl max-h-[93 vh] flex flex-col overflow-hidden"
+                                className="relative w-full max-w-130  h-163 bg-slate-800 border border-black -700 rounded-xl shadow-2xl  "
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <div className="overflow-y-auto flex-1">
