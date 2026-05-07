@@ -10,10 +10,11 @@ import EmployeeForm from './pages/employee/EmployeeForm'
 import UserProfile from './pages/user-profile/UserProfile'
 import Contacts from './pages/contacts/Contacts'
 import Employees from './pages/employee/Employees'
+import ChatInput from './pages/inboxchat/ChatInput'
 // import pi from "./api/Api"
 // Layout
 import Sidebar from './components/Sidebar'
-
+import ChatHeader from './pages/inboxchat/ChatHeader'
 // Auth Context
 import { AuthContext } from './Authcontext/AuthContext'
 
@@ -49,6 +50,8 @@ const router = createBrowserRouter([
             { path: 'employees', element: <Employees /> },
             { path: 'employee-form', element: <EmployeeForm /> },
             { path: 'profile', element: <UserProfile /> },
+            {path : 'chat-input' , element : <ChatInput />},
+                   {path : 'chat-header' , element : <ChatHeader />}
             // {path : "api"     , element :<Api />}
         ],
     },

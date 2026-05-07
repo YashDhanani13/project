@@ -11,6 +11,7 @@ import {
     AlertCircle,
     Loader2,
     User,
+    LogIn,
 } from 'lucide-react'
 
 import api from '../../api/api'
@@ -77,19 +78,24 @@ const Signup = () => {
     }
 
     return (
-        <div className="min-h-screen w-full flex  items-center  justify-center  bg-gradient-to-r from-slate-400 to-mist-700">
-            <div className="w-full grid grid-rows-5 gap-y-1 max-w-md">
-                <div className="bg-white rounded-[2.5rem] p-6 shadow-lg shadow-gray-200 border border-gray-100">
-                    <div className="text-center   mb-10">
-                        <User className=" p-1  m-1 text-xl font-bold  bg-white text-blue-400  border border-blue-300  rounded-lg   " />
-                        <h1 className="text-3xl font-black text-slate-900 tracking-tight">
-                            Create Account
+        <div className="min-h-screen w-full flex items-center justify-center p-4 bg-linear-to-r from-orange-300 to-indigo-800 pt-7 ">
+            <div className="w-full max-w-md">
+                <div className="bg-slate-800 rounded-[2.5rem] p-8 shadow-3xl border-slate-100">
+                    {/* Header Section */}
+                    <div className="text-center  mb-10 flex justify-start">
+                        <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-slate-800 mx-10 ">
+                            <User className="" size={32} />
+                        </div>
+                        <h1 className="text-3xl  font-black text-gray-400 ">
+                            Signup
                         </h1>
-                        <p className="text-slate-500 font-bold">
-                            Start your journey with us today.
-                        </p>
                     </div>
 
+                    <div className="flex justify-center">
+                        <p className="text-slate-400  text-lg font-black">
+                            Sign in to continue shopping.
+                        </p>
+                    </div>
                     {apiSuccess && (
                         <div className="bg-emerald-50 border border-emerald-100 text-emerald-600 text-sm p-4 rounded-2xl mb-8 flex items-center gap-3">
                             <CheckCircle2 className="shrink-0" size={18} />
@@ -106,7 +112,7 @@ const Signup = () => {
 
                     <form onSubmit={handleSubmit(onSubmit)}>
                         {/* full name */}
-                        <div className="space-y-2">
+                        <div className=" space-y-2">
                             <label
                                 className="text-xs font-black text-mist-
               400 uppercase tracking-widest ml-1"
@@ -121,7 +127,7 @@ const Signup = () => {
                                 <input
                                     type="text"
                                     placeholder="Enter Your Full name"
-                                    className={`w-full bg-slate-50 border-2 ${errors.password ? 'border-red-300' : 'border-gray-200'} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
+                                    className={`w-full bg-slate-50 border-2 border border-gray-500  ${errors.password ? 'border-red-300' : 'border-gray-200'} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
                                     {...register('fullName')}
                                 />
                             </div>
@@ -145,7 +151,7 @@ const Signup = () => {
                                 <input
                                     type="email"
                                     placeholder="name@example.com"
-                                    className={`w-full bg-slate-50 border-2 ${errors.password ? 'border-red-300' : 'border-gray-200'} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
+                                    className={`w-full bg-slate-50 border-2  border-gray-500 ${errors.password ? 'border-red-300' : 'border-gray-200'} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
                                     {...register('email')}
                                 />
                             </div>
@@ -168,8 +174,8 @@ const Signup = () => {
                                 />
                                 <input
                                     type="text"
-                                    placeholder="Enter your organization name"
-                                    className={`w-full bg-slate-50 border-2 ${errors.password ? 'border-red-300' : 'border-gray-200'} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
+                                    placeholder="Enter your organization name "
+                                    className={`w-full bg-slate-50 border-2  border-gray-500 ${errors.password ? 'border-red-300' : 'border-gray-200'} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
                                     {...register('organizationName')}
                                 />
                             </div>
@@ -193,7 +199,7 @@ const Signup = () => {
                                 <input
                                     type="password"
                                     placeholder="Enter your password"
-                                    className={`w-full bg-slate-50 border-2 ${errors.password ? 'border-red-300' : 'border-gray-200'} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
+                                    className={`w-full bg-slate-50 border-2 border-gray-500 ${errors.password ? 'border-red-300' : 'border-gray-200'} rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:border-blue-200 transition-all font-bold`}
                                     {...register('password')}
                                 />
                             </div>
@@ -208,7 +214,7 @@ const Signup = () => {
                         <button
                             disabled={loading}
                             type="submit"
-                            className="w-full bg-white text-blue-400 hover:bg-black hover:text-white   font-bold  rounded-lg  border border-blue-400    will-change-auto h-14 p-3  shadow-xl shadow-slate-200 transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-3 text-lg mt-4 hover:bg--800 cursor-pointer"
+                            className="w-full bg-white text-blue-400 hover:bg-blue-600 hover:text-white   font-bold  rounded-lg  border border-slate-800  border-2    will-change-auto h-14 p-3  shadow-xl  transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-3 text-lg mt-4 hover:bg--800 cursor-pointer"
                         >
                             {loading ? (
                                 <Loader2 className="animate-spin" size={20} />

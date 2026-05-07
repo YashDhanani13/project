@@ -1,30 +1,9 @@
-// import React from 'react'
-// import { email } from 'zod'
+import React from 'react'
 
-// const ContactSidebar = () => {
+const ContactSidebar = () => {
+  return (
+    <div>ContactSidebar</div>
+  )
+}
 
-
-
-
-//   const contact= {
-
-//     name = 
-//     email
-//     age 
-//     TAG
-//     phoneNumber
-//     address
-//   }
-//   return (
-//     <div>
-//                    <div>
-
-//                    </div>
-
-
-
-//     </div>
-//   )
-// }
-
-// export default ContactSidebar
+export default ContactSidebar
