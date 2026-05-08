@@ -15,7 +15,7 @@ import ChatInput from './pages/inboxchat/ChatInput'
 // Layout
 import Sidebar from './components/Sidebar'
 import ChatHeader from './pages/inboxchat/ChatHeader'
-// Auth Context
+import ChatSidebar from './pages/inboxchat/ChatSidebar'
 import { AuthContext } from './Authcontext/AuthContext'
 
 // Route Protection Component
@@ -51,7 +51,9 @@ const router = createBrowserRouter([
             { path: 'employee-form', element: <EmployeeForm /> },
             { path: 'profile', element: <UserProfile /> },
             {path : 'chat-input' , element : <ChatInput />},
-                   {path : 'chat-header' , element : <ChatHeader />}
+                   {path : 'chat-header' , element : <ChatHeader />},
+                   {path : 'chat-sidebar' , element : <ChatSidebar />}
+                   
             // {path : "api"     , element :<Api />}
         ],
     },

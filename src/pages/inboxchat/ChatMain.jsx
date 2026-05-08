@@ -2,7 +2,12 @@ import React from 'react'
 
 const ChatMain = () => {
   return (
-    <div>ChatMain</div>
+    <div>
+
+
+
+      {/* <p>helo keso ho </p> */}
+    </div>
   )
 }
 
