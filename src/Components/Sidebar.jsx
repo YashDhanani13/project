@@ -2,15 +2,19 @@ import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 import UserProfile from '../pages/user-profile/UserProfile'
+import { Inbox } from 'lucide-react'
 
 import { Home, Users, Briefcase, Settings, Power } from 'lucide-react'
 
 // const navigate / useNavigate();
 
 const mainLinks = [
-    { name: 'Home', path: '/', icon: <Home size={18} /> },
-    { name: 'Contacts', path: '/contacts', icon: <Users size={18} /> },
-    { name: 'Employee', path: '/employees', icon: <Briefcase size={18} /> },
+    { name: 'Home', path: '/', icon: <Home size={25} /> },
+    { name: 'Contacts', path: '/contacts', icon: <Users size={25} /> },
+    
+    { name: 'Employee', path: '/employees', icon: <Briefcase size={25} /> },
+        { name: 'Inbox ', path: '/inbox', icon: <Inbox size={25} /> },
+    // {}
 ]
 
 const logout = () => {

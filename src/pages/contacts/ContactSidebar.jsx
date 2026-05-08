@@ -127,17 +127,20 @@ const ContactSidebar = ({
             />
 
             {/* Slide-in panel */}
-            <div className="fixed right-0 top-0 h-full w-full sm:w-96  bg-gradient-to-br from-slate-800   shadow-2xl z-50 p-6 overflow-y-auto transition-transform duration-300">
-                {/* Header */}
+            <div className="fixed right-0 top-0 h-full w-full sm:w-96 bg-gradient-to-br from-slate-800  shadow-2xl z-50 p-6 overflow-y-auto transition-transform duration-300">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-extralight text-slate-500">
+                    <h2 className="text-xl font-serif   text-gray-500">
                         {isEditing ? 'Edit Contact ' : 'Contact Details : '}
-                        <p className="text-xs text-gray-00 uppercase">
+                        <p className="text-2xl text-white font-bold">
+                            {' '}
                             {selectedContact.name}
                         </p>
                     </h2>
                     <button
-                        onClick={closePanel}
+                        onClick={() => {
+                            setSelectedEmployee(null)
+                            setIsEditing(false)
+                        }}
                         className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold"
                     >
                         <X size={16} />
@@ -155,11 +158,11 @@ const ContactSidebar = ({
                             className="bg-slate-800 border border-slate-700 
             rounded-lg p-3 hover:bg-slate-700 transition"
                         >
-                            <p className="text-xs text-gray-500 uppercase">
+                            <p className="text-xs font-serif text-gray-500 uppercase">
                                 Name{' '}
                             </p>
                             <input
-                                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                                className="w-full bg-transparent text-md text-slate-100 placeholder-slate-500 outline-none"
                                 {...register('name')}
                                 placeholder="Name"
                             />
@@ -174,11 +177,11 @@ const ContactSidebar = ({
                             className="bg-slate-800 border border-slate-700 
             rounded-lg p-3 hover:bg-slate-700 transition"
                         >
-                            <p className="text-xs text-gray-500 uppercase">
+                            <p className="text-xs font-serif  text-gray-500 uppercase">
                                 Email
                             </p>
                             <input
-                                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                                className="w-full bg-transparent text-md text-slate-100  font-serif placeholder-slate-500 outline-none"
                                 {...register('email')}
                                 placeholder="Email"
                             />
@@ -193,11 +196,11 @@ const ContactSidebar = ({
                             className="bg-slate-800 border border-slate-700 
             rounded-lg p-3 hover:bg-slate-700 transition"
                         >
-                            <p className="text-xs text-gray-500 uppercase">
+                            <p className="text-xs  font-serif text-gray-500 uppercase">
                                 Age
                             </p>
                             <input
-                                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                                className="w-ful font-serif  bg-transparent text-md text-slate-100 placeholder-slate-500 outline-none"
                                 {...register('age')}
                                 placeholder="Age"
                             />
@@ -210,13 +213,13 @@ const ContactSidebar = ({
 
                         <div
                             className="bg-slate-800 border border-slate-700 
-            rounded-lg p-3 hover:bg-slate-700 transition"
+            rounded-lg p-3 hover:bg-slate-700 transition  font-serif "
                         >
                             <p className="text-xs text-gray-500 uppercase">
                                 Tag{' '}
                             </p>
                             <input
-                                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                                className="w-full bg-transparent text-md font-serif  text-slate-100 placeholder-slate-500 outline-none"
                                 {...register('tag')}
                                 placeholder="Tag"
                             />
@@ -231,11 +234,11 @@ const ContactSidebar = ({
                             className="bg-slate-800 border border-slate-700 
             rounded-lg p-3 hover:bg-slate-700 transition"
                         >
-                            <p className="text-xs text-gray-500 uppercase">
+                            <p className="text-xs font-serif text-gray-500 uppercase">
                                 Phone Number{' '}
                             </p>
                             <input
-                                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                                className="w-full bg-transparent text-md font-serif  text-slate-100 placeholder-slate-500 outline-none"
                                 {...register('phoneNumber')}
                                 placeholder="Phone"
                             />
@@ -249,11 +252,11 @@ const ContactSidebar = ({
                             className="bg-slate-800 border border-slate-700 
             rounded-lg p-3 hover:bg-slate-700 transition"
                         >
-                            <p className="text-xs text-gray-500 uppercase">
+                            <p className="text-xs font-serif text-gray-500 uppercase">
                                 Address{' '}
                             </p>
                             <input
-                                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
+                                className="w-full bg-transparent text-md font-serif  text-slate-100 placeholder-slate-500 outline-none"
                                 {...register('address')}
                                 placeholder="Address"
                             />
@@ -285,7 +288,7 @@ const ContactSidebar = ({
                     <div className=" grid grid-rows-5 gap-y-3.5  ">
                         <div
                             className="bg-slate-800 border border-slate-700 
-            rounded-lg p-3 hover:bg-slate-700 transition"
+            rounded-lg p-3 font-serif hover:bg-slate-700 transition"
                         >
                             <p className="text-xs text-gray-500 uppercase">
                                 Name
@@ -296,9 +299,9 @@ const ContactSidebar = ({
                         </div>
                         <div
                             className="bg-slate-800 border border-slate-700 
-            rounded-lg p-3 hover:bg-slate-700 transition"
+            rounded-lg p-3 font-serif  hover:bg-slate-700 transition"
                         >
-                            <p className="text-xs text-gray-500 uppercase">
+                            <p className="text-xs font-serif text-gray-500 uppercase">
                                 Email
                             </p>
                             <p className="text-white font-medium">
@@ -307,52 +310,52 @@ const ContactSidebar = ({
                         </div>
                         <div
                             className="bg-slate-800 border border-slate-700 
-            rounded-lg p-3 hover:bg-slate-700 transition"
+            rounded-lg p-3 font-serif hover:bg-slate-700 transition"
                         >
-                            <p className="text-xs text-slate-400 uppercase">
+                            <p className="text-xs  font-serif text-slate-400 uppercase">
                                 Age
                             </p>
-                            <p className="text-white font-medium">
+                            <p className="text-white font-serif ">
                                 {selectedContact.age}
                             </p>
                         </div>
                         <div
                             className="bg-slate-800 border border-slate-700 
-            rounded-lg p-3 hover:bg-slate-700 transition"
+            rounded-lg p-3 font-serif hover:bg-slate-700 transition"
                         >
-                            <p className="text-xs text-slate-400 uppercase">
+                            <p className="text-xs  font-serif text-slate-400 uppercase">
                                 Tag
                             </p>
-                            <p className="text-white font-medium">
+                            <p className="text-white font-serif">
                                 {selectedContact.tag}
                             </p>
                         </div>
 
                         <div
                             className="bg-slate-800 border border-slate-700 
-            rounded-lg p-3 hover:bg-slate-700 transition"
+            rounded-lg p-3 font-serif hover:bg-slate-700 transition"
                         >
-                            <p className="text-xs text-slate-400 uppercase">
+                            <p className="text-xs font-serif text-slate-400 uppercase">
                                 Phone
                             </p>
-                            <p className="text-white font-medium">
+                            <p className="text-white font-medium font-serif">
                                 {selectedContact.phoneNumber}
                             </p>
                         </div>
                         <div
                             className="bg-slate-800 border border-slate-700 
-            rounded-lg p-3 hover:bg-slate-700 transition"
+            rounded-lg p-3 font-serif hover:bg-slate-700 transition"
                         >
                             <p className="text-xs text-slate-400 uppercase">
                                 Address
                             </p>
-                            <p className="text-white font-medium">
+                            <p className="text-white font-medium font-serif">
                                 {selectedContact.address}
                             </p>
                         </div>
                         <div className="flex gap-2 mt-4">
                             <button
-                                className="flex-1 flex items-center justify-center gap-2 
+                                className="flex-1 flex items-center justify-center  gap-2 
             py-2 rounded-lg bg-blue-600 hover:bg-blue-700 
             text-white transition cursor-pointer"
                                 onClick={() => setIsEditing(true)}

@@ -12,17 +12,16 @@ const Employees = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [search, setSearch] = useState('')
-    const [filterField, setFilterField] = useState("");
-    const [filterValue, setFilterValue] = useState("");
+    const [filterField, setFilterField] = useState('')
+    const [filterValue, setFilterValue] = useState('')
     const [currentPage, setCurrentPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [sortField, setSortField] = useState('name')
     const [sortOrder, setSortOrder] = useState('asc')
-       
 
     useEffect(() => {
         fetchEmployees()
-    }, [search , filterField, filterValue])
+    }, [search, filterField, filterValue])
 
     const fetchEmployees = async () => {
         setLoading(true)
@@ -53,7 +52,7 @@ const Employees = () => {
         fetchEmployees()
     }
 
-        const handlesearchChange = (e) => {
+    const handlesearchChange = (e) => {
         setSearch(e.target.value)
         setCurrentPage(0)
     }
@@ -131,7 +130,7 @@ const Employees = () => {
                         type="search"
                         placeholder="Search employees..."
                         value={search}
-                            onChange={handlesearchChange}
+                        onChange={handlesearchChange}
                         className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none"
                     />
                 </div>

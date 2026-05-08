@@ -10,13 +10,10 @@ import EmployeeForm from './pages/employee/EmployeeForm'
 import UserProfile from './pages/user-profile/UserProfile'
 import Contacts from './pages/contacts/Contacts'
 import Employees from './pages/employee/Employees'
-import ChatInput from './pages/inboxchat/ChatInput'
-// import pi from "./api/Api"
-// Layout
 import Sidebar from './components/Sidebar'
-import ChatHeader from './pages/inboxchat/ChatHeader'
-import ChatSidebar from './pages/inboxchat/ChatSidebar'
+import Inbox from './pages/inboxchat/inbox'
 import { AuthContext } from './Authcontext/AuthContext'
+import ChatMain from './pages/inboxchat/ChatMain'
 
 // Route Protection Component
 const ProtectedLayout = () => {
@@ -50,11 +47,9 @@ const router = createBrowserRouter([
             { path: 'employees', element: <Employees /> },
             { path: 'employee-form', element: <EmployeeForm /> },
             { path: 'profile', element: <UserProfile /> },
-            {path : 'chat-input' , element : <ChatInput />},
-                   {path : 'chat-header' , element : <ChatHeader />},
-                   {path : 'chat-sidebar' , element : <ChatSidebar />}
-                   
-            // {path : "api"     , element :<Api />}
+            {path : 'inbox' , element : <Inbox />},
+            {path : 'chat-main' , element : <ChatMain />}
+           
         ],
     },
 

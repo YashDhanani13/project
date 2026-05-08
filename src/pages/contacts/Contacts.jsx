@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import ContactFilter from './ContactFilter'
 import ContactSidebar from './ContactSidebar'
 import api from '../../api/api'
-import { UserPlus, SlidersHorizontal, Search , Funnel } from 'lucide-react'
+import { UserPlus, SlidersHorizontal, Search, Funnel } from 'lucide-react'
 import ContactSkeleton from './ContactSkeleton'
 import ContactForm from './ContactForm'
 
@@ -143,8 +143,7 @@ const Contacts = () => {
                     onClick={() => setShowFilter(true)}
                     className="flex items-center gap-2  px-5 py-4 text-2xl rounded-xl border border-slate-700 bg-slate-800 text-slate-300  w-14  font-bold hover:bg-slate-700 hover:border-slate-600 text-xl hover:text-white transition-all cursor-pointer   "
                 >
-                   <Funnel size={18 } />
-                    
+                    <Funnel size={18} />
                 </button>
 
                 <div className="flex flex-1 max-w-2xl items-center gap-2.5   rounded-xl border border-slate-700 bg-slate-800 font-bold px-4 py-4 focus-within:ring-2 focus-within:ring-blue-500/40 focus-within:border-blue-500/70 hover:border-slate-600 transition-colors ">
@@ -228,7 +227,7 @@ const Contacts = () => {
                                                 <td className="px-4 py-3 font-medium text-slate-100">
                                                     {contact.name}
                                                 </td>
-                                                <td className="px-4 py-3 text-gradient-to-text from-blue-800  to-slate-900 ">
+                                                <td className="px-4 py-3  text-indigo-500  hover:text-orange-500">
                                                     {contact.email}
                                                 </td>
                                                 <td className="px-4 py-3 text-slate-300">
