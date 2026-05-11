@@ -11,10 +11,8 @@ import { Home, Users, Briefcase, Settings, Power } from 'lucide-react'
 const mainLinks = [
     { name: 'Home', path: '/', icon: <Home size={25} /> },
     { name: 'Contacts', path: '/contacts', icon: <Users size={25} /> },
-    
     { name: 'Employee', path: '/employees', icon: <Briefcase size={25} /> },
-        { name: 'Inbox ', path: '/inbox', icon: <Inbox size={25} /> },
-    // {}
+    { name: 'Inbox ', path: '/inbox', icon: <Inbox size={22} /> },
 ]
 
 const logout = () => {

@@ -8,13 +8,14 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepare": "husky",
+    "prepare": "husky install",
     "test": ""
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@react-google-maps/api": "^2.20.8",
     "axios": "^1.13.5",
+    "emoji-picker-react": "^4.19.1",
     "lucide-react": "^0.577.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",

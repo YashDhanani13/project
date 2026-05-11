@@ -48,7 +48,6 @@ const EmpSidebar = ({
         resolver: zodResolver(Empvalidation2),
     })
 
-    // 🔥 Fill form when sidebar opens
     useEffect(() => {
         if (selectedEmployee) {
             reset({
