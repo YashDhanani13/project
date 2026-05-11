@@ -35,16 +35,16 @@ const ChatInput = ({ setMessages }) => {
             {/* Emoji Picker */}
             {showPicker && (
                 <div className="absolute bottom-20 left-4">
-                    <EmojiPicker onEmojiClick={handleEmojiClick} />
+                    <EmojiPicker className='bg-yellow-50' onEmojiClick={handleEmojiClick} />
                 </div>
             )}
 
-            <div className="flex items-center gap-3 bg-slate-800 rounded-full px-4 py-3 shadow-md">
+            <div className="flex items-center gap-3 bg-mist-800 rounded-lg  px-4 py-3 shadow-md">
 
                 {/* Emoji Button */}
                 <button
                     onClick={() => setShowPicker(!showPicker)}
-                    className="text-slate-400 hover:text-yellow-400 transition"
+                    className="text-slate-400 hover:text-blue-600 transition  cursor-pointer"
                 >
                     <Sticker size={28} />
                 </button>
@@ -55,13 +55,13 @@ const ChatInput = ({ setMessages }) => {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Type a message"
-                    className="flex-1 bg-transparent outline-none text-white placeholder:text-slate-400 text-base"
+                    className="flex-1 outline-0 text-gray-300 font-bold text-lg "
                 />
 
                 {/* Send Button */}
                 <button
                     onClick={handleSendMessage}
-                    className="bg-blue-500 p-3 hover:bg-cyan-600 transition rounded-full shadow-lg"
+                    className="bg-blue-500 p-3 hover:bg-gray-600 transition rounded-full shadow-lg"
                 >
                     <SendHorizontal
                         className="text-white not-even:cursor-pointer "
