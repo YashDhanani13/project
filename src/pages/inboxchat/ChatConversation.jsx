@@ -1,131 +1,394 @@
-import React from 'react'
-import { EllipsisVertical, Search, Laugh } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { Search, MessageSquarePlus, X } from 'lucide-react'
+import socket from '../../socket'
+import { getAuthHeaders } from '../../utils/authToken'
 
-const ChatConversation = () => {
+const ChatConversation = ({
+    selectedConversation,
+    setSelectedConversation,
+}) => {
+    const [chats, setChats] = useState([])
+    const [contacts, setContacts] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [searchQuery, setSearchQuery] = useState('')
+    const [contactSearch, setContactSearch] = useState('')
+    const [showModal, setShowModal] = useState(false)
 
-    // Demo chat data
-    const chats = [
-        {
-            id: 1,
-            name: 'Narindara modi',
-            message: 'last message today',
-            time: '10:45 PM',
-            unread: 2,
-            color: 'text-cyan-400',
-        },
-        {
-            id: 2,
-            name: 'Virat kohil',
-            message: "Let's meet tomorrow 🚀",
-            time: '9:10 PM',
-            unread: 5,
-            color: 'text-pink-400',
-        },
-    ]
+    // Fetch conversations
+    useEffect(() => {
+        const fetchConversations = async () => {
+            try {
+                const res = await fetch(
+                    'http://localhost:3000/api/conversations',
+                    {
+                        headers: getAuthHeaders(),
+                    }
+                )
 
-    // Join room
-    const handleJoinRoom = (roomId) => {
+                const data = await res.json()
 
-        // socket.emit("join_room", roomId)
+                if (data.success) {
+                    setChats(data.data)
+                }
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setLoading(false)
+            }
+        }
 
-        console.log('Joined Room:', roomId)
+        fetchConversations()
+    }, [])
+
+    // Fetch contacts
+    useEffect(() => {
+        if (!showModal) return
+
+        const fetchContacts = async () => {
+            try {
+                const res = await fetch(
+                    'http://localhost:3000/api/contacts',
+                    {
+                        headers: getAuthHeaders(),
+                    }
+                )
+
+                const data = await res.json()
+
+                if (data.success) {
+                    setContacts(data.data)
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        fetchContacts()
+    }, [showModal])
+
+    // Socket listener
+    useEffect(() => {
+        const handleReceive = (message) => {
+            setChats((prev) =>
+                prev.map((chat) =>
+                    chat.room?.id === message.roomId
+                        ? {
+                              ...chat,
+                              lastMessage: message.text,
+                              lastMessageAt: message.createdAt,
+                              unreadCount:
+                                  (chat.unreadCount || 0) + 1,
+                          }
+                        : chat
+                )
+            )
+        }
+
+        socket.on('receive_message', handleReceive)
+
+        return () => {
+            socket.off('receive_message', handleReceive)
+        }
+    }, [])
+
+    const handleSelectChat = (chat) => {
+        setChats((prev) =>
+            prev.map((c) =>
+                c.id === chat.id
+                    ? { ...c, unreadCount: 0 }
+                    : c
+            )
+        )
+
+        setSelectedConversation(chat)
+
+        socket.emit('join_room', chat.room?.id)
     }
 
+    const handleStartChat = async (contact) => {
+        try {
+            const res = await fetch(
+                'http://localhost:3000/api/conversations',
+                {
+                    method: 'POST',
+                    headers: {
+                        ...getAuthHeaders(),
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contactId: contact.id,
+                    }),
+                }
+            )
+
+            const data = await res.json()
+
+            if (data.success) {
+                setChats((prev) => {
+                    const exists = prev.find(
+                        (c) => c.id === data.data.id
+                    )
+
+                    return exists
+                        ? prev
+                        : [data.data, ...prev]
+                })
+
+                setSelectedConversation(data.data)
+
+                socket.emit(
+                    'join_room',
+                    data.data.room?.id
+                )
+
+                setShowModal(false)
+                setContactSearch('')
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+
+
+
+    
+    const getTagColor = (tag) => {
+        if (tag === 'VIP') return 'text-yellow-400'
+        if (tag === 'VVIP') return 'text-pink-400'
+
+        return 'text-cyan-400'
+    }
+
+    const filteredChats = chats.filter(
+        (chat) =>
+            chat.contact?.name
+                ?.toLowerCase()
+                .includes(searchQuery.toLowerCase()) ||
+            chat.contact?.phoneNumber?.includes(searchQuery)
+    )
+
+
+
+
+
+
+    const filteredContacts = contacts.filter(
+        (contact) =>
+            contact.name
+                .toLowerCase()
+                .includes(contactSearch.toLowerCase()) ||
+            contact.phoneNumber?.includes(contactSearch)
+    )
+
     return (
-        <div className="w-[380px] h-screen bg-[#1c1c1e] border-r border-slate-700 flex flex-col">
+        <div className="w-[380px] h-screen bg-[#1c1c1e] border-r border-slate-700 flex flex-col relative">
 
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-700">
-
-                <h1 className="text-2xl font-bold text-white tracking-wide">
+                <h1 className="text-2xl font-bold text-white">
                     ClassMate
                 </h1>
 
-                <button className="p-2 rounded-full hover:bg-slate-800 transition">
-                    <EllipsisVertical
+                <button
+                    onClick={() => setShowModal(true)}
+                    className="p-2 rounded-full hover:bg-slate-700"
+                >
+                    <MessageSquarePlus
                         className="text-slate-300"
                         size={22}
                     />
                 </button>
-
             </div>
 
-            {/* Search Bar */}
-            <div className="p-4">
-
-                <div className="flex items-center w-full bg-slate-800 rounded-full px-4 py-2">
-
-                    <Search className="text-slate-400" size={24} />
+            {/* Search */}
+            <div className="p-3">
+                <div className="flex items-center bg-slate-800 rounded-full px-4 py-2">
+                    <Search
+                        className="text-slate-400"
+                        size={18}
+                    />
 
                     <input
                         type="text"
-                        placeholder="Search or start new chat"
-                        className="bg-transparent outline-none text-white placeholder:text-slate-400 ml-3 w-full text-sm"
+                        value={searchQuery}
+                        onChange={(e) =>
+                            setSearchQuery(e.target.value)
+                        }
+                        placeholder="Search"
+                        className="bg-transparent outline-none text-white ml-3 w-full text-sm"
                     />
-
                 </div>
-
             </div>
 
             {/* Chat List */}
             <div className="flex-1 overflow-y-auto">
 
-                {
-                    chats.map((chat) => (
+                {loading && (
+                    <p className="text-center text-slate-500 mt-10">
+                        Loading...
+                    </p>
+                )}
 
+                {!loading && filteredChats.length === 0 && (
+                    <p className="text-center text-slate-500 mt-10">
+                        No chats found
+                    </p>
+                )}
+
+                {filteredChats.map((chat) => {
+                    const isActive =
+                        selectedConversation?.id === chat.id
+
+                    return (
                         <div
                             key={chat.id}
-                            onClick={() => handleJoinRoom(chat.id)}
-                            className="flex items-center justify-between px-4 py-3 hover:bg-slate-800 transition cursor-pointer border-b border-slate-800"
+                            onClick={() =>
+                                handleSelectChat(chat)
+                            }
+                            className={`flex items-center justify-between px-4 py-3 border-b border-slate-800 cursor-pointer
+                            ${
+                                isActive
+                                    ? 'bg-slate-700'
+                                    : 'hover:bg-slate-800'
+                            }`}
                         >
+                            <div className="flex items-center gap-3">
 
-                            {/* Left */}
-                            <div className="flex items-center gap-4">
-
-                                <div className="w-14 h-14 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700">
-
-                                    <Laugh
-                                        className={chat.color}
-                                        size={28}
-                                    />
-
+                                <div className="w-14 h-14 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold text-xl">
+                                    {chat.contact?.name
+                                        ?.charAt(0)
+                                        .toUpperCase() || '?'}
                                 </div>
 
-                                {/* User Info */}
                                 <div>
-
-                                    <h2 className="text-white font-semibold text-base">
-                                        {chat.name}
+                                    <h2 className="text-white text-sm font-medium">
+                                        {chat.contact?.name}
                                     </h2>
 
-                                    <p className="text-slate-400 text-sm truncate w-44">
-                                        {chat.message}
+                                    <p className="text-slate-400 text-xs">
+                                        {chat.lastMessage ||
+                                            'No messages'}
                                     </p>
-
                                 </div>
-
                             </div>
 
-                            {/* Right */}
-                            <div className="flex flex-col items-end gap-2">
+                            <div className="flex flex-col items-end gap-1">
 
                                 <span className="text-xs text-slate-400">
-                                    {chat.time}
+                                    {chat.lastMessageAt
+                                        ? new Date(
+                                              chat.lastMessageAt
+                                          ).toLocaleTimeString(
+                                              [],
+                                              {
+                                                  hour: '2-digit',
+                                                  minute: '2-digit',
+                                              }
+                                          )
+                                        : ''}
                                 </span>
 
-                                <div className="bg-cyan-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                                    {chat.unread}
-                                </div>
+                                {chat.unreadCount > 0 && (
+                                    <span className="bg-green-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                                        {chat.unreadCount}
+                                    </span>
+                                )}
 
+                                {chat.contact?.tag && (
+                                    <span
+                                        className={`text-xs font-bold ${getTagColor(
+                                            chat.contact.tag
+                                        )}`}
+                                    >
+                                        {chat.contact.tag}
+                                    </span>
+                                )}
                             </div>
-
                         </div>
-
-                    ))
-                }
-
+                    )
+                })}
             </div>
 
+            {/* Modal */}
+            {showModal && (
+                <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
+
+                    <div className="bg-[#1c1c1e] w-[340px] rounded-2xl border border-slate-700">
+
+                        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-700">
+
+                            <h2 className="text-white font-semibold">
+                                New Chat
+                            </h2>
+
+                            <button
+                                onClick={() => {
+                                    setShowModal(false)
+                                    setContactSearch('')
+                                }}
+                            >
+                                <X
+                                    className="text-slate-400"
+                                    size={20}
+                                />
+                            </button>
+                        </div>
+
+                        <div className="p-3">
+                            <div className="flex items-center bg-slate-800 rounded-full px-4 py-2">
+
+                                <Search
+                                    className="text-slate-400"
+                                    size={16}
+                                />
+
+                                <input
+                                    autoFocus
+                                    type="text"
+                                    value={contactSearch}
+                                    onChange={(e) =>
+                                        setContactSearch(
+                                            e.target.value
+                                        )
+                                    }
+                                    placeholder="Search contacts"
+                                    className="bg-transparent outline-none text-white ml-2 w-full text-sm"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="max-h-[320px] overflow-y-auto">
+
+                            {filteredContacts.map((contact) => (
+                                <div
+                                    key={contact.id}
+                                    onClick={() =>
+                                        handleStartChat(contact)
+                                    }
+                                    className="flex items-center gap-4 px-5 py-3 hover:bg-slate-800 cursor-pointer"
+                                >
+                                    <div className="w-11 h-11 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold">
+                                        {contact.name
+                                            .charAt(0)
+                                            .toUpperCase()}
+                                    </div>
+
+                                    <div className="flex-1">
+                                        <p className="text-white text-sm">
+                                            {contact.name}
+                                        </p>
+
+                                        <p className="text-slate-400 text-xs">
+                                            {contact.phoneNumber}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

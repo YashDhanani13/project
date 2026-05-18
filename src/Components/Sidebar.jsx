@@ -3,16 +3,17 @@ import { Link, useLocation } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 import UserProfile from '../pages/user-profile/UserProfile'
 import { Inbox } from 'lucide-react'
+import Signup from '../pages/signup/Signup'
 
 import { Home, Users, Briefcase, Settings, Power } from 'lucide-react'
 
 // const navigate / useNavigate();
 
 const mainLinks = [
-    { name: 'Home', path: '/', icon: <Home size={25} /> },
-    { name: 'Contacts', path: '/contacts', icon: <Users size={25} /> },
-    { name: 'Employee', path: '/employees', icon: <Briefcase size={25} /> },
-    { name: 'Inbox ', path: '/inbox', icon: <Inbox size={22} /> },
+    { name: 'Home', path: '/', icon: <Home size={20} /> },
+    { name: 'Contacts', path: '/contacts', icon: <Users size={20} /> },
+    { name: 'Employee', path: '/employees', icon: <Briefcase size={20} /> },
+    { name: 'Inbox ', path: '/inbox', icon: <Inbox size={20} /> },
 ]
 
 const logout = () => {
@@ -29,23 +30,18 @@ const Sidebar = () => {
     const isActive = (path) => location.pathname === path
 
     return (
-        <div className="flex min-h-screen">
+        <div className="flex h-20">
             {/* ── Sidebar ── always visible */}
             <aside
                 className={`fixed top-0 left-0 h-screen z-50 flex flex-col transition-all duration-300
           ${collapsed ? 'w-16' : 'w-52'}
-          bg-slate-800 text-black`}
+          bg-mist-900 text-black`}
             >
                 {/* Logo */}
                 <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">
                     {!collapsed && (
-                        <div className="leading-tight">
-                            <p className="text-indigo-400 font-bold text-sm">
-                                class
-                            </p>
-                            <p className="text-orange-400 font-bold text-sm -mt-0.5">
-                                Mate
-                            </p>
+                        <div className="leading-tight flex gap-2  ">
+                              <p className='font-serif text-2xl text-mist-200 '>Class Mate </p>
                         </div>
                     )}
                     {/* Collapse toggle */}
@@ -78,7 +74,7 @@ const Sidebar = () => {
                         </Link>
                     ))}
                 </nav>
-                <div className="p-4 m-4">
+                <div className="p-4">
                     {' '}
                     {/* Bottom — Profile Settings */}
                     <button
@@ -103,16 +99,16 @@ const Sidebar = () => {
             <main
                 className={`flex-1 transition-all duration-300 ${collapsed ? 'ml-16' : 'ml-52'}`}
             >
-                <Outlet /> {/* pages render here, outside sidebar */}
+                <Outlet />
             </main>
 
             {/* ── Profile Modal ── */}
             {showProfile && (
                 <div className="fixed inset-0   flex items-center justify-center  z-60 bg-black/60">
-                    <div className="border  border-x-violet-400  border-2  bg-gradient-to-b  from-slate-800 to-slate-700  relative rounded-xl shadow-xl p-6 w-220  h-140 m-2">
+                    <div className="border  border-x-violet-400  border-2  bg-gradient-to-b  from-slate-800 to-slate-700  relative rounded-md shadow-xl p-8 w-220 h-175 m-2">
                         <button
                             onClick={() => setShowProfile(false)}
-                            className="absolute top-0   right-0 w-9 h-8 flex rounded-xs items-center justify-center p-4 bg-gray-100 hover:bg-red-500 hover:text-white text-gray-500 font-bold text-xs transition cursor-pointer"
+                            className="absolute top-0   right-0 w-9 h-8 flex rounded-xs items-center justify-center p-4 bg-gray-100  hover:bg-red-500 hover:text-white text-gray-500 font-bold text-xs transition cursor-pointer"
                         >
                             ✕
                         </button>

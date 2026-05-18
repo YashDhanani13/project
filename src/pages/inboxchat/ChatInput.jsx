@@ -1,50 +1,56 @@
 import React, { useState } from 'react'
-import { Sticker, SendHorizontal, Plus } from 'lucide-react'
+import { Sticker, SendHorizontal } from 'lucide-react'
 import EmojiPicker from 'emoji-picker-react'
+import socket, { refreshSocketAuth } from '../../socket'
 
-const ChatInput = ({ setMessages }) => {
-
+const ChatInput = ({ setMessages, selectedConversation }) => {
     const [message, setMessage] = useState('')
     const [showPicker, setShowPicker] = useState(false)
 
-    // Send Message
+    // ✅ Only the changed part — optimistic message
     const handleSendMessage = () => {
+        if (!message.trim() || !selectedConversation?.room?.id) return
 
-        if (!message.trim()) return
+        const roomId = selectedConversation.room.id
 
-        setMessages((prev) => [
-            ...prev,
-            {
-                id: Date.now(),
-                text: message,
-                sender: 'me',
-            },
-        ])
+        socket.emit('send_message', {
+            roomId,
+            text: message.trim(),
+        })
 
+        // ✅ Include senderId so isMyMessage works
+        const newMsg = {
+            id: Date.now(),
+            text: message.trim(),
+            senderId: getCurrentUserId(),
+            sender: 'me',
+            createdAt: new Date().toISOString(),
+        }
+
+        setMessages(newMsg)
         setMessage('')
     }
-
-    // Emoji Select
     const handleEmojiClick = (emojiObject) => {
         setMessage((prev) => prev + emojiObject.emoji)
     }
 
-    return (
-        <div className="border-t border-slate-700 bg-[#1c1c1e] p-4 relative">
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') handleSendMessage()
+    }
 
-            {/* Emoji Picker */}
+    return (
+        <div className="p-2 m-4 relative">
             {showPicker && (
-                <div className="absolute bottom-20 left-4">
-                    <EmojiPicker className='bg-yellow-50' onEmojiClick={handleEmojiClick} />
+                <div className="absolute bottom-20 left-4 z-10">
+                    <EmojiPicker onEmojiClick={handleEmojiClick} />
                 </div>
             )}
 
-            <div className="flex items-center gap-3 bg-mist-800 rounded-lg  px-4 py-3 shadow-md">
-
+            <div className="flex items-center gap-3 bg-mist-800 rounded-full px-3.5 py-1.5 shadow-md">
                 {/* Emoji Button */}
                 <button
                     onClick={() => setShowPicker(!showPicker)}
-                    className="text-slate-400 hover:text-blue-600 transition  cursor-pointer"
+                    className="text-slate-500 hover:bg-zinc-700 p-2 rounded-full transition cursor-pointer"
                 >
                     <Sticker size={28} />
                 </button>
@@ -54,23 +60,23 @@ const ChatInput = ({ setMessages }) => {
                     type="text"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     placeholder="Type a message"
-                    className="flex-1 outline-0 text-gray-300 font-bold text-lg "
+                    className="flex-1 outline-none text-gray-300 text-base bg-transparent caret-green-600"
                 />
 
                 {/* Send Button */}
                 <button
                     onClick={handleSendMessage}
-                    className="bg-blue-500 p-3 hover:bg-gray-600 transition rounded-full shadow-lg"
+                    disabled={!message.trim()}
+                    className="bg-green-500 p-3 rounded-full shadow-lg transition delay-100 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:scale-100"
                 >
                     <SendHorizontal
-                        className="text-white not-even:cursor-pointer "
-                        size={20}
+                        className="text-black cursor-pointer"
+                        size={24}
                     />
                 </button>
-
             </div>
-
         </div>
     )
 }

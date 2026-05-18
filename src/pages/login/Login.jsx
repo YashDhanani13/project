@@ -48,12 +48,14 @@ const Login = () => {
             // console.log("Login response:", response.data); // Debug: see what the backend returns
 
             // Handle different response structures
-            let token =
+            const token =
                 response.data.token ||
                 response.data.accessToken ||
+                response.data.data?.token ||
+                response.data.data?.accessToken ||
                 response.data.data
 
-            if (token) {
+            if (typeof token === 'string' && token) {
                 login(token)
                 setApiSuccess('Welcome back!')
                 setTimeout(() => navigate('/'), 1500)

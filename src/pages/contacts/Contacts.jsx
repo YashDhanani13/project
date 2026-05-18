@@ -129,16 +129,16 @@ const Contacts = () => {
         <div className="min-h-screen bg-slate-900 text-slate-100 p-6">
             {/* Header */}
             <div className="mb-8">
-                <h1 className="text-2xl font-bold text-white tracking-tight">
+                <h1 className="text-2xl font-serif text-white tracking-tight">
                     Contact Management
                 </h1>
-                <p className="text-slate-400 text-sm mt-1">
+                <p className="text-slate-400 text-serif mt-1">
                     Manage and organise your contacts
                 </p>
             </div>
 
             {/* Toolbar */}
-            <div className="flex items-center gap-3 mb-6 flex-wrap">
+            <div className="flex items-center gap-2  mb-6 flex-wrap">
                 <button
                     onClick={() => setShowFilter(true)}
                     className="flex items-center gap-2  px-5 py-4 text-2xl rounded-xl border border-slate-700 bg-slate-800 text-slate-300  w-14  font-bold hover:bg-slate-700 hover:border-slate-600 text-xl hover:text-white transition-all cursor-pointer   "
@@ -146,7 +146,7 @@ const Contacts = () => {
                     <Funnel size={18} />
                 </button>
 
-                <div className="flex flex-1 max-w-2xl items-center gap-2.5   rounded-xl border border-slate-700 bg-slate-800 font-bold px-4 py-4 focus-within:ring-2 focus-within:ring-blue-500/40 focus-within:border-blue-500/70 hover:border-slate-600 transition-colors ">
+                <div className="flex flex-1 max-w-2xl items-center gap-2.5 font-serif   rounded-xl border border-amber-700 bg-slate-800 font-bold px-4 py-4 focus-within:border-gray-400 focus:border-gray-500 border-2 hover:border-slate-600 ">
                     <Search size={15} className="text-slate-500 shrink-0" />
                     <input
                         type="search"
@@ -156,13 +156,12 @@ const Contacts = () => {
                         className="w-full bg-transparent  text-white  outline-none"
                     />
                 </div>
-
-                <button
+  <button
                     onClick={() => setIsFormOpen(true)}
-                    className="flex items-center gap-2 p-4   border border-zinc-700 border-2 w-45 font-extrabold  rounded-lg bg-linear-to-r from-gray-700 to-slate-800 text-gray-200  text-sm hover:from-mist-600 hover:to-indigo-400 hover:text-gray-800 border hover:border-black active:scale-[0.98] transition-all shadow-lg shadow-blue-500/20 cursor-pointer"
+                    className="flex items-center gap-2 p-3  border border-blue-900 border-2 w-40 rounded-lg bg-linear-to-r from-slate-800  to-slate-900  text-white   text-1xl font-serif hover:from-mist-600 hover:to-indigo-400 hover:text-black border hover:border-black *: transition-all  cursor-pointer"
                 >
-                    <UserPlus size={15} />
-                    Add Contact
+                    <UserPlus size={17} />
+                    Add Contacts
                 </button>
             </div>
 
@@ -224,19 +223,19 @@ const Contacts = () => {
                                                         }
                                                     />
                                                 </td>
-                                                <td className="px-4 py-3 font-medium text-slate-100">
+                                                <td className="px-4 py-3 font-serif  text-slate-100">
                                                     {contact.name}
                                                 </td>
-                                                <td className="px-4 py-3  text-indigo-500  hover:text-orange-500">
+                                                <td className="px-4 py-3 font-serif  text-indigo-500  hover:text-orange-500">
                                                     {contact.email}
                                                 </td>
-                                                <td className="px-4 py-3 text-slate-300">
+                                                <td className="px-4 py-3 font-serif text-slate-300">
                                                     {contact.age}
                                                 </td>
                                                 <td className="px-4 py-3">
                                                     {contact.tag ? (
                                                         <span
-                                                            className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${TAG_STYLES[contact.tag] || 'bg-slate-700 text-slate-300'}`}
+                                                            className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-serif ${TAG_STYLES[contact.tag] || 'bg-slate-700 text-slate-300'}`}
                                                         >
                                                             {contact.tag}
                                                         </span>
@@ -246,10 +245,10 @@ const Contacts = () => {
                                                         </span>
                                                     )}
                                                 </td>
-                                                <td className="px-4 py-3 text-slate-300">
+                                                <td className="px-4 py-3 font-serif  text-slate-300">
                                                     {contact.phoneNumber || '—'}
                                                 </td>
-                                                <td className="px-4 py-3 text-slate-400 max-w-xs truncate">
+                                                <td className="px-4 font-serif  py-3 text-slate-400 max-w-xs truncate">
                                                     {contact.address || '—'}
                                                 </td>
                                             </tr>

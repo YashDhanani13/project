@@ -11,9 +11,17 @@ import UserProfile from './pages/user-profile/UserProfile'
 import Contacts from './pages/contacts/Contacts'
 import Employees from './pages/employee/Employees'
 import Sidebar from './components/Sidebar'
-import Inbox from './pages/inboxchat/inbox'
+import Inbox from './pages/inboxchat/Inbox'
+import ChatHeader from './pages/inboxchat/ChatHeader'
 import { AuthContext } from './Authcontext/AuthContext'
+
 import ChatMain from './pages/inboxchat/ChatMain'
+import UserInfo from './pages/inboxchat/UserInfo'
+import ChatConversation from './pages/inboxchat/ChatConversation'
+import ChatInput from './pages/inboxchat/ChatInput'
+// import ChatHeader from './pages/inboxchat/ChatHeader'
+
+
 
 // Route Protection Component
 const ProtectedLayout = () => {
@@ -47,9 +55,14 @@ const router = createBrowserRouter([
             { path: 'employees', element: <Employees /> },
             { path: 'employee-form', element: <EmployeeForm /> },
             { path: 'profile', element: <UserProfile /> },
-            {path : 'inbox' , element : <Inbox />},
-            {path : 'chat-main' , element : <ChatMain />}
-           
+
+            { path: 'inbox', element: <Inbox /> },
+            { path: 'chat-main', element: <ChatMain /> },
+
+            { path: 'chat-input', element: <ChatInput /> },
+            { path: 'chat-header', element: <ChatHeader /> },
+              { path: 'user-info', element: <UserInfo /> },
+
         ],
     },
 
