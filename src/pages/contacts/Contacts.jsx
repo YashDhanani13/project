@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import ContactFilter from './ContactFilter'
 import ContactSidebar from './ContactSidebar'
 import api from '../../api/api'
-import { UserPlus, SlidersHorizontal, Search, Funnel } from 'lucide-react'
+import { UserPlus, SlidersHorizontal, Search, Funnel, X } from 'lucide-react'
 import ContactSkeleton from './ContactSkeleton'
 import ContactForm from './ContactForm'
 
@@ -156,11 +156,62 @@ const Contacts = () => {
                         className="w-full bg-transparent  text-white  outline-none"
                     />
                 </div>
-  <button
+                <button
                     onClick={() => setIsFormOpen(true)}
-                    className="flex items-center gap-2 p-3  border border-blue-900 border-2 w-40 rounded-lg bg-linear-to-r from-slate-800  to-slate-900  text-white   text-1xl font-serif hover:from-mist-600 hover:to-indigo-400 hover:text-black border hover:border-black *: transition-all  cursor-pointer"
+                    // className="flex items-center gap-2 p-3  border border-blue-900 border-2 w-40 rounded-lg bg-linear-to-r from-slate-800  to-slate-900  text-white   text-1xl font-serif hover:from-mist-600 hover:to-indigo-400 hover:text-black border hover:border-black *: transition-all  cursor-pointer"
+                    className="  group relative flex gap-3
+    overflow-hidden
+    cursor-pointer
+    rounded-md
+    border
+    border-[#00A97F]
+    bg-transparent
+    
+    w-50
+p-4
+    text-[17px]
+    font-light
+    uppercase
+    text-[#00A97F]
+    transition-all
+    duration-400
+    
+    z-[1]
+    active:scale-[0.98]
+    active:brightness-75
+    hover:text-[rgb(10,25,30)]
+ hover:font-serif 
+    before:content-['']
+    before:absolute
+    before:h-full
+    before:w-full
+    before:left-[-25%]
+    before:top-[-50%]
+    before:z-[-1]
+    before:bg-[#00A97F]
+    before:transition-all
+    before:duration-500
+    before:ease-out
+    before:[transform:skew(90deg)_rotate(180deg)_translate(-50%,-50%)]
+
+    after:content-['']
+    after:absolute
+    after:h-full
+    after:w-full
+    after:left-[25%]
+    after:top-1/2
+    after:z-[-1]
+    after:bg-[#00A97F]
+    after:transition-all
+    after:duration-500
+    after:ease-out
+    after:[transform:skew(90deg)_translate(-50%,-50%)]
+
+    hover:before:[transform:skew(45deg)_rotate(180deg)_translate(-50%,-50%)]
+    hover:after:[transform:skew(45deg)_translate(-50%,-50%)]
+  "
                 >
-                    <UserPlus size={17} />
+                    <UserPlus size={20} />
                     Add Contacts
                 </button>
             </div>
@@ -289,7 +340,7 @@ const Contacts = () => {
                                 <select
                                     value={rowsPerPage}
                                     onChange={handleRowsPerPageChange}
-                                    className="bg-slate-800 border border-slate-600 text-slate-200 text-xs rounded-lg px-2 py-1.5 outline-none cursor-pointer"
+                                    className="bg-slate-800 border text-1xl  border-slate-600 hover:border-red-900 hover:text-sm     transition-all  ease-in-out delay-300   hover:text-red-400 hover:bg-red-100 text-black -200  rounded-lg p-3 w-20 outline-none cursor-pointer font-serif"
                                 >
                                     <option value={3}>3</option>
                                     <option value={5}>5</option>
@@ -302,7 +353,7 @@ const Contacts = () => {
                                 <button
                                     onClick={() => setCurrentPage((p) => p - 1)}
                                     disabled={currentPage === 0}
-                                    className="px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300 text-xs font-medium hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                    className=" p-3  w-30 rounded-lg border border-slate-600  text-slate-300 text-xs font-serif disabled:opacity-30 hover:bg-white  transition-all  ease-in-out delay-500  hover:text-green-500 hover:border-green-600 disabled:bg-red-200 disabled:border-red-600 disabled:text-red-400 isabled:cursor-not-allowed cursor-pointer"
                                 >
                                     ← Prev
                                 </button>
@@ -319,7 +370,7 @@ const Contacts = () => {
                                 <button
                                     onClick={() => setCurrentPage((p) => p + 1)}
                                     disabled={currentPage >= noOfPages - 1}
-                                    className="px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300 text-xs font-medium hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                    className=" p-3  w-30 rounded-lg border border-slate-600  text-slate-300 text-xs font-serif disabled:opacity-30 hover:bg-white  transition-all  ease-in-out delay-500  hover:text-green-500 hover:border-green-600 disabled:bg-red-200 disabled:border-red-600 disabled:text-red-400 isabled:cursor-not-allowed cursor-pointer"
                                 >
                                     Next →
                                 </button>
@@ -333,9 +384,9 @@ const Contacts = () => {
                             <div className="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-4 w-96">
                                 <button
                                     onClick={() => setShowFilter(false)}
-                                    className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-full bg-slate-700 hover:bg-red-500 hover:text-white text-slate-400 text-xs transition cursor-pointer"
+                                    className="absolute top-2 right-1 hover:text-white  hover:bg-red-500  hover:text-300 w-7 h-7 flex items-center justify-center rounded-md bg-slate-700   text-slate-400 text-xs transition cursor-pointer"
                                 >
-                                    ✕
+                                    <X className="hover:bg" Size={20} />
                                 </button>
                                 <ContactFilter
                                     setFilterField={setFilterField}

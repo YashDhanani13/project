@@ -124,23 +124,72 @@ const Employees = () => {
 
             {/* Toolbar */}
             <div className="flex items-center gap-3 mb-6 flex-wrap">
-                
                 <div className="flex flex-1 max-w-2xl items-center gap-2.5 font-serif   rounded-xl border border-slate-700 bg-slate-800 font-bold px-4 py-4 focus-within:border-blue-400 focus:border-gray-500 border-2 hover:border-slate-600 ">
                     <Search size={15} className="text-slate-500 shrink-0" />
+
                     <input
                         type="search"
                         placeholder="Search Employee..."
                         value={search}
                         onChange={handlesearchChange}
-                        className="w-full bg-transparent      text-white  outline-none"
+                        className="w-full bg-transparent text-white  outline-none"
                     />
                 </div>
-
-                <button
+    <button
                     onClick={() => setIsFormOpen(true)}
-                    className="flex items-center gap-2 p-3  border border-blue-900 border-2 w-40 rounded-lg bg-linear-to-r from-slate-800  to-slate-900  text-white   text-1xl font-serif hover:from-mist-600 hover:to-indigo-400 hover:text-black border hover:border-black *: transition-all  cursor-pointer"
+                    // className="flex items-center gap-2 p-3  border border-blue-900 border-2 w-40 rounded-lg bg-linear-to-r from-slate-800  to-slate-900  text-white   text-1xl font-serif hover:from-mist-600 hover:to-indigo-400 hover:text-black border hover:border-black *: transition-all  cursor-pointer"
+                    className="  group relative flex gap-3
+    overflow-hidden
+    cursor-pointer
+    rounded-md
+    border
+    border-[#00A97F]
+    bg-transparent
+    
+    w-50
+p-4
+    text-[17px]
+    font-light
+    uppercase
+    text-[#247342]
+    transition-all
+    duration-500
+    z-[1]
+    active:scale-[0.98]
+    active:brightness-75
+    hover:text-[rgb(1,2,1)]
+ hover:font-serif
+    before:content-['']
+    before:absolute
+    before:h-full
+    before:w-full
+    before:left-[-25%]
+    before:top-[-50%]
+    before:z-[-1]
+    before:bg-[#5c449c]
+    before:transition-all
+    before:duration-500
+    before:ease-out
+    before:[transform:skew(90deg)_rotate(180deg)_translate(-50%,-50%)]
+
+    after:content-['']
+    after:absolute
+    after:h-full
+    after:w-full
+    after:left-[25%]
+    after:top-1/2
+    after:z-[-1]
+    after:bg-[#00A97F]
+    after:transition-all
+    after:duration-500
+    after:ease-out
+    after:[transform:skew(90deg)_translate(-50%,-50%)]
+
+    hover:before:[transform:skew(45deg)_rotate(180deg)_translate(-50%,-50%)]
+    hover:after:[transform:skew(45deg)_translate(-50%,-50%)]
+  "
                 >
-                    <UserPlus size={17} />
+                    <UserPlus size={20} />
                     Add Employee
                 </button>
             </div>
@@ -244,7 +293,7 @@ const Employees = () => {
 
                         {/* Footer */}
                         <div className="px-5 py-3 border-t border-slate-700 flex items-center justify-between flex-wrap gap-3 bg-slate-900/40">
-                            <span className="text-xs text-slate-400">
+                            <span className="text-md  text-slate-400">
                                 Showing{' '}
                                 <strong className="text-slate-200">
                                     {totalEmployees === 0 ? 0 : start + 1}–
@@ -258,14 +307,16 @@ const Employees = () => {
                             </span>
 
                             <div className="flex items-center gap-2 text-xs text-slate-400">
-                                <span className='font-serif'>Rows per page:</span>
+                                <span className="font-serif">
+                                    Rows per page:
+                                </span>
                                 <select
                                     value={rowsPerPage}
                                     onChange={(e) => {
                                         setRowsPerPage(Number(e.target.value))
                                         setCurrentPage(0)
                                     }}
-                                    className="bg-slate-800 border border-slate-600 text-slate-200 text-xs rounded-lg px-2 py-1.5 outline-none focus:ring-2 focus:ring-orange-500/40 cursor-pointer font-serif" 
+                                    className="bg-slate-800 border text-1xl  border-slate-600 hover:border-red-900 hover:text-sm     transition-all  ease-in-out delay-300   hover:text-red-400 hover:bg-red-100 text-black -200  rounded-lg p-3 w-20 outline-none cursor-pointer font-serif"
                                 >
                                     <option value={5}>5</option>
                                     <option value={10}>10</option>
@@ -278,11 +329,11 @@ const Employees = () => {
                                 <button
                                     onClick={() => setCurrentPage((p) => p - 1)}
                                     disabled={currentPage === 0}
-                                    className="px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300 text-xs font-serif hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                    className=" p-3  w-30 rounded-lg border border-slate-600  text-slate-300 text-xs font-serif disabled:opacity-30 hover:bg-white  transition-all  ease-in-out delay-500  hover:text-green-500 hover:border-green-600 disabled:bg-red-200 disabled:border-red-600 disabled:text-red-400 isabled:cursor-not-allowed cursor-pointer"
                                 >
                                     ← Prev
                                 </button>
-                                <span className="text-xs text-slate-400 font-medium">
+                                <span className="text-md text-slate-400 font-serif">
                                     Page{' '}
                                     <strong className="text-slate-200">
                                         {currentPage + 1}
@@ -295,7 +346,7 @@ const Employees = () => {
                                 <button
                                     onClick={() => setCurrentPage((p) => p + 1)}
                                     disabled={currentPage >= totalPages - 1}
-                                    className="px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300 text-xs font-serif hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                    className=" p-3  w-30 rounded-lg border border-slate-600  text-slate-300 text-xs font-serif disabled:opacity-30 hover:bg-white hover:text-green-500 hover:border-green-600  disabled:bg-red-200 disabled:border-red-600 disabled:text-red-400 isabled:cursor-not-allowed transition-all cursor-pointer"
                                 >
                                     Next →
                                 </button>

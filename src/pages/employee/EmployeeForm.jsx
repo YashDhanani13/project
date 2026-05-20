@@ -306,7 +306,7 @@ const EmployeeForm = ({ onSuccess = null, close }) => {
                                 onClick={() => close?.()}
                                 className="flex items-center gap-3 px-4 py-2 bg-white- hover:bg-red-500  hover:text-white  hover:border-2  text-black rounded-lg w-47 h-12 border border-gray-400  text-sm font-semibold transition-all cursor-pointer"
                             >
-                                Cancel 
+                                Cancel
                                 <X size={17} />
                             </button>
 

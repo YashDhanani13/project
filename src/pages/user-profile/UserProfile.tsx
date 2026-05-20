@@ -15,6 +15,8 @@ import {
 import api from '../../api/api'
 import ProfileSkeleton from '../../components/ProfileSkeleton'
 
+import multer from 'multer'
+
 interface ProfileForm {
     fullName: string
     email: string
@@ -25,7 +27,7 @@ const UserProfile = () => {
     const [loading, setLoading] = useState(true)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState('')
-    const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+    // const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
 
     const {
         register,
@@ -45,7 +47,7 @@ const UserProfile = () => {
     // =========================
 
     const inputWrapper =
-        'relative rounded-2xl border border-slate-700 bg-slate-900/70 hover:border-slate-600 focus-within:border-cyan-400 focus-within:ring-4 focus-within:ring-cyan-500/10 transition-all duration-300'
+        'relative rounded-2xl border border-slate-700 bg-slate-900/70 hover:border-red-400 transition-all duration-300'
 
     const fullNameValue = watch('fullName')
 
@@ -103,15 +105,6 @@ const UserProfile = () => {
             setIsSubmitting(false)
         }
     }
-
-    // =========================
-    // Avatar Preview
-    // =========================
-
-    // =========================
-    // Loading State
-    // =========================
-
     if (loading) return <ProfileSkeleton />
 
     if (error) {
@@ -137,7 +130,7 @@ const UserProfile = () => {
                 </div>
 
                 {/* Profile Card */}
-                <div className="rounded-3xl border border-white/5 bg-white/[0.03] backdrop-blur-xl  overflow-hidden">
+                <div className="rounded-3xl border border-white/5   overflow-hidden">
                     {/* Top Section */}
                     <div className="flex flex-col justify-between gap-6 border border-gray-600 bg-slate-900  rounded-t-3xl     p-6 lg:flex-row lg:items-center">
                         {/* Left Side */}
@@ -145,17 +138,6 @@ const UserProfile = () => {
                             {/* Avatar */}
                             <div className="relative group">
                                 <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-3xl border-4 border-slate-700   transition-all duration-300 group-hover:scale-105">
-                                    {avatarPreview ? (
-                                        <img
-                                            src={avatarPreview}
-                                            alt="avatar"
-                                            className="h-full w-full object-cover"
-                                        />
-                                    ) : (
-                                        <span className="text-4xl font-bold text-white">
-                                            {initials}
-                                        </span>
-                                    )}
                                 </div>
 
                                 {/* Upload Button */}
@@ -168,15 +150,15 @@ const UserProfile = () => {
 
                             {/* User Info */}
                             <div className="space-y-2">
-                                <h2 className="text-3xl font-bold text-white">
+                                <h2 className="text-3xl font-bold p-1 text-white ">
                                     {fullNameValue || 'Your Name'}
                                 </h2>
 
                                 <div className="flex items-center gap-2">
-                                    <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-400"></div>
+                                    <div className="h-2 w-2 "></div>
 
-                                    <span className="text-sm text-slate-400">
-                                        Active Account
+                                    <span className="text-sm text-red-300 border p-2 rounded-full w-20   border-red-200 flex  justify-center ">
+                                    {/* {fullName} */} HI 👋
                                     </span>
                                 </div>
                             </div>
@@ -241,7 +223,7 @@ const UserProfile = () => {
 
                         {/* Full Name */}
                         <div className="space-y-2">
-                            <label className="text-xs font-serif  uppercase tracking-[2px] text-slate-500">
+                            <label className="text-xs font-serif   hover:border-teal-400 transition-all duration-300   uppercase  text-slate-500">
                                 Full Name
                             </label>
 
@@ -286,14 +268,14 @@ const UserProfile = () => {
                             >
                                 <Mail
                                     size={20}
-                                    className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"
+                                    className="absolute left-5 top-1/2 -translate-y-1/2 text-cyan-500"
                                 />
 
                                 <input
                                     type="email"
                                     disabled={!isEditing}
                                     placeholder="Enter your email"
-                                    className="w-full bg-transparent font-serif  py-4 pl-14 pr-4 text-white outline-none placeholder:text-slate-500 disabled:text-slate-500"
+                                    className="w-full  font-serif  hover:border-teal-400 transition-all duration-300 py-4 pl-14 pr-4 text-white outline-none  disabled:text-slate-500 "
                                     {...register('email', {
                                         required: 'Email is required',
 

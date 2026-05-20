@@ -19,12 +19,12 @@ const ContactFilter = ({ setFilterField, setFilterValue, close }) => {
 
     return (
         <>
-            <div className="fixed inset-0 bg-black/20 " onClick={close} />
+            <div className="fixed  inset-0  " onClick={close} />
             <div
                 ref={filterRef}
-                className=" text-gray-600   p-4 rounded-lg shadow-lg  relative z-50"
+                className=" text-gray-500   p-4 h-45 shadow-lg  relative z-50"
             >
-                <h1 className="font-bold">Filter Contact</h1>
+                <h1 className="font-serif text-lg ">Filter Contact</h1>
 
                 <hr />
                 <div className="flex">

@@ -10,17 +10,14 @@ const ChatMain = ({ selectedConversation }) => {
     const [allMessages, setAllMessages] = useState({})
     const [loading, setLoading] = useState(false)
     const currentUserId = getCurrentUserId()
-
     const messages = allMessages[selectedConversation?.room?.id] || []
 
-    // ✅ Use room.id not conversation.id
     const isMyMessage = useCallback(
         (senderId) =>
             currentUserId && String(senderId) === String(currentUserId),
         [currentUserId]
     )
 
-    // Fetch messages when conversation changes
     useEffect(() => {
         if (!selectedConversation?.room?.id) return
         const roomId = selectedConversation.room.id
@@ -60,7 +57,6 @@ const ChatMain = ({ selectedConversation }) => {
         fetchMessages()
     }, [selectedConversation?.room?.id])
 
-    // ✅ Socket — use message.roomId not closure
     useEffect(() => {
         const handleReceive = (message) => {
             setAllMessages((prev) => ({
@@ -82,19 +78,19 @@ const ChatMain = ({ selectedConversation }) => {
         return () => socket.off('receive_message', handleReceive)
     }, [isMyMessage])
 
-    // if (!selectedConversation) {
-    //     return (
-    //         <div className="flex-1 flex items-center justify-center bg-[#1c1c1e]">
-    //             <div className="text-center text-slate-500">
-    //                 <img src={newjpeg} alt="image" />
-    //             </div>
-    //         </div>
-    //     )
-    // }
+    if (!selectedConversation) {
+        return (
+            <div className="flex-1 flex items-center justify-center bg-[#1c1c1e]">
+                <div className="text-center h-120  m-5    text-slate-500">
+                    <img src={newjpeg} alt="image" />
+                    <p>👿👿  HI mittar  can you click the     chatconversation   💀💀</p>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className="flex-1 bg-[#1c1c1e] flex flex-col h-screen">
-            {/* ✅ Pass contact info to header */}
             <ChatHeader selectedConversation={selectedConversation} />
 
             <div className="flex-1 overflow-y-auto">

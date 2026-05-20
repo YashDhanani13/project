@@ -21,8 +21,6 @@ import ChatConversation from './pages/inboxchat/ChatConversation'
 import ChatInput from './pages/inboxchat/ChatInput'
 // import ChatHeader from './pages/inboxchat/ChatHeader'
 
-
-
 // Route Protection Component
 const ProtectedLayout = () => {
     const { token } = useContext(AuthContext)
@@ -55,14 +53,11 @@ const router = createBrowserRouter([
             { path: 'employees', element: <Employees /> },
             { path: 'employee-form', element: <EmployeeForm /> },
             { path: 'profile', element: <UserProfile /> },
-
             { path: 'inbox', element: <Inbox /> },
-            { path: 'chat-main', element: <ChatMain /> },
-
+            { path: 'chat-main', element: <ChatMain /> } , 
             { path: 'chat-input', element: <ChatInput /> },
             { path: 'chat-header', element: <ChatHeader /> },
-              { path: 'user-info', element: <UserInfo /> },
-
+            { path: 'user-info', element: <UserInfo /> },
         ],
     },
 

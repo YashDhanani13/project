@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { Sticker, SendHorizontal } from 'lucide-react'
+import { Sticker, SendHorizontal, Link, Plus } from 'lucide-react'
 import EmojiPicker from 'emoji-picker-react'
-import socket, { refreshSocketAuth } from '../../socket'
+import socket from '../../socket'
+import { getCurrentUserId } from '../../utils/authToken'
 
-const ChatInput = ({ setMessages, selectedConversation }) => {
+const ChatInput = ({ selectedConversation }) => {
     const [message, setMessage] = useState('')
     const [showPicker, setShowPicker] = useState(false)
 
-    // ✅ Only the changed part — optimistic message
     const handleSendMessage = () => {
         if (!message.trim() || !selectedConversation?.room?.id) return
 
@@ -17,19 +17,10 @@ const ChatInput = ({ setMessages, selectedConversation }) => {
             roomId,
             text: message.trim(),
         })
-
-        // ✅ Include senderId so isMyMessage works
-        const newMsg = {
-            id: Date.now(),
-            text: message.trim(),
-            senderId: getCurrentUserId(),
-            sender: 'me',
-            createdAt: new Date().toISOString(),
-        }
-
-        setMessages(newMsg)
         setMessage('')
+        setShowPicker(false)
     }
+
     const handleEmojiClick = (emojiObject) => {
         setMessage((prev) => prev + emojiObject.emoji)
     }
@@ -46,30 +37,38 @@ const ChatInput = ({ setMessages, selectedConversation }) => {
                 </div>
             )}
 
-            <div className="flex items-center gap-3 bg-mist-800 rounded-full px-3.5 py-1.5 shadow-md">
-                {/* Emoji Button */}
+            <div className="flex items-center gap-2 bg-[#242626] rounded-full px-3.5 py-1 shadow-md">
+                {/* // file   pick     add  */}
                 <button
                     onClick={() => setShowPicker(!showPicker)}
-                    className="text-slate-500 hover:bg-zinc-700 p-2 rounded-full transition cursor-pointer"
+                    className="text-mist-500 hover:bg-olive-950 p-2 rounded-full transition cursor-pointer"
+                >
+                    <Plus size={28} />
+                </button>
+
+                {/* emoji sticker  */}
+                <button
+                    onClick={() => setShowPicker(!showPicker)}
+                    className="text-mist-500 hover:bg-olive-950 p-2 rounded-full transition cursor-pointer"
                 >
                     <Sticker size={28} />
                 </button>
-
-                {/* Input */}
+                
+                {/* input  bar  */}
                 <input
                     type="text"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Type a message"
-                    className="flex-1 outline-none text-gray-300 text-base bg-transparent caret-green-600"
+                    className="flex-1 outline-none text-gray-400  font-serif text-1xl  caret-green-500"
                 />
 
-                {/* Send Button */}
+                {/* Messaeg  send  button  */}
                 <button
                     onClick={handleSendMessage}
                     disabled={!message.trim()}
-                    className="bg-green-500 p-3 rounded-full shadow-lg transition delay-100 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:scale-100"
+                    className="bg-green-500 p-3 rounded-full shadow-lg  transition delay-100 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:scale-100"
                 >
                     <SendHorizontal
                         className="text-black cursor-pointer"
