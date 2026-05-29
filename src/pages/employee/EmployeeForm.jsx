@@ -105,7 +105,7 @@ const EmployeeForm = ({ onSuccess = null, close }) => {
                         </div>
                     )}
 
-                    {/* Error Alert */}
+                    
                     {apiError && (
                         <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl px-4 py-3 text-sm">
                             <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
@@ -119,14 +119,14 @@ const EmployeeForm = ({ onSuccess = null, close }) => {
                     >
                         {/* Full Name */}
                         <div className="space-y-1.5">
-                            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                            <label className="block text-blod font-semibold text-slate-400 uppercase tracking-wider">
                                 Full Name
                             </label>
                             <div
-                                className={`flex items-center gap-2.5 rounded-xl border bg-slate-900/60 px-3 py-2.5 transition-colors  ${errors.name ? 'border-red-500/60 focus-within:border-red-500' : 'border-slate-700  hover:border-slate-600'}`}
+                                className={`flex items-center gap-2.5 rounded-xl border bg-slate-900/60 px-3 py-3.5  transition-colors  ${errors.name ? 'border-red-500/60 focus-within:border-red-500' : 'border-slate-700  hover:border-slate-600'}`}
                             >
                                 <User
-                                    size={14}
+                                    size={16}
                                     className={
                                         errors.name
                                             ? 'text-red-400 shrink-0'

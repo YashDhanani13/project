@@ -3,7 +3,9 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from 'react-router-dom'
-import windows from '../../../public/windows.png'
+// import windows from '../../../public/windows.png'
+import pop from '../../../public/pop.jpeg'
+
 import {
     Mail,
     Lock,
@@ -72,13 +74,13 @@ const Login = () => {
     }
 
     return (
-        <div className="flex  h-179">
+        <div className="flex  h-172">
             <img
-                className="h-175 w-150    outline-none "
-                src={windows}
+                className="h-178 w-150    outline-none "
+                src={pop}
                 alt="imgage"
             />
-            <div className=" w-full  bg-mist-400   flex items-center justify-center p-6 pt-15">
+            <div className=" w-full  bg-white 00   flex items-center justify-center p-6 pt-15">
                 <div className="w-full max-w-md">
                     <div className=" rounded-lg p-8 shadow-3xl border bg-linear-0 from-slate-900 to-mist-800 0 00 -900  border-slate-600">
                         {/* Header Section */}
@@ -168,7 +170,7 @@ const Login = () => {
                             <button
                                 disabled={loading}
                                 type="submit"
-                                className="w-95 bg-white -900 text-sans hover:bg-mist-500   text-bllack font-black py-5 border border-slate-900 hover:border-cyan-400 rounded-2xl shadow-xl disabled:opacity-70 flex items-center justify-center gap-3 cursor-pointer hover:text-serif transition-all delay-200  hover:w-96"
+                                className="w-95 bg-white  text-sans hover:bg-violet-500   text-blue-400  font-bold w-1 py-5 border border-slate-900 hover:border-gray-400  hover:text-black rounded-2xl shadow-xl disabled:opacity-70 flex items-center justify-center gap-3 cursor-pointer hover:text-serif transition-all delay-200  hover:w-96"
                             >
                                 {loading ? (
                                     <Loader2
@@ -186,7 +188,7 @@ const Login = () => {
                             </button>
                         </form>
 
-                        <p className="mt-10 text-center text-slate-400 font-serif">
+                        <p className="mt-8 text-center text-slate-400 font-serif">
                             New here?{' '}
                             <Link
                                 to="/signup"

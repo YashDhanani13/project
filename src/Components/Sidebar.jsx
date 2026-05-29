@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
-import UserProfile from '../pages/user-profile/UserProfile'
 import { Inbox } from 'lucide-react'
 import Signup from '../pages/signup/Signup'
-
+import UserProfile from '../pages/user-profile/UserProfile'
 import { Home, Users, Briefcase, Settings, Power } from 'lucide-react'
 
-// const navigate / useNavigate();
-
+//  const navigate = useNavigate();
+  
 const mainLinks = [
     { name: 'Home', path: '/', icon: <Home size={20} /> },
     { name: 'Contacts', path: '/contacts', icon: <Users size={20} /> },
@@ -17,7 +16,7 @@ const mainLinks = [
 ]
 
 const logout = () => {
-    localStorage.removeItem('token') // Clear it so Interceptor sends nothing
+    localStorage.removeItem('token')
     window.location.href = '/login'
     // useNavigate("/login");
 }
@@ -41,10 +40,12 @@ const Sidebar = () => {
                 <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">
                     {!collapsed && (
                         <div className="leading-tight flex gap-2  ">
-                              <p className='font-serif text-2xl text-mist-200 '>Class Mate </p>
+                            <p className="font-serif text-2xl text-mist-200 ">
+                                Class Mate{' '}
+                            </p>
                         </div>
                     )}
-                    {/* Collapse toggle */}
+                    {/* side bar    toggle */}
                     <button
                         onClick={() => setCollapsed(!collapsed)}
                         className="text-gray-400 hover:text-white transition ml-auto"
@@ -105,7 +106,7 @@ const Sidebar = () => {
             {/* ── Profile Modal ── */}
             {showProfile && (
                 <div className="fixed inset-0   flex items-center justify-center  z-60 bg-black/60">
-                    <div className="border  border-x-violet-400  border-2  bg-gradient-to-b  from-slate-800 to-slate-700  relative rounded-md shadow-xl p-8 w-220 h-175 m-2">
+                    <div className="  border-x-violet-400  border-2  bg-gradient-to-b  from-slate-800 to-slate-700  relative rounded-md shadow-xl p-8 w-220 h-175 m-2">
                         <button
                             onClick={() => setShowProfile(false)}
                             className="absolute top-0   right-0 w-9 h-8 flex rounded-xs items-center justify-center p-4 bg-gray-100  hover:bg-red-500 hover:text-white text-gray-500 font-bold text-xs transition cursor-pointer"

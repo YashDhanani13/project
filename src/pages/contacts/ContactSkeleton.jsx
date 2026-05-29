@@ -55,7 +55,7 @@ const ContactSkeleton = () => {
                         ))}
                     </tbody>
                 </table>
-                <br />
+                {/* <br /> */}
 
                 <div className="flex items-center justify-between h-12 px-4 py-3 m-2">
                     {/* Left */}

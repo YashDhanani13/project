@@ -56,12 +56,13 @@ const UserInfo = ({ selectedConversation }) => {
                     {/* FIELDS */}
                     <div className="mt-10 space-y-5">
                         {/* FIELD 1 — Full Name */}
-                        <div className="group bg-white/[0.03] border border-white/10 rounded-3xl px-5 py-4 hover:border-red-500 transition-all duration-400">
+                        <div className="group bg-white/[0.03] border border-white/10 rounded-3xl  caret-red-500    px-5 py-4 hover:border-red-500 transition-all duration-400">
                             <label className="flex items-center gap-2 text-xs uppercase tracking-[2px] text-slate-400 mb-3">
                                 <UserRound
                                     size={18}
                                     className="text-cyan-400"
                                 />
+                                full name
                                 {/* {selectedConversation.name} */}
                             </label>
 
@@ -73,10 +74,10 @@ const UserInfo = ({ selectedConversation }) => {
                         </div>
 
                         {/* FIELD 2 — Email Address */}
-                        <div className="group bg-white/[0.03] border border-white/10 rounded-3xl px-5 py-4 hover:border-pink-400 transition-all duration-300">
+                        <div className="group bg-white/[0.03] border border-white/10 rounded-3xl px-5 py-4 hover:border-pink-400 caret-pink-500  transition-all duration-300">
                             <label className="flex items-center gap-2 text-xs uppercase tracking-[2px] text-slate-400 mb-3">
                                 <Mail size={18} className="text-cyan-400" />
-                                {/* {selectedConversation.address}/ */}
+                                {/* {selectedConversation.address}/ */} mail
                             </label>
 
                             <input
@@ -87,7 +88,7 @@ const UserInfo = ({ selectedConversation }) => {
                         </div>
 
                         {/* FIELD 3 — Address */}
-                        <div className="group bg-white/[0.03] border border-white/10 rounded-3xl px-5 py-4 hover:border-cyan-400/40 transition-all duration-300">
+                        <div className="group bg-white/[0.03] border border-white/10 rounded-3xl px-5 py-4 hover:border-cyan-400/40 transition-all caret-cyan-500  duration-300">
                             <label className="flex items-center gap-2 text-xs uppercase tracking-[2px] text-slate-400 mb-3">
                                 <MapPin size={18} className="text-cyan-400" />
                                 Address
@@ -101,7 +102,7 @@ const UserInfo = ({ selectedConversation }) => {
                         </div>
 
                         {/* FIELD 4 — Contact Number */}
-                        <div className="group bg-white/[0.03] border border-white/10 rounded-3xl px-5 py-4 hover:border-violet-400 transition-all duration-300">
+                        <div className="group bg-white/[0.03] border border-white/10 rounded-3xl px-5 py-4 hover:border-mist-400 transition-all caret-mist-400 duration-300">
                             <label className="flex items-center gap-2 text-xs uppercase tracking-[2px] text-slate-400 mb-3">
                                 <Contact size={18} className="text-cyan-400" />
                                 Contact Number

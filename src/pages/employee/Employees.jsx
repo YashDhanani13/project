@@ -111,13 +111,13 @@ const Employees = () => {
     )
 
     return (
-        <div className="min-h-screen  bg-slate-900 text-slate-100 p-6">
+        <div className="min-h-screen  bg-gray-900  text-slate-100 p-6">
             {/* Header */}
-            <div className="mb-8">
-                <h1 className="text-2xl font-serif text-white tracking-tight">
+            <div className="mb-5">
+                <h1 className="text-2xl font-serif text-green-200 tracking-tight">
                     Employee Management
                 </h1>
-                <p className="text-slate-400 font-serif  text-sm mt-1">
+                <p className="text-gray-600 font-serif  text-1xl  mt-1">
                     Manage and organise your team
                 </p>
             </div>
@@ -135,63 +135,86 @@ const Employees = () => {
                         className="w-full bg-transparent text-white  outline-none"
                     />
                 </div>
-    <button
-                    onClick={() => setIsFormOpen(true)}
-                    // className="flex items-center gap-2 p-3  border border-blue-900 border-2 w-40 rounded-lg bg-linear-to-r from-slate-800  to-slate-900  text-white   text-1xl font-serif hover:from-mist-600 hover:to-indigo-400 hover:text-black border hover:border-black *: transition-all  cursor-pointer"
-                    className="  group relative flex gap-3
-    overflow-hidden
+
+
+
+                <button
+                 onClick={() => setIsFormOpen(true)}
+              
+  className="
+    relative
+    w-[200px]
+    h-[73px]
+    border-none
     cursor-pointer
-    rounded-md
-    border
-    border-[#00A97F]
     bg-transparent
-    
-    w-50
-p-4
-    text-[17px]
-    font-light
-    uppercase
-    text-[#247342]
-    transition-all
-    duration-500
-    z-[1]
-    active:scale-[0.98]
-    active:brightness-75
-    hover:text-[rgb(1,2,1)]
- hover:font-serif
+    translate-y-2
+    overflow-hidden
+    group
+
     before:content-['']
     before:absolute
+    before:left-1/2
+    before:top-1/2
     before:h-full
-    before:w-full
-    before:left-[-25%]
-    before:top-[-50%]
-    before:z-[-1]
-    before:bg-[#5c449c]
+    before:w-0
+    before:-translate-x-1/2
+    before:-translate-y-1/2
+    before:bg-black
     before:transition-all
-    before:duration-500
-    before:ease-out
-    before:[transform:skew(90deg)_rotate(180deg)_translate(-50%,-50%)]
+    before:duration-1000
+
+    hover:before:w-full
 
     after:content-['']
     after:absolute
-    after:h-full
-    after:w-full
-    after:left-[25%]
-    after:top-1/2
-    after:z-[-1]
-    after:bg-[#00A97F]
+    after:left-0
+    after:right-0
+    after:bg-amber-500
+    after:bottom-0
     after:transition-all
-    after:duration-500
-    after:ease-out
-    after:[transform:skew(90deg)_translate(-50%,-50%)]
+    after:duration-[2000ms]
 
-    hover:before:[transform:skew(45deg)_rotate(180deg)_translate(-50%,-50%)]
-    hover:after:[transform:skew(45deg)_translate(-50%,-50%)]
+    hover:after:shadow-[0px_-13px_56px_12px_#ffffffa6]
   "
-                >
-                    <UserPlus size={20} />
+  style={{
+    WebkitMask:
+      "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='868' width='2500' viewBox='0 0 726 252.17'%3E%3Cpath d='M483.92 0S481.38 24.71 466 40.11c-11.74 11.74-24.09 12.66-40.26 15.07-9.42 1.41-29.7 3.77-34.81-.79-2.37-2.11-3-21-3.22-27.62-.21-6.92-1.36-16.52-2.82-18-.75 3.06-2.49 11.53-3.09 13.61S378.49 34.3 378 36a85.13 85.13 0 0 0-30.09 0c-.46-1.67-3.17-11.48-3.77-13.56s-2.34-10.55-3.09-13.61c-1.45 1.45-2.61 11.05-2.82 18-.21 6.67-.84 25.51-3.22 27.62-5.11 4.56-25.38 2.2-34.8.79-16.16-2.47-28.51-3.39-40.21-15.13C244.57 24.71 242 0 242 0H0s69.52 22.74 97.52 68.59c16.56 27.11 14.14 58.49 9.92 74.73C170 140 221.46 140 273 158.57c69.23 24.93 83.2 76.19 90 93.6 6.77-17.41 20.75-68.67 90-93.6 51.54-18.56 103-18.59 165.56-15.25-4.21-16.24-6.63-47.62 9.93-74.73C656.43 22.74 726 0 726 0z'/%3E%3C/svg%3E\") no-repeat 50% 50%",
+    mask:
+      "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='868' width='2500' viewBox='0 0 726 252.17'%3E%3Cpath d='M483.92 0S481.38 24.71 466 40.11c-11.74 11.74-24.09 12.66-40.26 15.07-9.42 1.41-29.7 3.77-34.81-.79-2.37-2.11-3-21-3.22-27.62-.21-6.92-1.36-16.52-2.82-18-.75 3.06-2.49 11.53-3.09 13.61S378.49 34.3 378 36a85.13 85.13 0 0 0-30.09 0c-.46-1.67-3.17-11.48-3.77-13.56s-2.34-10.55-3.09-13.61c-1.45 1.45-2.61 11.05-2.82 18-.21 6.67-.84 25.51-3.22 27.62-5.11 4.56-25.38 2.2-34.8.79-16.16-2.47-28.51-3.39-40.21-15.13C244.57 24.71 242 0 242 0H0s69.52 22.74 97.52 68.59c16.56 27.11 14.14 58.49 9.92 74.73C170 140 221.46 140 273 158.57c69.23 24.93 83.2 76.19 90 93.6 6.77-17.41 20.75-68.67 90-93.6 51.54-18.56 103-18.59 165.56-15.25-4.21-16.24-6.63-47.62 9.93-74.73C656.43 22.74 726 0 726 0z'/%3E%3C/svg%3E\") no-repeat 50% 50%",
+    WebkitMaskSize: "100%",
+  }}
+>
+  <span
+    className="
+      absolute
+      left-1/2
+      top-[39%]
+      w-full
+      -translate-x-1/2
+      -translate-y-1/2
+      text-center
+      
+      text-[15px]
+      font-serif
+      tracking-[3px]
+      text-black 
+      transition-all
+      duration-[2000ms]
+      group-hover:text-white
+    "
+  >
+        <UserPlus size={10} />
                     Add Employee
-                </button>
+  </span>
+</button>
+                {/* <button
+                   
+                    // className="flex items-center gap-2 p-3  border border-blue-900 border-2 w-40 rounded-lg bg-linear-to-r from-slate-800  to-slate-900  text-white   text-1xl font-serif hover:from-mist-600 hover:to-indigo-400 hover:text-black border hover:border-black *: transition-all  cursor-pointer"
+                    className=" "
+                >
+                  
+                </button> */}
             </div>
 
             {/* Error */}
@@ -292,7 +315,7 @@ p-4
                         </div>
 
                         {/* Footer */}
-                        <div className="px-5 py-3 border-t border-slate-700 flex items-center justify-between flex-wrap gap-3 bg-slate-900/40">
+                        <div className="px-5 py-3  font-serif border-t text-md  *: border-slate-700 flex items-center justify-between flex-wrap gap-3 bg-slate-900/40">
                             <span className="text-md  text-slate-400">
                                 Showing{' '}
                                 <strong className="text-slate-200">
@@ -316,7 +339,7 @@ p-4
                                         setRowsPerPage(Number(e.target.value))
                                         setCurrentPage(0)
                                     }}
-                                    className="bg-slate-800 border text-1xl  border-slate-600 hover:border-red-900 hover:text-sm     transition-all  ease-in-out delay-300   hover:text-red-400 hover:bg-red-100 text-black -200  rounded-lg p-3 w-20 outline-none cursor-pointer font-serif"
+                                    className="bg-slate-800 border text-1xl  border-slate-600 hover:border-red-900 hover:text-sm    font-serif  transition-all  ease-in-out delay-300   hover:text-red-400 hover:bg-red-100 text-black -200  rounded-lg p-3 w-20 outline-none cursor-pointer "
                                 >
                                     <option value={5}>5</option>
                                     <option value={10}>10</option>
@@ -329,7 +352,7 @@ p-4
                                 <button
                                     onClick={() => setCurrentPage((p) => p - 1)}
                                     disabled={currentPage === 0}
-                                    className=" p-3  w-30 rounded-lg border border-slate-600  text-slate-300 text-xs font-serif disabled:opacity-30 hover:bg-white  transition-all  ease-in-out delay-500  hover:text-green-500 hover:border-green-600 disabled:bg-red-200 disabled:border-red-600 disabled:text-red-400 isabled:cursor-not-allowed cursor-pointer"
+                                    className=" p-3  w-30 rounded-lg border border-slate-600  text-slate-300 text-xs font-serif disabled:opacity-30 hover:bg-green-50  transition-all  ease-in-out delay-500  hover:text-green-500 hover:border-green-600 disabled:bg-red-200 disabled:border-red-600 disabled:text-red-400 isabled:cursor-not-allowed cursor-pointer"
                                 >
                                     ← Prev
                                 </button>
@@ -346,7 +369,7 @@ p-4
                                 <button
                                     onClick={() => setCurrentPage((p) => p + 1)}
                                     disabled={currentPage >= totalPages - 1}
-                                    className=" p-3  w-30 rounded-lg border border-slate-600  text-slate-300 text-xs font-serif disabled:opacity-30 hover:bg-white hover:text-green-500 hover:border-green-600  disabled:bg-red-200 disabled:border-red-600 disabled:text-red-400 isabled:cursor-not-allowed transition-all cursor-pointer"
+                                    className=" p-3  w-30 rounded-lg border border-slate-600  text-slate-300 text-xs font-serif disabled:opacity-30 hover:bg-blue-100 hover:text-blue-500  border-2 hover:border-blue-600  disabled:bg-red-200 disabled:border-red-600 disabled:text-red-400 isabled:cursor-not-allowed transition-all cursor-pointer"
                                 >
                                     Next →
                                 </button>

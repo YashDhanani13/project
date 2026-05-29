@@ -3,7 +3,9 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from 'react-router-dom'
-import windows from '../../../public/windows.png'
+import api from '../../api/api'
+import { AuthContext } from '../../Authcontext/AuthContext'
+import pop from '../../../public/pop.jpeg'
 import {
     Mail,
     Lock,
@@ -11,13 +13,13 @@ import {
     CheckCircle2,
     AlertCircle,
     Loader2,
-    User,
+    User, 
     LogIn,
 } from 'lucide-react'
 
-import api from '../../api/api'
-import { AuthContext } from '../../Authcontext/AuthContext'
 
+
+// validaitno for   signup 
 const signValdate = z.object({
     fullName: z.string().min(1, 'Name is required'),
     email: z.string().min(1, 'Email is required').email('Invalid email format'),
@@ -40,7 +42,7 @@ const Signup = () => {
     const [loading, setLoading] = useState(false)
     const [apiError, setApiError] = useState('')
     const [apiSuccess, setApiSuccess] = useState('')
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
     const { login } = useContext(AuthContext)
 
     const onSubmit = async (data) => {
@@ -81,8 +83,8 @@ const Signup = () => {
     return (
         <div className="flex  h-172">
             <img
-                className="h-170 w-150    outline-none "
-                src={windows}
+                className="h-178  w-150    outline-none "
+                src={pop}
                 alt="imgage"
             />
             <div className=" h-145 w-full    flex items-center justify-center m-15">
@@ -118,10 +120,7 @@ const Signup = () => {
                         <form onSubmit={handleSubmit(onSubmit)}>
                             {/* full name */}
                             <div className=" ">
-                                <label
-                                    className="text-xs font-serif  text-gray-400 text-mist-
-              400 uppercase tracking-widest ml-1"
-                                >
+                                <label className="text-sm font-serif  text-gray-300 uppercase tracking-widest ml-1">
                                     Full name
                                 </label>
                                 <div className="relative">
@@ -132,8 +131,8 @@ const Signup = () => {
                                     <input
                                         type="text"
                                         placeholder="Enter Your Full name"
-                                        className={`w-full bg-slate-900 border-2 ${errors.email ? 'border-red-300' : 'border-slate-50'} border border-gray-500  font-serif rounded-2xl p-5 px-11  text-gray-400 outline-none caret-cyan-400 border  hover
-                                                                border-2   hover:border-cyan-400 transition-all font-bold`}
+                                        className={`w-full bg-slate-900 border-2 ${errors.email ? 'border-red-300' : 'border-slate-50'} border border-gray-500  font-serif rounded-2xl p-5 px-11  text-gray-400 outline-none caret-blue-600 border  hover
+                                                                border-2   hover:border-blue-600 transition-all font-bold`}
                                         {...register('fullName')}
                                     />
                                 </div>
@@ -205,8 +204,8 @@ const Signup = () => {
                                         size={20}
                                     />
                                     <input
-                                        className={`w-full bg-slate-900 border-2 ${errors.email ? 'border-red-300' : 'border-slate-50'} border border-gray-500  font-serif rounded-2xl p-5 px-11  text-gray-400 outline-none caret-lime-300 border  hover
-                                                                border-2   hover:border-lime-300 transition-all font-bold`}
+                                        className={`w-full bg-slate-900 border-2 ${errors.email ? 'border-red-300' : 'border-slate-50'} border border-gray-500  font-serif rounded-2xl p-5 px-11  text-gray-400 outline-none caret-yellow-300 border  hover
+                                                                border-2   hover:border-yellow-300 transition-all font-bold`}
                                         type="password"
                                         placeholder="Enter your password"
                                         autoComplete="current-password"
@@ -224,8 +223,18 @@ const Signup = () => {
                             <button
                                 disabled={loading}
                                 type="submit"
-                                className="w-full bg-white text-blue-400 hover:bg-blue-600 hover:text-white   font-bold  rounded-lg  border border-slate-800  border-2    will-change-auto h-14 p-2  shadow-xl  transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-3 text-lg mt-3 hover:bg--800 cursor-pointer"
+                                className="w-full bg-white text-blue-400 hover:text-white   font-bold  rounded-lg  border border-gray-600  border-2    will-change-auto h-14   shadow-xl  disabled:opacity-70 flex items-center justify-center gap-3 hover:border-black border-2 text-lg mt-3 hover:bg-violet-800 cursor-pointer transform-border  from-gray-500  hover:font-serif transition-all delay-200 ease-in-to-lime-300 hover:w-96 `"
                             >
+
+
+
+
+
+
+
+
+
+
                                 {loading ? (
                                     <Loader2
                                         className="animate-spin"
@@ -240,11 +249,11 @@ const Signup = () => {
                             </button>
                         </form>
 
-                        <p className="mt-4 text-center text-md text-mist-700 font-bold">
+                        <p className="mt-4 text-center text-md text-slate-400 font-serif">
                             Already a member?{' '}
                             <Link
                                 to="/login"
-                                className="text-blue-600 hover:underline"
+                                className="text-red-400  font-serif hover:underline"
                             >
                                 Log In
                             </Link>

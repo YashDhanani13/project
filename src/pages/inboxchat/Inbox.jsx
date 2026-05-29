@@ -4,9 +4,11 @@ import ChatMain from './ChatMain'
 
 const Inbox = () => {
     const [selectedConversation, setSelectedConversation] = useState(null)
+
     return (
         <div className="flex h-screen">
             <ChatConversation
+                selectedConversation={selectedConversation}
                 setSelectedConversation={setSelectedConversation}
             />
             <ChatMain selectedConversation={selectedConversation} />

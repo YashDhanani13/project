@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import { Sticker, SendHorizontal, Link, Plus } from 'lucide-react'
+import { Sticker, SendHorizontal, Plus } from 'lucide-react'
 import EmojiPicker from 'emoji-picker-react'
 import socket from '../../socket'
-import { getCurrentUserId } from '../../utils/authToken'
 
 const ChatInput = ({ selectedConversation }) => {
     const [message, setMessage] = useState('')
     const [showPicker, setShowPicker] = useState(false)
 
     const handleSendMessage = () => {
+        // if  i can not  write so this  not  send   space    in
         if (!message.trim() || !selectedConversation?.room?.id) return
 
         const roomId = selectedConversation.room.id
@@ -40,21 +40,21 @@ const ChatInput = ({ selectedConversation }) => {
             <div className="flex items-center gap-2 bg-[#242626] rounded-full px-3.5 py-1 shadow-md">
                 {/* // file   pick     add  */}
                 <button
-                    onClick={() => setShowPicker(!showPicker)}
+                    // onClick={() => setShowPicker(!showPicker)}
                     className="text-mist-500 hover:bg-olive-950 p-2 rounded-full transition cursor-pointer"
                 >
                     <Plus size={28} />
                 </button>
 
-                {/* emoji sticker  */}
+                {/* emoji picker     */}
                 <button
                     onClick={() => setShowPicker(!showPicker)}
                     className="text-mist-500 hover:bg-olive-950 p-2 rounded-full transition cursor-pointer"
                 >
                     <Sticker size={28} />
                 </button>
-                
-                {/* input  bar  */}
+
+                {/* input  bar write the message   */}
                 <input
                     type="text"
                     value={message}

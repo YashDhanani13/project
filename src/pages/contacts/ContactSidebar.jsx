@@ -138,7 +138,7 @@ const ContactSidebar = ({
                     </h2>
                     <button
                         onClick={() => {
-                            setSelectedEmployee(null)
+                            setSelectedContact(null)
                             setIsEditing(false)
                         }}
                         className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold"

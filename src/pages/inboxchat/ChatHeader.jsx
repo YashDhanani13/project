@@ -25,7 +25,7 @@ const ChatHeader = ({ selectedConversation }) => {
                     <Search className="" size={19} />
                 </div>
 
-{/* more   add  this  */}
+                {/* more   add  this  */}
                 <button className="p-3 rounded-full bg-slate-800 hover:bg-slate-700 transition cursor-pointer">
                     <EllipsisVertical
                         className="text-slate-300 cursor-pointer"

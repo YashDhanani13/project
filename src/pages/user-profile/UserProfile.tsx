@@ -15,8 +15,6 @@ import {
 import api from '../../api/api'
 import ProfileSkeleton from '../../components/ProfileSkeleton'
 
-import multer from 'multer'
-
 interface ProfileForm {
     fullName: string
     email: string
@@ -130,17 +128,14 @@ const UserProfile = () => {
                 </div>
 
                 {/* Profile Card */}
-                <div className="rounded-3xl border border-white/5   overflow-hidden">
+                <div className="rounded-3xl border border-white/5 hover:border-t-amber-400   hover:transition-all delay-400    overflow-hidden">
                     {/* Top Section */}
-                    <div className="flex flex-col justify-between gap-6 border border-gray-600 bg-slate-900  rounded-t-3xl     p-6 lg:flex-row lg:items-center">
+                    <div className="flex flex-col justify-between gap-6 border border-gray-700 border-2 bg-slate-900  rounded-t-3xl     p-6 lg:flex-row lg:items-center">
                         {/* Left Side */}
                         <div className="flex items-center gap-5">
-                            {/* Avatar */}
                             <div className="relative group">
-                                <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-3xl border-4 border-slate-700   transition-all duration-300 group-hover:scale-105">
-                                </div>
+                                <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-3xl border-4 border-slate-700   transition-all duration-300 group-hover:scale-105"></div>
 
-                                {/* Upload Button */}
                                 <label className="absolute -bottom-2 -right-2 flex h-10 w-10 cursor-pointer items-center justify-center rounded-2xl bg-cyan-500  hover:bg-cyan-400">
                                     <Camera size={18} className="text-white" />
 
@@ -158,7 +153,7 @@ const UserProfile = () => {
                                     <div className="h-2 w-2 "></div>
 
                                     <span className="text-sm text-red-300 border p-2 rounded-full w-20   border-red-200 flex  justify-center ">
-                                    {/* {fullName} */} HI 👋
+                                        HI 👋
                                     </span>
                                 </div>
                             </div>

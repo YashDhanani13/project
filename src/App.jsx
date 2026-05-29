@@ -77,6 +77,14 @@ const router = createBrowserRouter([
             </PublicRoute>
         ),
     },
+     {
+        path: '/home',
+        element: (
+            <PublicRoute>
+                <Home />
+            </PublicRoute>
+        ),
+    },
 ])
 
 function App() {
